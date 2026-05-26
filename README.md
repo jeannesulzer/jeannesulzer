@@ -14,7 +14,7 @@ Paris II · Head of International Justice Commission @AmnestyFrance.
 - **[Global Justice Archive](https://internationaltribunals.lovable.app)** — Every past & present international tribunal since Nuremberg
 - **[Reparation – International Crimes](https://reparation-international-crimes.lovable.app)** — Mechanisms & case law for victims
 - **[Victims' Rights & International Justice Journal](https://victimsrightsinternationaljournal.org)** — Host of the IMPACT podcast
-- **[Partying Is A Human Right](#)** — _link to come_
+- **- **[Partying Is A Human Right](https://partyingisahumanright.org)** — A fundamental right 
 
 #### 🤖 Legal AI
 
