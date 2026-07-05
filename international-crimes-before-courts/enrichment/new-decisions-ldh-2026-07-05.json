@@ -1,0 +1,404 @@
+{
+  "generated": "2026-07-05",
+  "method": "Legal Data Hunter MCP sweep of official national case-law databases (Légifrance/Judilibre, rechtsprechung-im-internet, Juportal, entscheidsuche.ch, RIS, rechtspraak.nl, SAIJ, Tribunal Constitucional HJ), cross-checked against the 198-case corpus and 140 existing judicial decisions. Confidence: 'confirmed' = identity established from the decision text (parties, dates, facts); 'probable' = strong circumstantial match, verify before ingestion.",
+  "decisions_for_existing_cases": [
+    {
+      "case_id": "france-assad-arrest-warrant",
+      "also": "eurojust-fr-syria-bashar-assad-immunity",
+      "case_name": "Bashar al-Assad — Arrest Warrant (Chemical Weapons)",
+      "date": "2025-07-25",
+      "court": "Cour de cassation, Assemblée plénière",
+      "type": "supreme_court",
+      "reference": "Pourvoi n° 24-84.393, arrêt n° 685 B+R",
+      "ecli": "ECLI:FR:CCASS:2025:CR90685",
+      "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000051993273",
+      "language": "French",
+      "note": "Official Légifrance text of the immunity ruling (cassation of the chambre de l'instruction arrêt of 26 June 2024 upholding the arrest warrant). Corpus currently links Eurojust/vLex only.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "amnesty-fr-cambodge-ung-boun-hor",
+      "case_name": "Assassination of Ung Boun Hor (Cambodia — Khmer Rouge)",
+      "date": "2009-01-21",
+      "court": "Cour de cassation, Chambre criminelle",
+      "type": "supreme_court",
+      "reference": "Pourvoi n° 07-88.330, Publié au bulletin",
+      "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000020181483",
+      "language": "French",
+      "note": "FIDH & LDH pourvoi against the chambre de l'instruction (Paris, 24 Oct 2007) which had confirmed the investigating judge's lack of jurisdiction over the 1975 abduction of Ung Boun Hor from the French embassy in Phnom Penh. Case has no decisions in the corpus yet.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "france-munyeshyaka (corpus: Wenceslas Munyeshyaka — Non-lieu)",
+      "case_name": "Wenceslas Munyeshyaka (Rwanda — Non-lieu)",
+      "date": "2019-10-30",
+      "court": "Cour de cassation, Chambre criminelle",
+      "type": "supreme_court",
+      "reference": "Pourvoi n° 18-84.663",
+      "ecli": "ECLI:FR:CCASS:2019:CR02052",
+      "url": "https://www.courdecassation.fr/decision/5fca63d176ca4b4c278b5b0c",
+      "language": "French",
+      "note": "Rejection of the civil parties' (FIDH, LICRA, CPCR, LDH) pourvoi against the confirmation of the non-lieu (chambre de l'instruction, 21 June 2018) — the final decision closing the 1995 complaint.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "rwanda-mbarushimana (corpus: Callixte Mbarushimana — FDLR)",
+      "case_name": "Callixte Mbarushimana (Rwanda — FDLR)",
+      "date": "2011-01-04",
+      "court": "Cour de cassation, Chambre criminelle",
+      "type": "supreme_court",
+      "reference": "Pourvoi n° 10-87.760, Publié au bulletin",
+      "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000023432938",
+      "language": "French",
+      "note": "Ruling on Mbarushimana's surrender to the International Criminal Court (chambre de l'instruction Paris, 3 Nov 2010).",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "rwanda-simbikangwa",
+      "case_name": "Pascal Simbikangwa",
+      "date": "2012-06-20",
+      "court": "Cour de cassation, Chambre criminelle",
+      "type": "supreme_court",
+      "reference": "Pourvoi n° 12-81.024, Publié au bulletin",
+      "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000026154292",
+      "language": "French",
+      "note": "Published arrêt on the validity of investigative acts executed in Rwanda under international letters rogatory (on-site visit 9 May 2011, interrogation 14 Nov 2011) in a genocide/CAH instruction. Defendant anonymised; timeline matches the Simbikangwa instruction — verify before attaching.",
+      "confidence": "probable"
+    },
+    {
+      "case_id": "germany-fdlr-murwanashyaka",
+      "case_name": "Murwanashyaka & Musoni (FDLR — Rwanda/DRC)",
+      "date": "2018-12-20",
+      "court": "Bundesgerichtshof, 3. Strafsenat",
+      "type": "supreme_court",
+      "reference": "3 StR 236/17, Urteil",
+      "ecli": "ECLI:DE:BGH:2018:201218U3STR236.17.0",
+      "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE300452019&psml=bsjrsprod.psml",
+      "language": "German",
+      "note": "Revision judgment partially quashing the OLG Stuttgart judgment of 28 Sept 2015 (Murwanashyaka), with leading holdings on §§ 4, 7, 8 VStGB (command responsibility, psychological aiding of war crimes).",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "eurojust-de-yarmouk-syria",
+      "case_name": "Yarmouk Anti-Tank Attack (Germany — Syria)",
+      "date": "2023-10-31",
+      "court": "Bundesgerichtshof, 3. Strafsenat",
+      "type": "supreme_court",
+      "reference": "3 StR 306/23, Beschluss",
+      "ecli": "ECLI:DE:BGH:2023:311023B3STR306.23.0",
+      "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE311412023&psml=bsjrsprod.psml",
+      "language": "German",
+      "note": "Revision dismissed against the Kammergericht judgment of 23 Feb 2023 (the corpus's judgment date for this case); leading holding on 'attack' under § 11(1) VStGB and concurrence of murder with prohibited methods of warfare.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "germany-yazidi-jennifer-w",
+      "case_name": "Jennifer W. (Yazidi — Germany)",
+      "date": "2023-03-09",
+      "court": "Bundesgerichtshof, 3. Strafsenat",
+      "type": "supreme_court",
+      "reference": "KORE621552023 (rechtsprechung-im-internet)",
+      "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE621552023&psml=bsjrsprod.psml",
+      "language": "German",
+      "note": "Official text of the BGH revision (partial reversal on sentencing) of OLG München, 25 Oct 2021. DATA CORRECTION: the corpus dates this decision 2022-03-09; the official registry dates it 2023-03-09.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "germany-yazidi-genocide-taha",
+      "also": "eurojust-de-taha-aj-yazidi",
+      "case_name": "Taha Al-J. (Yazidi Genocide — Germany)",
+      "date": "2022-11-30",
+      "court": "Bundesgerichtshof",
+      "type": "supreme_court",
+      "reference": "KORE315052023 (rechtsprechung-im-internet)",
+      "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE315052023&psml=bsjrsprod.psml",
+      "language": "German",
+      "note": "Official registry text of the revision decision upholding the genocide conviction (corpus links the Eurojust summary only); leading holdings on 'serious bodily or mental harm' under §§ 6, 7 VStGB.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "anwar-raslan",
+      "case_name": "Anwar Raslan",
+      "date": "2024-03-20",
+      "court": "Bundesgerichtshof",
+      "type": "supreme_court",
+      "reference": "KORE301022024 (rechtsprechung-im-internet)",
+      "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE301022024&psml=bsjrsprod.psml",
+      "language": "German",
+      "note": "Official registry text of the BGH appeal ruling already in the corpus via Eurojust; leading holding on the use of UN investigative-mechanism reports as evidence (§§ 250, 256 StPO).",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "eurojust-de-germany-immunity-2024",
+      "case_name": "Syrian Official — Functional Immunity Ruling (Germany)",
+      "date": "2024-02-21",
+      "court": "Bundesgerichtshof",
+      "type": "supreme_court",
+      "reference": "KORE304162024 (rechtsprechung-im-internet)",
+      "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE304162024&psml=bsjrsprod.psml",
+      "language": "German",
+      "note": "Official text of the 21 Feb 2024 ruling that functional immunity of foreign officials does not bar prosecution for international crimes regardless of status or rank. Case has no decision link in the corpus.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "switzerland-nezzar-algeria",
+      "case_name": "Khaled Nezzar (Algeria — Dirty War)",
+      "date": "2012-07-25",
+      "court": "Tribunal pénal fédéral, Cour des plaintes",
+      "type": "pre_trial",
+      "reference": "BB.2011.140",
+      "url": "https://entscheidsuche.ch/docs/CH_BSTG/CH_BSTG_001_BB-2011-140_2012-07-25.pdf",
+      "language": "French",
+      "note": "Full text of the landmark decision rejecting functional immunity for the former Algerian defence minister — the corpus lists this decision (2012-07-25) with no URL.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "switzerland-sonko-gambia",
+      "case_name": "Ousman Sonko (Gambia)",
+      "date": "2017-08-16",
+      "court": "Tribunal fédéral (Federal Supreme Court)",
+      "type": "pre_trial",
+      "reference": "BGE 143 IV 316 (1B_271/2017)",
+      "url": "https://search.bger.ch/ext/eurospider/live/de/php/clir/http/index.php?highlight_docid=atf%3A%2F%2F143-IV-316%3Ade&lang=de&type=highlight_simple_query&query_words=&part=all",
+      "language": "German",
+      "note": "Published leading judgment (BGE) on extension of pre-trial detention for suspected crimes against humanity (torture) under Art. 264a/264k StGB — the detention litigation in the Sonko proceedings. Verify defendant identity before attaching.",
+      "confidence": "probable"
+    },
+    {
+      "case_id": "belgium-rwanda-basabose",
+      "case_name": "Pierre Basabosé & Séraphin Twahirwa (Rwanda)",
+      "date": "2020-11-04",
+      "court": "Cour de cassation (Belgium)",
+      "type": "pre_trial",
+      "reference": "P.20.1061.F",
+      "ecli": "ECLI:BE:CASS:2020:ARR.20201104.2F.12",
+      "url": "https://juportal.be/content/ECLI:BE:CASS:2020:ARR.20201104.2F.12",
+      "language": "French",
+      "note": "Pre-trial cassation (defendant arrested 30 Sept 2020, Rwanda 1994 genocide): extraterritorial jurisdiction under art. 6, 1°bis of the Preliminary Title CPP does not require the suspect's Belgian residence to predate the facts.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "belgium-rwanda-basabose",
+      "case_name": "Pierre Basabosé & Séraphin Twahirwa (Rwanda)",
+      "date": "2024-09-11",
+      "court": "Cour de cassation (Belgium)",
+      "type": "supreme_court",
+      "reference": "P.24.0184.F",
+      "ecli": "ECLI:BE:CASS:2024:ARR.20240911.2F.5",
+      "url": "https://juportal.be/content/ECLI:BE:CASS:2024:ARR.20240911.2F.5",
+      "language": "French",
+      "note": "Final cassation ruling on the pourvois of both accused against the Brussels assize arrêts of 19–22 Dec 2023 (internement of Basabosé, condamnation of Twahirwa), incl. holding that Art. 67 Rome Statute does not govern witness examination before the cour d'assises.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "belgium-ntuyahaga-rwanda",
+      "case_name": "Bernard Ntuyahaga (Rwanda — Belgium)",
+      "date": "2002-01-09",
+      "court": "Cour de cassation (Belgium)",
+      "type": "pre_trial",
+      "reference": "ECLI:BE:CASS:2002:ARR.20020109.26",
+      "url": "https://juportal.be/content/ECLI:BE:CASS:2002:ARR.20020109.26",
+      "language": "French",
+      "note": "Holding that the ICTR's non-confirmation of an indictment is not a decision on the merits and has no res judicata effect — the ruling that allowed Belgian proceedings to continue after the ICTR withdrew its indictment. Anonymised; matches the Ntuyahaga procedural history.",
+      "confidence": "probable"
+    },
+    {
+      "case_id": "austria-cvjetkovic-bosnia",
+      "case_name": "Duško Cvjetković (Bosnia — first European UJ genocide trial)",
+      "date": "1994-07-13",
+      "court": "Oberster Gerichtshof (Austria)",
+      "type": "supreme_court",
+      "reference": "15 Os 99/94",
+      "url": "https://www.ris.bka.gv.at/Dokument.wxe?Abfrage=Justiz&Dokumentnummer=JJR_19940713_OGH0002_0150OS00099_9400000_001",
+      "language": "German",
+      "note": "OGH ruling grounding Austrian jurisdiction in Art. VI Genocide Convention when no international tribunal is available (complements the 21 June 1994 decision already linked in the corpus).",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "arg-venezuela",
+      "case_name": "Venezuelan Officials (2014 Protests)",
+      "date": "2024-04-05",
+      "court": "Argentine federal courts (SAIJ digest)",
+      "type": "pre_trial",
+      "reference": "SAIJ su33028727 / su33028729",
+      "url": "https://www.saij.gob.ar/sumario/jurisdiccion-internacional-violacion-derechos-humanos-venezuela-su33028727",
+      "language": "Spanish",
+      "note": "Official SAIJ digests of the ruling assuming universal jurisdiction over Venezuelan state crimes, incl. the non-bis-in-idem analysis vis-à-vis the ICC's Venezuela situation.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "arg-venezuela",
+      "case_name": "Venezuelan Officials (2014 Protests) — capture order",
+      "date": "2024-09-23",
+      "court": "Argentine federal courts (SAIJ digest)",
+      "type": "arrest_warrant",
+      "reference": "SAIJ su33028790 / su33028791",
+      "url": "https://www.saij.gob.ar/sumario/orden-captura-extradicion-crimenes-lesa-humanidad-estados-extranjeros-jurisdiccion-internacional-su33028790",
+      "language": "Spanish",
+      "note": "SAIJ digest of the order for the international capture, with a view to extradition to Argentina, of a sitting foreign president accused of crimes against humanity (the Maduro warrant reported Sept 2024). Verify defendant scope before attaching.",
+      "confidence": "probable"
+    },
+    {
+      "case_id": "netherlands-kouwenhoven-liberia",
+      "case_name": "Guus Kouwenhoven (Liberia — arms-for-timber)",
+      "date": "2018-12-18",
+      "court": "Hoge Raad",
+      "type": "supreme_court",
+      "reference": "ECLI:NL:HR:2018:2336",
+      "url": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:HR:2018:2336",
+      "language": "Dutch",
+      "note": "Dutch original of the final cassation judgment — the corpus links only the official English version (ECLI:NL:HR:2018:2349).",
+      "confidence": "confirmed"
+    }
+  ],
+  "new_case_candidates": [
+    {
+      "suggested_id": "france-kabuga-irmct",
+      "case_name": "Félicien Kabuga (France — arrest and surrender to the IRMCT)",
+      "country_of_prosecution": "France",
+      "country_of_commission": "Rwanda",
+      "crimes": "Genocide; Crimes against humanity",
+      "jurisdictional_basis": "Territorial arrest / cooperation with international mechanism",
+      "key_decision": {
+        "date": "2020-09-30",
+        "court": "Cour de cassation, Chambre criminelle",
+        "reference": "Pourvoi n° 20-83.181, FS-P+B+I",
+        "ecli": "ECLI:FR:CCASS:2020:CR01802",
+        "url": "https://www.courdecassation.fr/decision/5fca327e89bc1fbc73ddc6dd"
+      },
+      "note": "Kabuga, the ICTR/IRMCT's most wanted fugitive, was arrested near Paris on 16 May 2020; the Cour de cassation rejected his challenge and confirmed his transfer to the Mechanism (chambre de l'instruction Paris, 3 June 2020). Bridges the corpus's national layer and the tribunals layer (IRMCT).",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "netherlands-basebya-rwanda",
+      "case_name": "Yvonne Basebya (Rwanda — Netherlands, incitement to genocide)",
+      "country_of_prosecution": "Netherlands",
+      "country_of_commission": "Rwanda",
+      "crimes": "Incitement to genocide",
+      "jurisdictional_basis": "Active personality (naturalised Dutch citizen) / Wet internationale misdrijven",
+      "key_decision": {
+        "date": "2015-05-12",
+        "court": "Hoge Raad",
+        "reference": "ECLI:NL:HR:2015:1230 (revision of Rb Den Haag, 1 March 2013, 09/748004-09)",
+        "url": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:HR:2015:1230"
+      },
+      "note": "First Dutch conviction for incitement to genocide (District Court The Hague, 1 March 2013, 6 years and 8 months); the Hoge Raad decision rules on her revision request. Trial judgment ECLI:NL:RBDHA:2013:BZ4292 should be added as the first-instance decision.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "belgium-sharon-yaron",
+      "case_name": "H.S.A. et al. v. Ariel Sharon & Amos Yaron (Sabra and Shatila — Belgium)",
+      "country_of_prosecution": "Belgium",
+      "country_of_commission": "Lebanon",
+      "crimes": "Genocide; Crimes against humanity; War crimes",
+      "jurisdictional_basis": "Universal jurisdiction (loi du 16 juin 1993 / 10 février 1999)",
+      "key_decision": {
+        "date": "2003-02-12",
+        "court": "Cour de cassation (Belgium)",
+        "reference": "P.02.1139.F (record: conclusions/summary)",
+        "url": "https://juportal.be/content/ECLI:BE:CASS:2003:CONC.20030212.22"
+      },
+      "note": "Landmark: the crimes covered by the 1993/1999 law do not require the accused's presence in Belgium for prosecution (while sitting officials enjoy immunity). A pillar of the Belgian UJ saga that led to the 2003 repeal — absent from the corpus. The Juportal record retrieved is the ministère public's conclusions attached to the arrêt; link the arrêt itself when ingesting.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "france-javor-bosnia",
+      "case_name": "In re Javor (Bosnian victims — France)",
+      "country_of_prosecution": "France",
+      "country_of_commission": "Bosnia and Herzegovina",
+      "crimes": "Genocide; War crimes; Torture",
+      "jurisdictional_basis": "Universal jurisdiction (attempted — rejected)",
+      "key_decision": {
+        "date": "1996-03-26",
+        "court": "Cour de cassation, Chambre criminelle",
+        "reference": "Pourvoi n° 95-81.527, Publié au bulletin",
+        "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000007068336"
+      },
+      "note": "Bosnian refugees (supported by Cimade and LDH) sought UJ prosecution in France for Bosnia camp crimes; the Cour de cassation confirmed French courts' lack of jurisdiction, holding the Geneva Conventions not directly applicable — the negative landmark that shaped France's later statutory UJ regime.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "france-disparus-oran",
+      "case_name": "Disappeared of Oran, 5 July 1962 (France — Algeria)",
+      "country_of_prosecution": "France",
+      "country_of_commission": "Algeria",
+      "crimes": "Crimes against humanity (complaint)",
+      "jurisdictional_basis": "Passive personality",
+      "key_decision": {
+        "date": "1991-11-14",
+        "court": "Cour de cassation, Chambre criminelle",
+        "reference": "Pourvoi n° 91-82.246, Publié au bulletin",
+        "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000007066570"
+      },
+      "note": "Early CAH complaint by the wife of a man disappeared in Oran on 5 July 1962; the arrêt settles venue (Paris) for crimes committed abroad by unidentified perpetrators — part of the pre-1994 French CAH jurisprudence alongside Boudarel.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "spain-falun-gong",
+      "case_name": "Falun Gong (Spain — universal jurisdiction over China)",
+      "country_of_prosecution": "Spain",
+      "country_of_commission": "China",
+      "crimes": "Genocide; Torture",
+      "jurisdictional_basis": "Universal jurisdiction (art. 23.4 LOPJ, pre-2009 reform)",
+      "key_decision": {
+        "date": "2007-10-22",
+        "court": "Tribunal Constitucional, Sala Segunda",
+        "reference": "STC 227/2007",
+        "ecli": "ECLI:ES:TC:2007:227",
+        "url": "https://hj.tribunalconstitucional.es/HJ/es/Resolucion/Show/6194"
+      },
+      "note": "Constitutional amparo applying the STC 237/2005 (Guatemala) doctrine of broad universal jurisdiction to the Falun Gong complaint against Chinese leaders. STC 237/2005 itself is not indexed in LDH but is on the same HJ portal; both belong to the Spanish UJ arc that the corpus currently covers only via Scilingo, Pinochet-related and Couso references.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "germany-koblenz-yazidi-enslavement",
+      "case_name": "OLG Koblenz Yazidi enslavement case (ISIS returnee)",
+      "country_of_prosecution": "Germany",
+      "country_of_commission": "Syria/Iraq",
+      "crimes": "Crimes against humanity (enslavement, persecution); aiding sexual-violence CAH and war crimes; membership in a foreign terrorist organisation",
+      "jurisdictional_basis": "Universal jurisdiction / active personality (Völkerstrafgesetzbuch)",
+      "key_decision": {
+        "date": "2025-07-10",
+        "court": "Bundesgerichtshof, 3. Strafsenat",
+        "reference": "3 StR 496/23, Beschluss (on OLG Koblenz, 21 June 2023)",
+        "ecli": "ECLI:DE:BGH:2025:100725B3STR496.23.0",
+        "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE300152025&psml=bsjrsprod.psml"
+      },
+      "note": "Leading BGH decision on participation in genocide by enslavement (conviction modified to CAH counts, sentence remanded). Defendant anonymised — identify the OLG Koblenz 21 June 2023 case (reported as 'Nadine K.') before ingestion.",
+      "confidence": "probable"
+    },
+    {
+      "suggested_id": "germany-stuttgart-humanitarian-ops",
+      "case_name": "War crime against humanitarian operations (OLG Stuttgart 2017)",
+      "country_of_prosecution": "Germany",
+      "country_of_commission": "Syria",
+      "crimes": "War crime against humanitarian operations; grave deprivation of liberty",
+      "jurisdictional_basis": "Universal jurisdiction (Völkerstrafgesetzbuch)",
+      "key_decision": {
+        "date": "2018-08-23",
+        "court": "Bundesgerichtshof",
+        "reference": "KORE630652018 (on OLG Stuttgart, 20 Sept 2017)",
+        "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE630652018&psml=bsjrsprod.psml"
+      },
+      "note": "BGH revision reshaping the conviction (war crime against humanitarian operations in unity with grave deprivation of liberty and aiding). Underlying OLG Stuttgart case (20 Sept 2017) — identify defendant (reported as a UN-observer abduction case in Syria) before ingestion.",
+      "confidence": "probable"
+    }
+  ],
+  "watchlist": [
+    {
+      "reference": "BGH AK 118/25, Beschluss of 17 Dec 2025",
+      "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE701222026&psml=bsjrsprod.psml",
+      "note": "Detention continued in a pending Völkerstrafrecht case before OLG Koblenz (accused in custody since 27 March 2025) — possible future corpus case."
+    },
+    {
+      "reference": "ECLI:NL:HR:2023:864, Hoge Raad 6 June 2023",
+      "url": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:HR:2023:864",
+      "note": "Cassation on a 2022 Rwandan extradition request — useful for the corpus's Rwanda-extradition strand (cf. ECLI:NL:HR:2014:3627, 16 Dec 2014)."
+    },
+    {
+      "reference": "Cass. crim. 7 mai 2025, n° 25-81.446, FS-B",
+      "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000051582124",
+      "note": "Published 2025 arrêt in a UJ/international-crimes procedure (partial cassation) — identify the underlying case; may match a corpus 2025 entry."
+    }
+  ]
+}
