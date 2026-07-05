@@ -1,0 +1,360 @@
+{
+  "generated": "2026-07-05",
+  "scope": "Batch 2 — Americas, Africa, Israel: national cases adjudicating international crimes (immunity, jurisdiction, procedure, victims' rights). Sources: CourtListener/Caselaw Access Project (US), CSJN sjconsulta + SAIJ (AR), Corte de Constitucionalidad (GT), Tribunal Constitucional (PE), Poder Judicial (CL), Cour suprême via Juricaf (SN), Constitutional Court (ZA), Versa/Cardozo (IL), Corte Constitucional + Procuraduría (CO).",
+  "decisions_for_existing_cases": [
+    {
+      "case_id": "al-shimari-caci (corpus: Al Shimari v. CACI)",
+      "case_name": "Al Shimari v. CACI",
+      "date": "2017-06-28",
+      "court": "U.S. District Court, E.D. Virginia (Brinkema, J.)",
+      "type": "first_instance",
+      "reference": "1:08-cv-827 (LMB/JFA)",
+      "url": "https://www.courtlistener.com/opinion/7326469/al-shimari-v-caci-premier-tech-inc/",
+      "language": "English",
+      "note": "Memorandum opinion setting the ATS legal standard for the Abu Ghraib torture claims against the contractor — official opinion text for a corpus case.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "kiobel (corpus: Kiobel v. Royal Dutch Petroleum)",
+      "case_name": "Kiobel v. Royal Dutch Petroleum Co.",
+      "date": "2013-04-17",
+      "court": "Supreme Court of the United States",
+      "type": "supreme_court",
+      "reference": "569 U.S. 108 (2013)",
+      "url": "https://www.courtlistener.com/opinion/858289/kiobel-v-royal-dutch-petroleum-co/",
+      "language": "English",
+      "note": "Official opinion text (presumption against extraterritoriality under the ATS) for a corpus case.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "filartiga (corpus: Filártiga v. Peña-Irala)",
+      "case_name": "Filártiga v. Peña-Irala",
+      "date": "1980-06-30",
+      "court": "U.S. Court of Appeals, Second Circuit",
+      "type": "appeal",
+      "reference": "630 F.2d 876 (2d Cir. 1980)",
+      "url": "https://www.courtlistener.com/opinion/382191/dolly-m-e-filartiga-and-joel-filartiga-v-americo-norberto-pena-irala/",
+      "language": "English",
+      "note": "Official text of the founding ATS torture judgment; the E.D.N.Y. damages decision of 10 Jan 1984 is also indexed (courtlistener.com/opinion/1496989).",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "za-salc (corpus: National Commissioner SAPS v. SALC — Zimbabwe Torture Docket)",
+      "case_name": "National Commissioner of the SAPS v. Southern African Human Rights Litigation Centre",
+      "date": "2014-10-30",
+      "court": "Constitutional Court of South Africa",
+      "type": "supreme_court",
+      "reference": "2014 (12) BCLR 1428 (CC)",
+      "url": "http://hdl.handle.net/20.500.12144/3754",
+      "language": "English",
+      "note": "Official repository text of the judgment obliging SAPS to investigate Zimbabwean torture under the ICC Act — a corpus case.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "hissene-habre",
+      "case_name": "Hissène Habré",
+      "date": "2001-03-20",
+      "court": "Cour de cassation du Sénégal",
+      "type": "supreme_court",
+      "reference": "Arrêt n° 14 du 20 mars 2001 (Guengueng et autres c. Habré)",
+      "url": "https://juricaf.org/arret/SENEGAL-COURSUPREME-20010320-14",
+      "language": "French",
+      "note": "Official Juricaf text of the cassation ruling that Senegalese courts lacked jurisdiction pre-EAC — the corpus cites an HRW legacy page for this decision.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "rumsfeld-us (corpus: Donald Rumsfeld — Abu Ghraib & Guantánamo Torture)",
+      "case_name": "Ali v. Rumsfeld (companion US civil litigation)",
+      "date": "2011-06-21",
+      "court": "U.S. Court of Appeals, D.C. Circuit",
+      "type": "appeal",
+      "reference": "649 F.3d 762 (D.C. Cir. 2011)",
+      "url": "https://www.courtlistener.com/opinion/219202/arkan-ali-v-donald-rumsfeld/",
+      "language": "English",
+      "note": "Dismissal of Afghan/Iraqi detainees' torture claims against Rumsfeld — the US-court counterpart of the European UJ complaints tracked by the corpus case. Attach as related decision or treat as separate case.",
+      "confidence": "confirmed"
+    }
+  ],
+  "new_case_candidates": [
+    {
+      "suggested_id": "argentina-simon",
+      "case_name": "Simón, Julio Héctor y otros (Argentina — annulment of the amnesty laws)",
+      "country_of_prosecution": "Argentina",
+      "country_of_commission": "Argentina",
+      "crimes": "Crimes against humanity; Enforced disappearance",
+      "jurisdictional_basis": "Territorial",
+      "axes": "amnesty; imprescriptibility; victims' rights",
+      "key_decision": {
+        "date": "2005-06-14",
+        "court": "Corte Suprema de Justicia de la Nación",
+        "reference": "Fallos 328:2056, causa n° 17.768",
+        "url": "https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinks498.html?idAnalisis=586338"
+      },
+      "note": "The landmark declaring the Punto Final and Obediencia Debida laws unconstitutional and reopening the dictatorship-era prosecutions. The Procuración General dictamen (5 May 2005) is also indexed (idAnalisis=583223).",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "argentina-arancibia-clavel",
+      "case_name": "Arancibia Clavel (Argentina — Prats assassination, imprescriptibility)",
+      "country_of_prosecution": "Argentina",
+      "country_of_commission": "Argentina",
+      "crimes": "Crimes against humanity (aggravated homicide, criminal association — DINA agent, assassination of General Carlos Prats)",
+      "jurisdictional_basis": "Territorial",
+      "axes": "imprescriptibility; customary international law with constitutional rank",
+      "key_decision": {
+        "date": "2004-08-24",
+        "court": "Corte Suprema de Justicia de la Nación",
+        "reference": "Fallos 327:3312, causa n° 259",
+        "url": "https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinks498.html?idAnalisis=565288"
+      },
+      "note": "CSJN holds crimes against humanity imprescriptible on the basis of peremptory international norms — decided against a Chilean DINA agent for a Buenos Aires assassination (transnational dimension).",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "guatemala-rios-montt",
+      "case_name": "José Efraín Ríos Montt & Mauricio Rodríguez Sánchez (Guatemala — Ixil genocide)",
+      "country_of_prosecution": "Guatemala",
+      "country_of_commission": "Guatemala",
+      "crimes": "Genocide; Crimes against the duties of humanity",
+      "jurisdictional_basis": "Territorial",
+      "axes": "head-of-state accountability; amparo/procedural challenges; victims' participation",
+      "key_decision": {
+        "date": "2014-01-16",
+        "court": "Corte de Constitucionalidad",
+        "reference": "Expediente 1905-2013 (apelación de sentencia de amparo)",
+        "url": "https://jurisprudencia.cc.gob.gt/Sentencias/824470.1905-2013.pdf"
+      },
+      "note": "CONFIRMED from the text: amparo by Ríos Montt and Rodríguez Sánchez's defence against the 28 Jan 2013 auto opening the genocide trial before the Tribunal de Mayor Riesgo B. The CC portal indexes the wider amparo line around the 10 May 2013 conviction and its 20 May 2013 annulment (e.g. exp. 3340-2013 of 18 Dec 2014; acumulados 1578/1585/1587/1926-2014 of 3 March 2016) — map each before ingestion. The trial judgment itself is not in LDH.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "peru-fujimori",
+      "case_name": "Alberto Fujimori (Peru — Barrios Altos / La Cantuta; pardon litigation)",
+      "country_of_prosecution": "Peru",
+      "country_of_commission": "Peru",
+      "crimes": "Crimes against humanity (qualified homicide, grave injuries, kidnapping)",
+      "jurisdictional_basis": "Territorial (after extradition from Chile)",
+      "axes": "head-of-state accountability; autoría mediata; pardon vs. IACtHR obligations; victims' rights",
+      "key_decision": {
+        "date": "2025-02-14",
+        "court": "Tribunal Constitucional del Perú (Pleno)",
+        "reference": "Exp. 03878-2021-PHC/TC, Sentencia 36/2025",
+        "url": "https://www.tc.gob.pe/jurisprudencia/2025/03878-2021-HC.html"
+      },
+      "note": "LDH indexes the constitutional layer: the Fujimori habeas corpus / humanitarian-pardon line (also Exp. 03301-2023-HC, 00661-2020-HC, 04593-2023-HC, 03028-2023-HC, 04790-2023-HC — all Pleno rulings published 2024-2025). The 7 April 2009 Sala Penal Especial conviction itself is not indexed — keep the existing secondary sources for it.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-sosa-alvarez-machain",
+      "case_name": "Sosa v. Alvarez-Machain (US — ATS framework)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Mexico",
+      "crimes": "Arbitrary detention (cross-border abduction) — ATS civil claim",
+      "jurisdictional_basis": "Alien Tort Statute (civil)",
+      "axes": "jurisdiction; scope of actionable international-law norms",
+      "key_decision": {
+        "date": "2004-06-29",
+        "court": "Supreme Court of the United States",
+        "reference": "542 U.S. 692 (2004)",
+        "url": "https://www.courtlistener.com/opinion/137006/sosa-v-alvarez-machain/"
+      },
+      "note": "The framework ruling limiting ATS claims to specific, universal and obligatory international-law norms — governs every ATS case in the corpus.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-samantar-yousuf",
+      "case_name": "Yousuf v. Samantar (US — Somalia, foreign-official immunity)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Somalia",
+      "crimes": "Torture; Extrajudicial killing (TVPA/ATS civil)",
+      "jurisdictional_basis": "ATS / TVPA (civil)",
+      "axes": "immunity (core)",
+      "key_decision": {
+        "date": "2010-06-01",
+        "court": "Supreme Court of the United States",
+        "reference": "560 U.S. 305 (2010)",
+        "url": "https://www.courtlistener.com/opinion/147531/samantar-v-yousuf/"
+      },
+      "note": "SCOTUS: FSIA does not shield individual foreign officials. On remand, the Fourth Circuit (2 Nov 2012, 699 F.3d 763 — courtlistener.com/opinion/811209) held no common-law immunity for jus cogens violations — one of the clearest national immunity rulings anywhere. Former Somali PM Samantar was ultimately held liable.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-kadic-karadzic",
+      "case_name": "Kadić v. Karadžić (US — Bosnia, private-actor liability)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Bosnia and Herzegovina",
+      "crimes": "Genocide; War crimes; Crimes against humanity (civil)",
+      "jurisdictional_basis": "ATS / TVPA (civil)",
+      "axes": "non-state actors; jurisdiction over de facto authorities",
+      "key_decision": {
+        "date": "1995-10-13",
+        "court": "U.S. Court of Appeals, Second Circuit",
+        "reference": "70 F.3d 232 (2d Cir. 1995)",
+        "url": "https://www.courtlistener.com/opinion/7034388/kadic-v-karadzic/"
+      },
+      "note": "Genocide and war crimes are actionable against private individuals without state action — jury later awarded $4.5bn. Companion Doe v. Karadžić (S.D.N.Y.) also indexed.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-belfast-chuckie-taylor",
+      "case_name": "United States v. Belfast (Chuckie Taylor — first US torture-statute conviction)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Liberia",
+      "crimes": "Torture; Conspiracy; Firearms offences (criminal)",
+      "jurisdictional_basis": "Active personality / extraterritorial torture statute (18 U.S.C. § 2340A)",
+      "axes": "first criminal application of the US torture statute",
+      "key_decision": {
+        "date": "2010-07-15",
+        "court": "U.S. Court of Appeals, Eleventh Circuit",
+        "reference": "611 F.3d 783 (11th Cir. 2010)",
+        "url": "https://www.courtlistener.com/opinion/150723/united-states-v-belfast/"
+      },
+      "note": "Affirms the 97-year sentence of Charles Taylor's son for torture in Liberia — the criminal counterpart to the corpus's Liberia cluster (Kosiah, Kamara, Jabbateh, Woewiyu).",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-forti-suarez-mason",
+      "case_name": "Forti v. Suarez-Mason (US — Argentine Dirty War, ATS)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Argentina",
+      "crimes": "Torture; Prolonged arbitrary detention; Summary execution; Disappearance (civil)",
+      "jurisdictional_basis": "ATS (civil)",
+      "axes": "victims' rights; which norms are actionable",
+      "key_decision": {
+        "date": "1988-07-25",
+        "court": "U.S. District Court, N.D. California",
+        "reference": "694 F. Supp. 707 (N.D. Cal. 1988)",
+        "url": "https://www.courtlistener.com/opinion/1874332/forti-v-suarez-mason/"
+      },
+      "note": "ATS suit by Argentine victims against General Suárez-Mason (First Army Corps commander) — early post-Filártiga jurisprudence defining actionable norms; complements the corpus's Argentine cluster.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-xuncax-gramajo",
+      "case_name": "Xuncax v. Gramajo / Ortiz v. Gramajo (US — Guatemala)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Guatemala",
+      "crimes": "Torture; Summary execution; Disappearance; Arbitrary detention (civil)",
+      "jurisdictional_basis": "ATS / TVPA (civil)",
+      "axes": "command responsibility of a defence minister; victims' rights",
+      "key_decision": {
+        "date": "1995-04-12",
+        "court": "U.S. District Court, D. Massachusetts",
+        "reference": "886 F. Supp. 162 (D. Mass. 1995)",
+        "url": "https://static.case.law/"
+      },
+      "note": "Default judgments against Guatemalan Defence Minister Héctor Gramajo for Kanjobal villagers and US nun Dianna Ortiz — the US civil companion to the corpus's Guatemala entries. CAP static URL is generic; pin the CourtListener opinion when ingesting.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-doe-exxon",
+      "case_name": "Doe v. Exxon Mobil (US — Aceh, corporate)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Indonesia",
+      "crimes": "Torture; Arbitrary detention (civil, corporate defendant)",
+      "jurisdictional_basis": "ATS / TVPA (civil)",
+      "axes": "corporate accountability",
+      "key_decision": {
+        "date": "2005-10-14",
+        "court": "U.S. District Court, District of Columbia",
+        "reference": "393 F. Supp. 2d 20 (D.D.C. 2005)",
+        "url": "https://www.courtlistener.com/opinion/2455787/doe-v-exxon-mobil-corp/"
+      },
+      "note": "Security-forces abuses at the Arun gas field; two decades of litigation (settled 2023). Corporate-defendant flag = Yes — extends the corpus's corporate cluster (Lafarge, Amesys, BNP Paribas, Lundin).",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "us-sarei-rio-tinto",
+      "case_name": "Sarei v. Rio Tinto (US — Bougainville, corporate)",
+      "country_of_prosecution": "United States",
+      "country_of_commission": "Papua New Guinea",
+      "crimes": "Genocide; War crimes (civil, corporate defendant)",
+      "jurisdictional_basis": "ATS (civil)",
+      "axes": "corporate accountability; exhaustion of local remedies",
+      "key_decision": {
+        "date": "2011-10-25",
+        "court": "U.S. Court of Appeals, Ninth Circuit (en banc)",
+        "reference": "671 F.3d 736 (9th Cir. 2011)",
+        "url": "https://www.courtlistener.com/opinion/616018/sarei-v-rio-tinto-plc/"
+      },
+      "note": "En banc reinstatement of genocide/war-crimes claims over the Panguna mine blockade deaths (later vacated after Kiobel). Corporate-defendant flag = Yes.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "za-basson",
+      "case_name": "S v. Basson (South Africa — Project Coast / apartheid chemical warfare)",
+      "country_of_prosecution": "South Africa",
+      "country_of_commission": "South Africa / Namibia",
+      "crimes": "Apartheid-era murder conspiracy abroad; war-related crimes",
+      "jurisdictional_basis": "Territorial / extraterritorial conspiracy",
+      "axes": "jurisdiction over cross-border conspiracy; duty to prosecute international crimes",
+      "key_decision": {
+        "date": "2005-09-09",
+        "court": "Constitutional Court of South Africa",
+        "reference": "CCT 30/03 (S v Basson; reasons of 9 Sept 2005)",
+        "url": "http://hdl.handle.net/20.500.12144/2185"
+      },
+      "note": "The ConCourt rulings in the prosecution of Wouter Basson, head of the apartheid regime's chemical and biological weapons programme — held that South African courts had jurisdiction over conspiracy to murder SWAPO detainees in Namibia, invoking international-law duties.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "il-berenblat-kapo",
+      "case_name": "Berenblat v. Attorney-General (Israel — kapo trials)",
+      "country_of_prosecution": "Israel",
+      "country_of_commission": "Poland (occupied)",
+      "crimes": "Nazi and Nazi Collaborators (Punishment) Law offences",
+      "jurisdictional_basis": "Retroactive extraterritorial statute (as in Eichmann)",
+      "axes": "collaborator liability; evidence in atrocity trials",
+      "key_decision": {
+        "date": "1964-05-22",
+        "court": "Supreme Court of Israel (Court of Criminal Appeal)",
+        "reference": "Crim. A. 77/64",
+        "url": "https://versa.cardozo.yu.edu/opinions/berenblat-v-attorney-general-0"
+      },
+      "note": "Leading kapo-trial appeal (Jewish police commander at the Bendin ghetto) — the domestic jurisprudence surrounding Eichmann that the corpus's Israel layer currently lacks. Official English translation via Versa (Cardozo).",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "il-pcati-targeted-killings",
+      "case_name": "Public Committee Against Torture in Israel v. Government of Israel (targeted killings)",
+      "country_of_prosecution": "Israel",
+      "country_of_commission": "Israel / Occupied Palestinian Territory",
+      "crimes": "Legality of targeted killings under IHL (judicial review)",
+      "jurisdictional_basis": "High Court of Justice review",
+      "axes": "national court applying IHL/international criminal law standards; civilian direct participation in hostilities",
+      "key_decision": {
+        "date": "2006-12-14",
+        "court": "Supreme Court of Israel sitting as High Court of Justice",
+        "reference": "HCJ 769/02",
+        "url": "https://versa.cardozo.yu.edu/opinions/public-committee-against-torture-v-government"
+      },
+      "note": "The targeted-killings judgment — a national supreme court defining the IHL rules (DPH, proportionality, investigation duties) that govern potential war crimes; borderline for the corpus's scope but central to the 'national courts looking into international crimes' idea.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "co-c-080-18-jep",
+      "case_name": "Sentencia C-080/18 (Colombia — constitutional review of the JEP statute)",
+      "country_of_prosecution": "Colombia",
+      "country_of_commission": "Colombia",
+      "crimes": "Framework for war crimes / crimes against humanity of the armed conflict",
+      "jurisdictional_basis": "Territorial (transitional justice)",
+      "axes": "victims' rights; amnesty limits; command responsibility standard",
+      "key_decision": {
+        "date": "2018-08-15",
+        "court": "Corte Constitucional de Colombia",
+        "reference": "C-080/18",
+        "url": "https://www.corteconstitucional.gov.co/relatoria/2018/C-080-18.htm"
+      },
+      "note": "The constitutional review of the JEP statutory law — no amnesty for international crimes, victims' participation architecture. Bridges to the corpus's Uribe entry and the site's tribunals layer (JEP). C-781/12 (broad victim definition) also indexed.",
+      "confidence": "confirmed"
+    }
+  ],
+  "coverage_notes": [
+    "CHILE: the LDH Poder Judicial index carries the dictatorship-era CIVIL reparations layer (dozens of recent indemnification judgments against the Fisco de Chile, e.g. juris.pjud.cl C-16272-2024, C-8762-2024) but not the Sala Penal criminal line (episodios) — treat Chile as a civil/victims'-rights vein and source the criminal landmarks elsewhere.",
+    "GUATEMALA: only the Corte de Constitucionalidad is indexed — the high-risk-tribunal judgments (Ríos Montt 10 May 2013, Sepur Zarco 2016, Molina Theissen 2018, Dos Erres) must come from other sources; the CC amparo layer around each is available and citable.",
+    "PERU: only the Tribunal Constitucional is indexed — the Sala Penal Especial Fujimori judgment (7 April 2009) and Corte Suprema confirmations are not.",
+    "SOUTH AFRICA: Constitutional Court only — the Supreme Court of Appeal Al-Bashir judgment (Minister of Justice v SALC, 2016) is not indexed; keep SAFLII for it.",
+    "ARGENTINA: CSJN sjconsulta full texts + SAIJ digests are both indexed — Mazzeo (2007, indultos), Priebke (1995 extradition) and the ESMA/Videla lines are likely retrievable the same way for a follow-up pass.",
+    "US: CourtListener + Caselaw Access Project give official texts for virtually the whole ATS/TVPA canon — further candidates spotted but not yet verified: Doe v. Nestlé (C.D. Cal. 2010, courtlistener.com/opinion/2470318), Handel v. Artukovic (C.D. Cal. 1985), Abagninin v. AMVAC (9th Cir. 2008), Ali Shafi v. Palestinian Authority (D.C. Cir. 2011), Mohamed v. President of RSA (ZA ConCourt 2001, rendition to US)."
+  ]
+}

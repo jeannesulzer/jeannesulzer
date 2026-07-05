@@ -1,8 +1,13 @@
 # Enrichment — new decisions found via Legal Data Hunter
 
-Research pass of **2026-07-05** over official national case-law databases (Légifrance/Judilibre, rechtsprechung-im-internet.de, Juportal, entscheidsuche.ch/BGer, RIS, rechtspraak.nl, SAIJ, Tribunal Constitucional HJ), using the Legal Data Hunter MCP and cross-checked against the corpus's 198 cases and 140 judicial decisions.
+Research passes of **2026-07-05** over official national case-law databases, using the Legal Data Hunter MCP and cross-checked against the corpus's 198 cases and 140 judicial decisions.
 
-Machine-readable results: [`new-decisions-ldh-2026-07-05.json`](new-decisions-ldh-2026-07-05.json). Every entry carries a `confidence` flag — **confirmed** (identity established from the decision text: parties, dates, facts) or **probable** (strong circumstantial match; verify before ingestion, since most European decisions are anonymised).
+Machine-readable results:
+
+- [`new-decisions-ldh-2026-07-05.json`](new-decisions-ldh-2026-07-05.json) — **Batch 1 (Europe)**: Légifrance/Judilibre, rechtsprechung-im-internet.de, Juportal, entscheidsuche.ch/BGer, RIS, rechtspraak.nl, SAIJ, Tribunal Constitucional HJ.
+- [`new-decisions-ldh-2026-07-05-batch2.json`](new-decisions-ldh-2026-07-05-batch2.json) — **Batch 2 (Americas, Africa, Israel)**: the US ATS/TVPA canon with official opinion texts (Filártiga, Sosa, Samantar/Yousuf, Kadić v. Karadžić, US v. Belfast/Chuckie Taylor, Forti, Xuncax v. Gramajo, Doe v. Exxon, Sarei v. Rio Tinto, Kiobel, Al Shimari), Argentina's CSJN amnesty landmarks (Simón 2005, Arancibia Clavel 2004 — full texts), Guatemala's Constitutional Court amparo line in Ríos Montt, Peru's Tribunal Constitucional Fujimori pardon litigation, South Africa (SALC ConCourt official text; S v Basson), Senegal (the 2001 Habré cassation via Juricaf), Israel (Berenblat kapo appeal; PCATI targeted-killings HCJ), and Colombia (C-080/18 JEP review). Includes per-country coverage notes (what LDH does NOT index: Chilean Sala Penal criminal line, Guatemalan trial judgments, the 2009 Fujimori conviction, the ZA Al-Bashir SCA judgment).
+
+Every entry carries a `confidence` flag — **confirmed** (identity established from the decision text: parties, dates, facts) or **probable** (strong circumstantial match; verify before ingestion, since most European decisions are anonymised).
 
 ## What was found
 
