@@ -1,0 +1,272 @@
+[
+  {
+    "tribunal_acronym": "IMT",
+    "label": "Avalon Project — Nuremberg trial documents",
+    "url": "https://avalon.law.yale.edu/subject_menus/imt.asp",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "IMT",
+    "label": "ICRC IHL — Nuremberg Judgment",
+    "url": "https://ihl-databases.icrc.org/en/ihl-treaties/imt-charter-1945",
+    "kind": "docs"
+  },
+  {
+    "tribunal_acronym": "IMTFE",
+    "label": "ICC Legal Tools — Tokyo Tribunal",
+    "url": "https://www.legal-tools.org/en/browse/imtfe/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "IMTFE",
+    "label": "UVA Tokyo War Crimes Trial archive",
+    "url": "https://imtfe.law.virginia.edu/",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "NMT",
+    "label": "Harvard Nuremberg Trials Project (NMT)",
+    "url": "https://nuremberg.law.harvard.edu/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "NMT",
+    "label": "Avalon — Subsequent proceedings",
+    "url": "https://avalon.law.yale.edu/subject_menus/imtmenu.asp",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "NMT-Drs",
+    "label": "Harvard Doctors' Trial (NMT 1)",
+    "url": "https://nuremberg.law.harvard.edu/transcripts/1-transcript-for-nmt-1-medical-case",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "NMT-Ein",
+    "label": "Harvard Einsatzgruppen Trial (NMT 9)",
+    "url": "https://nuremberg.law.harvard.edu/transcripts/3-transcript-for-nmt-9-einsatzgruppen-case",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "NMT-Min",
+    "label": "Harvard Ministries Trial (NMT 11)",
+    "url": "https://nuremberg.law.harvard.edu/transcripts/4-transcript-for-nmt-11-ministries-case",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "ICTY",
+    "label": "ICTY — Cases database",
+    "url": "https://www.icty.org/en/cases",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "ICTY",
+    "label": "ICTY Court Records",
+    "url": "https://ucr.irmct.org/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "ICTR",
+    "label": "ICTR — Cases database",
+    "url": "https://unictr.irmct.org/en/cases",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "IRMCT",
+    "label": "IRMCT — Cases",
+    "url": "https://www.irmct.org/en/cases",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "IRMCT",
+    "label": "Unified Court Records (UCR)",
+    "url": "https://ucr.irmct.org/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "ICC",
+    "label": "ICC — Cases",
+    "url": "https://www.icc-cpi.int/cases",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "ICC",
+    "label": "ICC Court Records",
+    "url": "https://www.icc-cpi.int/court-record",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "ICC",
+    "label": "ICC Legal Tools Database",
+    "url": "https://www.legal-tools.org/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "SPSC",
+    "label": "UC Berkeley — SPSC case archive",
+    "url": "https://www.law.berkeley.edu/research/human-rights-center/projects/east-timor/",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "SPSC",
+    "label": "ICC Legal Tools — East Timor SPSC",
+    "url": "https://www.legal-tools.org/en/browse/east-timor/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "Reg.64",
+    "label": "ICC Legal Tools — UNMIK Reg. 64 panels",
+    "url": "https://www.legal-tools.org/en/browse/kosovo/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "SCSL / RSCSL",
+    "label": "Residual Special Court for Sierra Leone",
+    "url": "http://www.rscsl.org/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "SCSL / RSCSL",
+    "label": "RSCSL — Cases",
+    "url": "http://www.rscsl.org/Cases.html",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "IHT",
+    "label": "ICC Legal Tools — Iraqi High Tribunal",
+    "url": "https://www.legal-tools.org/en/browse/iraq/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "IHT",
+    "label": "Case Western — IHT documents",
+    "url": "https://law.case.edu/saddamtrial/",
+    "kind": "archive"
+  },
+  {
+    "tribunal_acronym": "WCC-BiH",
+    "label": "Court of BiH — Section I (War Crimes)",
+    "url": "http://www.sudbih.gov.ba/?jezik=e",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "WCC-BiH",
+    "label": "OSCE — BiH war crimes monitoring",
+    "url": "https://www.osce.org/mission-to-bosnia-and-herzegovina/war-crimes",
+    "kind": "docs"
+  },
+  {
+    "tribunal_acronym": "ECCC",
+    "label": "ECCC — Case load",
+    "url": "https://www.eccc.gov.kh/en/case-load",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "ECCC",
+    "label": "ECCC Court Documents",
+    "url": "https://www.eccc.gov.kh/en/documents/court",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "STL",
+    "label": "STL Legacy Website — Cases",
+    "url": "https://www.stl-tsl.org/en/the-cases",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "EAC",
+    "label": "Chambres africaines extraordinaires — archive",
+    "url": "https://www.chambresafricaines.org/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "EAC",
+    "label": "ICC Legal Tools — EAC / Habré",
+    "url": "https://www.legal-tools.org/en/browse/eac/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "KSC",
+    "label": "Kosovo Specialist Chambers — Cases",
+    "url": "https://www.scp-ks.org/en/cases",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "KSC",
+    "label": "KSC Court Records",
+    "url": "https://repository.scp-ks.org/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "SCC",
+    "label": "Cour Pénale Spéciale (CPS-CAR)",
+    "url": "https://cps-rca.cf/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "JEP",
+    "label": "Jurisdicción Especial para la Paz",
+    "url": "https://www.jep.gov.co/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "JEP",
+    "label": "JEP — Macro-cases (Macrocasos)",
+    "url": "https://www.jep.gov.co/macrocasos/",
+    "kind": "database"
+  },
+  {
+    "tribunal_acronym": "IIIM",
+    "label": "IIIM — Syria",
+    "url": "https://iiim.un.org/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "UNITAD",
+    "label": "UNITAD legacy site",
+    "url": "https://www.unitad.un.org/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "IIMM",
+    "label": "IIMM — Myanmar",
+    "url": "https://iimm.un.org/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "IIMU",
+    "label": "Commission of Inquiry on Ukraine",
+    "url": "https://www.ohchr.org/en/hr-bodies/hrc/iicihr-ukraine/index",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "CIJA",
+    "label": "CIJA — Commission for International Justice and Accountability",
+    "url": "https://cijaonline.org/",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "STCoA",
+    "label": "Council of Europe — Special Tribunal page",
+    "url": "https://www.coe.int/en/web/special-tribunal-aggression-against-ukraine",
+    "kind": "site"
+  },
+  {
+    "tribunal_acronym": "Malabo",
+    "label": "AU — Malabo Protocol (text)",
+    "url": "https://au.int/en/treaties/protocol-amendments-protocol-statute-african-court-justice-and-human-rights",
+    "kind": "docs"
+  },
+  {
+    "tribunal_acronym": "CAH-Conv",
+    "label": "ILC — Draft articles on crimes against humanity",
+    "url": "https://legal.un.org/ilc/texts/7_7.shtml",
+    "kind": "docs"
+  },
+  {
+    "tribunal_acronym": "Sudan-TJ",
+    "label": "Juba Peace Agreement (UN Peacemaker)",
+    "url": "https://peacemaker.un.org/sudan-juba-agreement2020",
+    "kind": "docs"
+  }
+]
