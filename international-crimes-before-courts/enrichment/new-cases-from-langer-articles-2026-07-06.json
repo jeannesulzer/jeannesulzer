@@ -1,0 +1,148 @@
+{
+  "generated": "2026-07-06",
+  "sources": [
+    "N. M. Bryce, L. Johns & M. Langer, 'Living with impunity versus living in fear: Universal jurisdiction defendants, due process, and the use of democracies by autocracies to prosecute their opponents', (2025) 38 Leiden Journal of International Law 322-342, doi:10.1017/S0922156524000244",
+    "M. Langer & M. Eason, 'The Quiet Expansion of Universal Jurisdiction', (2019) 30 European Journal of International Law 779-817, doi:10.1093/ejil/chz050"
+  ],
+  "note": "Cases referenced in these two articles and cross-checked against the 198-case corpus. The Langer UJ database (complaints 1961-2022, updated across Langer 2011/2015, Langer & Eason 2019, Johns/Langer/Peters 2022, Bryce/Johns/Langer 2025) is itself a cross-reference source the site could cite alongside TRIAL International, UJAR, the CFJ Tool and Amnesty.",
+  "new_case_candidates": [
+    {
+      "suggested_id": "switzerland-soltani-algeria",
+      "case_name": "Bouguerra Soltani (Algeria — Switzerland, torture complaint)",
+      "country_of_prosecution": "Switzerland",
+      "country_of_commission": "Algeria",
+      "crimes": "Torture (ordering, authorizing, inciting)",
+      "jurisdictional_basis": "Universal jurisdiction (presence-based; defendant fled)",
+      "outcome_type": "fled / no proceedings",
+      "reference": "TRIAL International complaint, 2009, filed while Soltani (MSP leader, former Algerian minister) attended an event in Switzerland; he immediately returned to Algeria",
+      "article_source": "Bryce/Johns/Langer 2025, at 325 & n. 8 ('Alleged Algerian Torturer Barely Escapes Swiss Justice', TRIAL International, 17 July 2017)",
+      "axes": "living-with-impunity archetype; complements the corpus's Nezzar (Switzerland/Algeria) entry"
+    },
+    {
+      "suggested_id": "spain-rpf-40-officials",
+      "case_name": "40 RPF officers & Rwandan officials (Spain — Judge Merelles indictment)",
+      "country_of_prosecution": "Spain",
+      "country_of_commission": "Rwanda / DRC",
+      "crimes": "Genocide; Crimes against humanity; War crimes; Terrorism (1990s killings of Spanish nationals and Rwandan/Congolese civilians)",
+      "jurisdictional_basis": "Universal jurisdiction + passive personality (pre-2014 LOPJ)",
+      "outcome_type": "indictment; dismissed after the 2014 UJ reform (Supreme Court, Oct 2015)",
+      "reference": "Juzgado Central de Instrucción No. 4, Audiencia Nacional, Sumario 3/2008, Madrid, 6 Feb 2008; dismissal: Spanish Supreme Court, 8 Oct 2015 (BBC, 'Spain Dismissed Rwanda War Crimes Case Against 40 Officials')",
+      "article_source": "Bryce/Johns/Langer 2025, at 330 & nn. 33-34",
+      "axes": "UJ against a sitting regime's officials (living with impunity); UJ statutory rollback; Kagame condemnation"
+    },
+    {
+      "suggested_id": "belgium-nkezabera",
+      "case_name": "Ephrem Nkezabera — 'the Genocide Banker' (Rwanda — Belgium)",
+      "country_of_prosecution": "Belgium",
+      "country_of_commission": "Rwanda",
+      "crimes": "War crimes (Rwanda 1994; Interahamwe financier)",
+      "jurisdictional_basis": "Universal jurisdiction (1993/2003 Belgian regime)",
+      "outcome_type": "conviction — 30 years (Brussels, 1 Dec 2009); died before final retrial",
+      "reference": "Cour d'assises de Bruxelles, 1 Dec 2009; arrest originally requested by the ICTR, tried in Belgium",
+      "article_source": "Bryce/Johns/Langer 2025, at 331 n. 36 (JusticeInfo, 'Genocide Banker Sentenced to 30 Years')",
+      "axes": "ICTR-to-national handoff; completes the Belgian Rwanda assize line (Butare Four, Ntuyahaga, Nzabonimana/Ndashyikirwa, Neretse, Basabosé/Twahirwa)"
+    },
+    {
+      "suggested_id": "sweden-martinovic",
+      "case_name": "Milić Martinović (Kosovo — Sweden, acquittal on appeal)",
+      "country_of_prosecution": "Sweden",
+      "country_of_commission": "Kosovo (FRY)",
+      "crimes": "War crimes (Ćuška/Cuska massacre 1999)",
+      "jurisdictional_basis": "Universal jurisdiction",
+      "outcome_type": "trial conviction (life, Stockholm District Court 2012) reversed on appeal (Svea hovrätt, acquittal)",
+      "reference": "Stockholms tingsrätt 20 Jan 2012; Svea hovrätt acquittal 19 Dec 2012",
+      "article_source": "Bryce/Johns/Langer 2025, at 338 n. 50 (one of only two UJ convictions reversed on appeal in the Langer dataset)",
+      "axes": "due-process/acquittal function of UJ trials; Sweden's Balkan line (with Makitan)"
+    },
+    {
+      "suggested_id": "sweden-makitan",
+      "case_name": "Ahmet Makitan (Bosnia — Sweden, Dretelj camp)",
+      "country_of_prosecution": "Sweden",
+      "country_of_commission": "Bosnia and Herzegovina",
+      "crimes": "War crimes; torture of Serb detainees (Dretelj camp, 1992)",
+      "jurisdictional_basis": "Universal jurisdiction",
+      "outcome_type": "conviction — life imprisonment (Stockholm District Court, 8 April 2011)",
+      "reference": "Stockholms tingsrätt, B 382-10, 8 April 2011; investigation by Sweden's National War Crimes Commission",
+      "article_source": "Langer & Eason 2019, at n. (institutional-learning discussion)",
+      "axes": "specialised-unit-driven prosecution; pairs with the corpus's Danish Sarić (also Dretelj)"
+    },
+    {
+      "suggested_id": "finland-ammar-hilal",
+      "case_name": "Jebbar Salman Ammar & Hadi Habeeb Hilal (Iraq — Finland, social-media war crimes)",
+      "country_of_prosecution": "Finland",
+      "country_of_commission": "Iraq",
+      "crimes": "War crimes (desecration/outrages upon personal dignity, documented in online videos/photos)",
+      "jurisdictional_basis": "Universal jurisdiction",
+      "outcome_type": "convictions (Pirkanmaa District Court, 2016)",
+      "reference": "Käräjäoikeus Pirkanmaa 2016 (both Iraqi nationals; evidence from social-media postings)",
+      "article_source": "Langer & Eason 2019, n. 36",
+      "axes": "open-source/social-media evidence — the doctrinal pair of Sweden's Droubi and Sakhanh, both already in the corpus"
+    },
+    {
+      "suggested_id": "israel-us-demjanjuk",
+      "case_name": "John (Ivan) Demjanjuk (US extradition → Israel acquittal → Germany conviction)",
+      "country_of_prosecution": "United States / Israel / Germany",
+      "country_of_commission": "Poland (occupied) — Treblinka/Sobibor",
+      "crimes": "Nazi and Nazi Collaborators (Punishment) Law offences; accessory to murder (Sobibor, 27,900 counts)",
+      "jurisdictional_basis": "Extradition + retroactive extraterritorial statute (Israel); active-personality surrogate (Germany)",
+      "outcome_type": "Israel: death sentence reversed — acquitted on identity doubt (1993); Germany: convicted (LG München II, 12 May 2011), died pending appeal",
+      "decisions": [
+        {"reference": "Demjanjuk v. Petrovsky, 776 F.2d 571 (6th Cir. 1985)", "note": "US extradition ruling endorsing universal jurisdiction for Nazi crimes"},
+        {"reference": "Supreme Court of Israel, State of Israel v. Demjanjuk, Crim. App. 347/88, verdict 29 July 1993", "note": "acquittal — the due-process landmark cited by Bryce/Johns/Langer as one of two reversed UJ convictions"},
+        {"reference": "LG München II, 12 May 2011, 1 Ks 115 Js 12496/08", "note": "the judgment that founded the modern German camp-service accessory doctrine applied in Gröning/Hanning/Furchner (enrichment batch 3)"}
+      ],
+      "article_source": "Langer & Eason 2019, n. 44; Bryce/Johns/Langer 2025, n. 50",
+      "axes": "wrongful-conviction prevention; identity evidence; bridge between the WWII layer and the modern German line"
+    },
+    {
+      "suggested_id": "spain-western-sahara-polisario",
+      "case_name": "Western Sahara complaints — Polisario Front / SADR officials (Spain, 2007)",
+      "country_of_prosecution": "Spain",
+      "country_of_commission": "Western Sahara / Algeria (Tindouf camps)",
+      "crimes": "Genocide; torture (complaints)",
+      "jurisdictional_basis": "Universal jurisdiction + passive personality",
+      "outcome_type": "complaint cluster (the 2007 living-in-fear spike in the Langer dataset)",
+      "reference": "Audiencia Nacional complaints, 2007 campaign",
+      "article_source": "Bryce/Johns/Langer 2025, at 333 (explanation of the 2007 outlier in Figure 1)",
+      "axes": "autocracy-prompted UJ (Morocco context); rebel-group defendants"
+    }
+  ],
+  "decision_references_for_existing_cases": [
+    {
+      "case_id": "rwanda-simbikangwa",
+      "reference": "Cour d'assises de Seine-Saint-Denis (appeal), 3 Dec 2016, No. 51/2016",
+      "note": "Precise reference for the appellate confirmation of the 25-year sentence (Bryce/Johns/Langer 2025, n. 18) — the corpus lists the appeal without a case number."
+    },
+    {
+      "case_id": "france-ben-said (corpus: Khaled Ben Saïd)",
+      "reference": "Cour d'assises du Bas-Rhin, Ordonnance de mise en accusation, No. J.20009/01, 16 Feb 2007 (reprinted in FIDH, L'affaire Khaled Ben Saïd, 2009)",
+      "note": "Committal reference + FIDH dossier PDF (www.fidh.org/IMG/pdf/Bensaid512fr2008_FINAL.pdf) — Bryce/Johns/Langer 2025, n. 46."
+    },
+    {
+      "case_id": "sweden-iran-hamid-noury",
+      "reference": "Released in an Iran-Sweden prisoner exchange, June 2024",
+      "note": "OUTCOME UPDATE: the corpus's outcome ('life imprisonment; leave to appeal refused 2024-03-06') should note the June 2024 release by prisoner swap (Bryce/Johns/Langer 2025, n. 16) — a key data point for the 'instrumentalisation by autocracies' axis."
+    },
+    {
+      "case_id": "netherlands-eshetu-ethiopia",
+      "reference": "ECLI:NL:RBDHA:2017:16383 (Dutch) / ECLI:NL:RBDHA:2017:14782 (English)",
+      "note": "The corpus links the English ECLI; the Dutch original 16383 completes the pair (Bryce/Johns/Langer 2025, n. 22)."
+    },
+    {
+      "case_id": "israel-eichmann",
+      "reference": "Supreme Court of Israel, Attorney-General v. Adolf Eichmann, Crim. App. 336/61, 29 May 1962",
+      "note": "Precise appellate citation used by Langer & Eason 2019 (n. 44) — verify the corpus's Eichmann decisions include the appeal with this reference."
+    },
+    {
+      "case_id": "germany-jamil-hassan-warrant (relates to: Ali Mamluk, Jamil Hassan & Abdel Salam Mahmoud — France)",
+      "reference": "German arrest warrant against Jamil Hassan (head of Syrian Air Force Intelligence), June 2018 (ECCHR)",
+      "note": "The German warrant is distinct from the French proceedings the corpus tracks — candidate additional decision or separate case (Bryce/Johns/Langer 2025, n. 62, as Germany's 'global enforcer' example)."
+    }
+  ],
+  "possible_duplicate_check": [
+    {
+      "corpus_case": "Kigali Garage Case (Belgium — Rwanda Genocide)",
+      "question": "Verify whether this is the 2005 Brussels assize trial of Etienne Nzabonimana & Samuel Ndashyikirwa ('les frères de Kigali') cited by Langer & Eason 2019 (n. 49 — recognition of Nzabonimana in a Brussels grocery store). If not, Nzabonimana/Ndashyikirwa is a new case candidate; if yes, add their names to the corpus entry."
+    }
+  ]
+}
