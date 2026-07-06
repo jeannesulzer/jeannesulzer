@@ -1,0 +1,45 @@
+{
+  "generated": "2026-07-06",
+  "scope": "Batch 7 — corporate accountability: the Lafarge cassation cluster, the US corporate ATS canon (Unocal, Talisman, Nestlé, Chiquita), and the BHRRC Corporate Legal Accountability portal as a cross-reference source. Confirmed items folded into the dataset in the same commit.",
+  "cross_reference_source": {
+    "name": "Business & Human Rights Resource Centre — Corporate Legal Accountability",
+    "note": "300+ lawsuit profiles; the natural corporate counterpart to TRIAL/UJAR/CFJ/Amnesty cross-references. The site blocks automated fetching (403), so profiles must be linked manually per case.",
+    "entry_points": [
+      "https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/",
+      "https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/",
+      "https://www.business-humanrights.org/en/from-us/lawsuits-database/",
+      "https://www.business-humanrights.org/en/latest-news/companies-crimes-against-humanity-cases/",
+      "https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/criminal-proceedings-against-companies-and-their-executives-and-employees/"
+    ]
+  },
+  "decisions_for_existing_cases": [
+    {
+      "case_id": "lafarge-syria",
+      "date": "2021-09-07",
+      "reference": "Cass. crim., 7 sept. 2021, n° 19-87.367, 19-87.376 et 19-87.662 (FS-B)",
+      "url": "https://www.courdecassation.fr/decision/6137092ff585960512dfe635",
+      "note": "The corporate-complicity landmark: knowingly paying several million dollars to an organisation whose object is exclusively criminal suffices to characterise complicity in crimes against humanity, regardless of pursuing a commercial activity. Partial cassation reinstating the CAH complicity mise en examen track. Sibling arrêts of the same day: 19-87.031 (JURITEXT000044105519), 19-87.036 (JURITEXT000044105520, endangerment of employees), 19-87.040.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "lafarge-syria",
+      "date": "2023-03-14",
+      "reference": "Cass. crim., 14 mars 2023, n° 22-83.681 (demande d'avis)",
+      "url": "https://www.courdecassation.fr/decision/6411793925b075fb02f1b072",
+      "note": "Procedural step in the Lafarge saga (chambre criminelle referring a question to another chamber) — verify posture before ingestion.",
+      "confidence": "probable"
+    }
+  ],
+  "new_case_candidates_folded": [
+    "us-doe-unocal — Doe v. Unocal (9th Cir. 2002 + C.D. Cal. 2000; settled 2005) — first corporate ATS case to survive toward trial; forced labour on the Yadana pipeline",
+    "us-talisman-sudan — Presbyterian Church of Sudan v. Talisman Energy (S.D.N.Y. 2003/2006; 2d Cir. 582 F.3d 244 (2009) purpose standard; cert denied 2010)",
+    "us-nestle-doe — Doe v. Nestlé/Cargill (9th Cir. 2014/2018/2019; SCOTUS Nestlé USA v. Doe, 17 June 2021 — general corporate activity in the US insufficient post-Kiobel; incorporates Jesner's bar on foreign-corporation ATS liability)",
+    "us-chiquita-mdl — In re Chiquita Brands (S.D. Fla. MDL 08-md-01916: 2011/2016/2018 opinions; June 2024 — first US jury verdict holding a corporation liable for financing paramilitary abuses, $38.3M; preceded by the 2007 DOJ guilty plea, $25M fine)"
+  ],
+  "coverage_notes": [
+    "FRENCH LOWER COURTS: LDH's French case-law sources are the Cour de cassation (three feeds), Conseil d'État, Conseil constitutionnel, CNDA and regulators — NO cours d'appel, tribunaux correctionnels/judiciaires or cours d'assises. French trial-level judgments in the corpus's cases (assises verdicts, the coming Lafarge trial, Amesys/Nexa chambre de l'instruction arrêts) are not systematically published anywhere official; sources remain FIDH/ECCHR/TRIAL dossiers and registry copies. The CNDA source (423 docs) is a promising vein for art. 1F exclusion decisions — connection dropped mid-probe; retry in a follow-up pass.",
+    "JESNER v. ARAB BANK, 584 U.S. 241 (2018) — the foreign-corporation ATS bar; not pinned to an LDH URL this pass (retrievable on CourtListener); referenced in the Nestlé fold summary.",
+    "SWEDEN/LUNDIN: the Stockholm District Court's Lundin trial (ongoing since Sept 2023; corpus case sweden-lundin-sudan) and the HD's 2021 jurisdiction ruling are not in LDH's Swedish digest sources — keep official domstol.se releases.",
+    "REMAINING CORPORATE VEINS: Al Shimari/CACI post-verdict opinions (Nov 2024 jury verdict, $42M — E.D. Va., retrievable on CourtListener); Argor-Heraeus (Switzerland, pillage of DRC gold — OAG dismissal 2015); Nevsun v. Araya (SCC 2020 — not in LDH's Canadian Federal-Court-only index); apartheid litigation (Balintulo); Wiwa v. Shell (settled 2009)."
+  ]
+}

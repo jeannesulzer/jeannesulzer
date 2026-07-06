@@ -99,8 +99,8 @@
     "decision_link": "https://www.courdecassation.fr",
     "ngos": "ECCHR (https://www.ecchr.eu); Sherpa (https://www.asso-sherpa.org)",
     "victims_organizations": "Syrian former employees",
-    "judicial_decisions_count": 0,
-    "additional_sources": "ECCHR — Lafarge Case: https://www.ecchr.eu/en/case/lafarge-in-syria/ | SJAC — Corporate Accountability: https://syriaaccountability.org/ | UJAR 2025: https://trialinternational.org/universal-jurisdiction-tools/universal-jurisdiction-annual-review-ujar/ | Amnesty France — Compétence universelle: https://competenceuniverselle.amnesty.fr/ | Sherpa — Lafarge Dossier: https://www.asso-sherpa.org/lafarge"
+    "judicial_decisions_count": "1",
+    "additional_sources": "ECCHR — Lafarge Case: https://www.ecchr.eu/en/case/lafarge-in-syria/ | SJAC — Corporate Accountability: https://syriaaccountability.org/ | UJAR 2025: https://trialinternational.org/universal-jurisdiction-tools/universal-jurisdiction-annual-review-ujar/ | Amnesty France — Compétence universelle: https://competenceuniverselle.amnesty.fr/ | Sherpa — Lafarge Dossier: https://www.asso-sherpa.org/lafarge; BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "rwanda-simbikangwa",
@@ -307,7 +307,8 @@
     "key_legal_findings": "Presumption against extraterritoriality — ATS | Corporate liability limits under ATS | Touch and concern test | Corporate accountability in host states",
     "decision_link": "https://supreme.justia.com/cases/federal/us/569/108/",
     "ngos": "CCR (https://ccrjustice.org); EarthRights International (https://earthrights.org)",
-    "judicial_decisions_count": "1"
+    "judicial_decisions_count": "1",
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "argentina-plan-condor",
@@ -464,7 +465,8 @@
     "key_legal_findings": "Corporate civil liability for torture | Private military contractor accountability | Political question doctrine — not a bar | Abu Ghraib accountability",
     "decision_link": "https://ccrjustice.org/al-shimari",
     "ngos": "CCR (https://ccrjustice.org)",
-    "judicial_decisions_count": "1"
+    "judicial_decisions_count": "1",
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "arg-uribe-colombia",
@@ -752,7 +754,8 @@
     "summary": "Investigation into French surveillance technology company Nexa Technologies (formerly Amesys) for the alleged sale of surveillance equipment to the Egyptian government, used to target political opponents. A key witness was heard in 2023 regarding the use of the technology. The case is part of a broader pattern of corporate accountability cases in France for the export of surveillance and dual-use technologies to authoritarian regimes.",
     "key_legal_findings": "Corporate complicity through technology export | Surveillance technology and human rights | Dual-use technology accountability",
     "ngos": "FIDH (https://www.fidh.org); LDH (https://www.ldh-france.org)",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "france-amesys-libya",
@@ -773,7 +776,8 @@
     "summary": "Investigative judges ordered to proceed with several investigative acts in the corporate accountability case against Amesys and two of its executives for selling surveillance technology to the Gaddafi regime in Libya, allegedly used to identify and torture political opponents. Together with the Nexa/Egypt case, it represents a frontier of corporate liability for dual-use technology exports.",
     "key_legal_findings": "Corporate complicity in Libyan torture | Technology export liability | Investigative acts ordered",
     "ngos": "FIDH (https://www.fidh.org); LDH (https://www.ldh-france.org)",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "france-exxelia-gaza",
@@ -794,7 +798,8 @@
     "summary": "An unprecedented war crimes and corporate accountability case was opened against French company Exxelia for its alleged role in supplying components used in a military attack in Gaza. This is the first corporate accountability case specifically related to an Israeli military operation in the occupied Palestinian territories, linking European arms supply chains to alleged war crimes.",
     "key_legal_findings": "Corporate complicity in Gaza attack | Arms supply chain liability | First corporate case for Palestine crimes",
     "ngos": "Sherpa (https://www.asso-sherpa.org)",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "france-rwamucyo-rwanda",
@@ -1191,7 +1196,8 @@
     "summary": "Swiss businessman Alex Schneiter and Swedish oil magnate Ian Lundin stand trial for complicity in Sudanese war crimes committed during oil exploration operations in southern Sudan (now South Sudan) between 1999 and 2003. Lundin Energy (formerly Lundin Oil) allegedly benefited from military offensives that displaced and killed civilians to secure oil exploration areas. This is one of the most significant corporate accountability trials in Europe.",
     "key_legal_findings": "Corporate complicity in war crimes | Oil industry accountability | Business and armed conflict | Longest Swedish UJ investigation",
     "ngos": "PAX (https://paxforpeace.nl); ECCHR (https://www.ecchr.eu)",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "switzerland-nezzar-algeria",
@@ -1939,7 +1945,7 @@
     "key_legal_findings": "Banking complicity in genocide | Arms trade financing | Corporate accountability — Rwanda | Transfer during active genocide",
     "ngos": "Sherpa (https://www.asso-sherpa.org); Ibuka (https://ibuka.fr)",
     "judicial_decisions_count": 0,
-    "additional_sources": "CPCR — Collectif des parties civiles pour le Rwanda (chroniques d audience, arrêts, lettres de motivation): https://www.collectifpartiescivilesrwanda.fr/proces/ | Amnesty France — Compétence universelle: https://competenceuniverselle.amnesty.fr/"
+    "additional_sources": "CPCR — Collectif des parties civiles pour le Rwanda (chroniques d audience, arrêts, lettres de motivation): https://www.collectifpartiescivilesrwanda.fr/proces/ | Amnesty France — Compétence universelle: https://competenceuniverselle.amnesty.fr/; BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "france-banque-france-rwanda",
@@ -1960,7 +1966,8 @@
     "summary": "CPCR filed a new complaint against the Banque de France for complicity in the Rwandan genocide, alleging that the institution facilitated financial transactions that supported the genocidal regime. This follows the BNP Paribas complaint and expands the corporate accountability frontier for the 1994 genocide.",
     "key_legal_findings": "Central bank accountability | Financial complicity in genocide | Institutional responsibility",
     "ngos": "CPCR (https://www.collectifpartiescivilesrwanda.fr)",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "france-kayondo-rwanda",
@@ -2308,7 +2315,8 @@
     "key_legal_findings": "Corporate supply chain liability | Concealment (recel) of international crimes | Uyghur forced labour | Multiple corporate defendants",
     "ngos": "Sherpa (https://www.asso-sherpa.org); ECCHR (https://www.ecchr.eu)",
     "amnesty": "https://competenceuniverselle.amnesty.fr/",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "amnesty-fr-congo-beach",
@@ -2353,7 +2361,8 @@
     "key_legal_findings": "Corporate complicity — surveillance technology | Convention Against Torture — universal jurisdiction | Digital surveillance and human rights",
     "ngos": "FIDH (https://www.fidh.org); LDH (https://www.ldh-france.org)",
     "amnesty": "https://competenceuniverselle.amnesty.fr/",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "amnesty-fr-sirli-egypt",
@@ -2505,7 +2514,8 @@
     "summary": "Victim complaint against French companies Protec SA, De Dietrich, and Carbone Lorraine (now Mersen) for allegedly supplying chemical weapons precursors to Saddam Hussein's Iraq, used in the 1988 Halabja massacre of Kurdish civilians (~5,000 killed). This corporate accountability case links industrial exports to genocide-level atrocities.",
     "key_legal_findings": "Active personality — French companies | Chemical weapons supply chain | Corporate complicity in mass atrocities",
     "amnesty": "https://competenceuniverselle.amnesty.fr/",
-    "judicial_decisions_count": 0
+    "judicial_decisions_count": 0,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "amnesty-fr-sinjar-iraq",
@@ -3901,7 +3911,7 @@
     "ngos": "FIDH (https://www.fidh.org); Ligue des droits de l'Homme (LDH) (https://www.ldh-france.org)",
     "amnesty": "https://competenceuniverselle.amnesty.fr/affaire/qosmos/",
     "judicial_decisions_count": 1,
-    "additional_sources": "Amnesty France — Cartographie compétence universelle: https://competenceuniverselle.amnesty.fr/affaire/qosmos/ | FIDH — Qosmos / Syrie: https://www.fidh.org/fr/themes/mondialisation-droits-humains/"
+    "additional_sources": "Amnesty France — Cartographie compétence universelle: https://competenceuniverselle.amnesty.fr/affaire/qosmos/ | FIDH — Qosmos / Syrie: https://www.fidh.org/fr/themes/mondialisation-droits-humains/; BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "france-barril-rwanda",
@@ -4133,7 +4143,8 @@
     "key_legal_findings": "Corporate complicity in war crimes | Active personality jurisdiction over Dutch nationals abroad",
     "decision_link": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:GHSHE:2017:1760",
     "ngos": "Global Witness; Open Society Justice Initiative",
-    "judicial_decisions_count": 2
+    "judicial_decisions_count": 2,
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/"
   },
   {
     "id": "belgium-ntuyahaga-paras",
@@ -4745,7 +4756,7 @@
     "summary": "Acehnese villagers sued ExxonMobil over abuses by Indonesian security forces guarding the Arun gas field. The 2005 opinion let core claims proceed; after twenty years of litigation the case settled on the eve of trial in 2023 — a pillar of the corporate-accountability strand.",
     "decision_link": "https://www.courtlistener.com/opinion/2455787/doe-v-exxon-mobil-corp/",
     "judicial_decisions_count": "1",
-    "additional_sources": "Added from the 2026-07 Legal Data Hunter enrichment (see enrichment/ folder)",
+    "additional_sources": "Added from the 2026-07 Legal Data Hunter enrichment (see enrichment/ folder); BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/",
     "case_number": "393 F. Supp. 2d 20",
     "key_legal_findings": "Corporate exposure for security-force abuses; interplay of ATS, TVPA and state-law claims."
   },
@@ -4767,7 +4778,7 @@
     "summary": "Bougainville islanders sued Rio Tinto over the deaths surrounding the Panguna mine blockade. The en banc Ninth Circuit reinstated the genocide and war-crimes claims before the case fell to Kiobel’s presumption against extraterritoriality.",
     "decision_link": "https://www.courtlistener.com/opinion/616018/sarei-v-rio-tinto-plc/",
     "judicial_decisions_count": "1",
-    "additional_sources": "Added from the 2026-07 Legal Data Hunter enrichment (see enrichment/ folder)",
+    "additional_sources": "Added from the 2026-07 Legal Data Hunter enrichment (see enrichment/ folder); BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/",
     "case_number": "671 F.3d 736",
     "key_legal_findings": "Corporate ATS liability for genocide/war crimes (pre-Kiobel); exhaustion of local remedies."
   },
@@ -5310,5 +5321,93 @@
     "decision_link": null,
     "judicial_decisions_count": "0",
     "additional_sources": "Referenced in Bryce/Johns/Langer, LJIL 2025 (doi:10.1017/S0922156524000244) and/or Langer & Eason, EJIL 2019 (doi:10.1093/ejil/chz050); details to be re-verified against primary sources."
+  },
+  {
+    "id": "us-doe-unocal",
+    "case_name": "Doe v. Unocal (US — Myanmar, Yadana pipeline forced labour)",
+    "case_number": "395 F.3d 932",
+    "country_of_prosecution": "United States",
+    "court": "U.S. Court of Appeals, Ninth Circuit",
+    "date": "2002-09-18",
+    "year": 2002,
+    "country_of_commission": "Myanmar",
+    "crimes_charged": "Forced labour; Murder; Rape (civil, corporate defendant)",
+    "jurisdictional_basis": "Alien Tort Statute / TVPA (civil)",
+    "jurisdiction_type": "civil",
+    "outcome": "Claims reinstated (2002); settled for compensation (2005)",
+    "outcome_type": "civil_litigation",
+    "corporate_defendant": "Yes",
+    "original_language": "English",
+    "summary": "Burmese villagers sued Unocal over forced labour, killings and rape by the Myanmar military securing the Yadana gas pipeline. The Ninth Circuit held that aiding and abetting forced labour is actionable under the ATS — the first corporate atrocity case to head towards trial before its 2005 settlement, the founding precedent of corporate ATS litigation.",
+    "key_legal_findings": "Forced labour as a modern variant of slavery requiring no state action; corporate aiding-and-abetting liability (knowing practical assistance standard).",
+    "decision_link": "https://www.courtlistener.com/opinion/789011/john-doe-i-individually-as-administrator-of-the-estate-of-his-deceased/",
+    "judicial_decisions_count": "2",
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/ — added from the 2026-07 Legal Data Hunter enrichment (batch 7)"
+  },
+  {
+    "id": "us-talisman-sudan",
+    "case_name": "Presbyterian Church of Sudan v. Talisman Energy (US — Sudan oil)",
+    "case_number": "582 F.3d 244",
+    "country_of_prosecution": "United States",
+    "court": "U.S. Court of Appeals, Second Circuit",
+    "date": "2009-10-02",
+    "year": 2009,
+    "country_of_commission": "Sudan",
+    "crimes_charged": "Genocide; Crimes against humanity; War crimes (aiding and abetting — civil, corporate defendant)",
+    "jurisdictional_basis": "Alien Tort Statute / TVPA (civil)",
+    "jurisdiction_type": "civil",
+    "outcome": "Dismissed (purpose standard not met); cert denied (2010)",
+    "outcome_type": "civil_litigation",
+    "corporate_defendant": "Yes",
+    "original_language": "English",
+    "summary": "Sudanese plaintiffs alleged Talisman Energy assisted the Sudanese government’s ethnic-cleansing campaign around its oil concessions. The Second Circuit affirmed dismissal, holding that ATS aiding-and-abetting liability requires acting with the PURPOSE of facilitating the crimes, not mere knowledge — the restrictive mens rea pole of the corporate-complicity debate.",
+    "key_legal_findings": "Purpose (not knowledge) standard for aiding-and-abetting under the ATS, drawn from customary international law.",
+    "decision_link": "https://www.courtlistener.com/opinion/2287736/presbyterian-church-of-sudan-v-talisman-energy-inc/",
+    "judicial_decisions_count": "3",
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/ — added from the 2026-07 Legal Data Hunter enrichment (batch 7)"
+  },
+  {
+    "id": "us-nestle-doe",
+    "case_name": "Doe v. Nestlé / Cargill (US — Côte d’Ivoire child slavery)",
+    "case_number": "593 U.S. 628 (2021)",
+    "country_of_prosecution": "United States",
+    "court": "Supreme Court of the United States / Ninth Circuit",
+    "date": "2021-06-17",
+    "year": 2021,
+    "country_of_commission": "Côte d’Ivoire",
+    "crimes_charged": "Child slavery; Forced labour (aiding and abetting — civil, corporate defendants)",
+    "jurisdictional_basis": "Alien Tort Statute / TVPA (civil)",
+    "jurisdiction_type": "civil",
+    "outcome": "Dismissed by the Supreme Court (extraterritoriality); litigation continued on other grounds",
+    "outcome_type": "civil_litigation",
+    "corporate_defendant": "Yes",
+    "original_language": "English",
+    "summary": "Former child slaves on Ivorian cocoa farms sued Nestlé USA and Cargill for aiding and abetting child slavery through purchasing and technical support. After two decades and three Ninth Circuit opinions, the Supreme Court held that general corporate activity in the United States is insufficient to displace the presumption against extraterritoriality — with Jesner v. Arab Bank (584 U.S. 241 (2018), barring ATS suits against foreign corporations), the case that closed most of the corporate ATS route.",
+    "key_legal_findings": "Domestic-conduct requirement post-Kiobel applied to corporate defendants; aiding-and-abetting pleading standards (9th Cir. 2018).",
+    "decision_link": "https://www.courtlistener.com/opinion/4892569/nestle-usa-inc-v-doe/",
+    "judicial_decisions_count": "3",
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/ — added from the 2026-07 Legal Data Hunter enrichment (batch 7)"
+  },
+  {
+    "id": "us-chiquita-mdl",
+    "case_name": "In re Chiquita Brands (US — Colombia, AUC financing)",
+    "case_number": "MDL No. 08-md-01916 (S.D. Fla.)",
+    "country_of_prosecution": "United States",
+    "court": "U.S. District Court, Southern District of Florida",
+    "date": "2024-06-10",
+    "year": 2024,
+    "country_of_commission": "Colombia",
+    "crimes_charged": "Torture; Extrajudicial killing; Crimes against humanity (financing paramilitaries — civil, corporate defendant)",
+    "jurisdictional_basis": "Alien Tort Statute / TVPA (civil)",
+    "jurisdiction_type": "civil",
+    "outcome": "June 2024: first US jury verdict holding a corporation liable for financing paramilitary abuses ($38.3M); earlier 2007 DOJ guilty plea ($25M fine)",
+    "outcome_type": "civil_litigation",
+    "corporate_defendant": "Yes",
+    "original_language": "English",
+    "summary": "Thousands of Colombian victims sued Chiquita over its payments of about $1.7 million to the AUC paramilitaries (2001-2004), to which Chiquita had pleaded guilty in the 2007 US criminal case. After seventeen years of MDL litigation, a federal jury in June 2024 found Chiquita liable for eight AUC murders — the first time a US jury held an American corporation liable for financing human rights abuses abroad.",
+    "key_legal_findings": "Corporate civil liability for financing a designated terrorist/paramilitary organisation; TVPA and Colombian-law claims surviving Kiobel.",
+    "decision_link": "https://www.courtlistener.com/opinion/2112999/in-re-chiquita-brands-international-inc/",
+    "judicial_decisions_count": "3",
+    "additional_sources": "BHRRC Corporate Legal Accountability: https://www.business-humanrights.org/en/big-issues/corporate-legal-accountability/case-profiles/ — added from the 2026-07 Legal Data Hunter enrichment (batch 7)"
   }
 ]
