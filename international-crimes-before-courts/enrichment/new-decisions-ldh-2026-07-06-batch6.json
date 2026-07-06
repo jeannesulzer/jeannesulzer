@@ -1,0 +1,21 @@
+{
+  "generated": "2026-07-06",
+  "scope": "Batch 6 — Serbia, Hungary, Estonia reconnaissance (post-fold; the confirmed findings of batches 1-5 are now folded into the dataset itself — see data/ and the v2 workbook).",
+  "new_veins": [
+    {
+      "vein": "SERBIA — Supreme Court war-crimes cassation docket (Kzz RZ)",
+      "note": "The Vrhovni sud runs a dedicated cassation docket for war-crimes cases from the Belgrade War Crimes Department, fully indexed with official links. Defendants are anonymised, so each ruling needs matching against the Higher Court Belgrade (Odeljenje za ratne zločine) case it reviews — but the docket enumerates itself: Kzz RZ 1/2023 (17 May 2023), Kzz RZ 2/2023 (30 May 2023), Kzz RZ 2/2024 (4 Apr 2024), Kzz RZ 4/2024 (18 Mar 2025), Kzz RZ 1/2025 (27 Feb 2025), Kzz RZ 3/2025 (25 Nov 2025).",
+      "exemplars": [
+        {"reference": "Kzz RZ 1/2023, 17 May 2023", "url": "https://vrh.sud.rs/sr-lat/kzz-rz-12023-438-stav-1-ta%C4%8D-9-zkp-439-ta%C4%8Dka1-zkp"},
+        {"reference": "Kzz RZ 2/2024, 4 Apr 2024", "url": "https://vrh.sud.rs/sr-lat/kzz-rz-22024-odbija-se-zzz-povreda-%C4%8Dlana-451-zkp"},
+        {"reference": "Kzz RZ 4/2024, 18 Mar 2025", "url": "https://vrh.sud.rs/sr-lat/kzz-rz-42024-23-241211232"}
+      ],
+      "next_step": "Cross-reference the Kzz RZ docket against the Humanitarian Law Center (HLC/FHP) trial reports to attach defendant names (Lovas, Ovčara, Ćuška, Štrpci lines), then ingest as Serbia's domestic war-crimes layer."
+    }
+  ],
+  "coverage_notes": [
+    "HUNGARY: the indexed Kúria layer is its ECtHR case-summary collection, not domestic judgments — Biszku (communist-era CAH) and Képíró (WWII, 2011 acquittal) are not retrievable; source them from the Fővárosi Törvényszék/Kúria press records and literature.",
+    "ESTONIA: Riigikohus decisions are indexed with stable official links (riigikohus.ee/et/lahendid) but parties appear as initials — the crimes-against-humanity cassations (e.g. Paulov, 3-1-1-31-00; the Kolk & Kislyiy domestic appeals) need retrieval by known case number rather than search.",
+    "Remaining unswept veins after six batches: Bosnia's Court of BiH (Section I), Croatia targeted pass (Glavaš I Kž-Us 121/2019, Norac/Ademi), the Serbian Kzz RZ-to-defendant mapping, Argentina round two (Mazzeo, Videla, ESMA megacausa via CSJN sjconsulta), and the ICT-BD appellate set (Sayedee, Nizami, Mollah) on supremecourt.gov.bd."
+  ]
+}
