@@ -1,0 +1,202 @@
+{
+  "generated": "2026-07-06",
+  "scope": "Batch 3 — WWII-related decisions before national courts (France, Germany, Italy, Canada, Israel), plus Argentine and Canadian finds surfaced along the way. Sources: Légifrance/Judilibre, rechtsprechung-im-internet + NeuRIS + NRW/MV Land portals, Corte Costituzionale, Federal Court of Canada (A2AJ), Versa/Cardozo, CSJN sjconsulta.",
+  "decisions_for_existing_cases": [
+    {
+      "case_id": "argentina-astiz (corpus: Alfredo Ignacio Astiz — Dirty War)",
+      "case_name": "Alfredo Ignacio Astiz (Argentina — Dirty War)",
+      "date": "2011-10-04",
+      "court": "Corte Suprema de Justicia de la Nación",
+      "type": "supreme_court",
+      "reference": "A. 538. XLVI (Astiz, Alfredo Ignacio s/ extradición)",
+      "url": "https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinks498.html?idAnalisis=9779",
+      "language": "Spanish",
+      "note": "CSJN ruling on France's extradition request for Astiz (refused at first instance by the Bahía Blanca federal court) — the Argentine side of the French in absentia conviction tracked by the corpus.",
+      "confidence": "confirmed"
+    },
+    {
+      "case_id": "canada-mungwarere (corpus: Jacques Mungwarere — Rwanda)",
+      "case_name": "Jacques Mungwarere (Rwanda — Canada)",
+      "date": "2017-07-21",
+      "court": "Federal Court of Canada",
+      "type": "post_trial",
+      "reference": "Mungwarere v. Canada (Public Safety), 2017 FC 708",
+      "url": "https://decisions.fct-cf.gc.ca/fc-cf/decisions/en/item/235798/index.do",
+      "language": "English/French",
+      "note": "Immigration-inadmissibility ruling following Mungwarere's criminal acquittal — the administrative aftermath of the corpus case (criminal acquittal ≠ immigration clearance).",
+      "confidence": "confirmed"
+    }
+  ],
+  "new_case_candidates_wwii": [
+    {
+      "suggested_id": "france-barbie",
+      "case_name": "Klaus Barbie (France — Lyon Gestapo chief)",
+      "country_of_prosecution": "France",
+      "country_of_commission": "France (occupied)",
+      "crimes": "Crimes against humanity (deportations, Izieu children, persecution of resistants)",
+      "jurisdictional_basis": "Territorial",
+      "axes": "imprescriptibility; CAH definition; disguised extradition; victims as civil parties",
+      "decisions": [
+        {"date": "1984-01-26", "reference": "Cass. crim., 26 janv. 1984, n° 83-94.425, Publié", "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000007061605", "note": "Detention upheld despite the 'disguised extradition' from Bolivia — male captus doctrine for crimes against humanity."},
+        {"date": "1985-12-20", "reference": "Cass. crim., 20 déc. 1985, n° 85-95.166", "url": "https://www.courdecassation.fr/decision/6079a8839ba5988459c4dbc0", "note": "THE landmark: crimes against humanity defined as inhumane acts and persecutions committed in the name of a State practising a policy of ideological hegemony — extending protection to resistance members. Pourvoi by deportee/resistant associations."},
+        {"date": "1988-06-03", "reference": "Cass. crim., 3 juin 1988, n° 87-84.240", "url": "https://www.courdecassation.fr/decision/6079a82d9ba5988459c4bf89", "note": "Rejection of Barbie's pourvoi against the 4 July 1987 Rhône assize conviction (perpetuity) — conviction final."}
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "france-touvier",
+      "case_name": "Paul Touvier (France — Milice de Lyon, Rillieux-la-Pape)",
+      "country_of_prosecution": "France",
+      "country_of_commission": "France (occupied)",
+      "crimes": "Complicity in crimes against humanity",
+      "jurisdictional_basis": "Territorial",
+      "axes": "first French conviction of a Frenchman for CAH; state-agent requirement",
+      "decisions": [
+        {"date": "1993-10-21", "reference": "Cass. crim., 21 oct. 1993, n° 93-83.325", "url": "https://www.courdecassation.fr/decision/6079a8669ba5988459c4d264", "note": "Renvoi to the Yvelines assize court after cassation (the post-1992 revival of the case)."},
+        {"date": "1995-06-01", "reference": "Cass. crim., 1er juin 1995, n° 94-82.590, Publié", "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000007065773", "note": "Rejection of Touvier's pourvoi against the 20 April 1994 perpetuity conviction — the first final French CAH conviction of a Vichy official."}
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "france-papon",
+      "case_name": "Maurice Papon (France — Bordeaux deportations)",
+      "country_of_prosecution": "France",
+      "country_of_commission": "France (occupied)",
+      "crimes": "Complicity in crimes against humanity",
+      "jurisdictional_basis": "Territorial",
+      "axes": "complicity of a civil servant; no requirement of adherence to the perpetrators' ideology",
+      "decisions": [
+        {"date": "1997-01-23", "reference": "Cass. crim., 23 janv. 1997, n° 96-84.822, Publié", "url": "https://www.legifrance.gouv.fr/juri/id/JURITEXT000007066186", "note": "Rejection of Papon's pourvoi against his renvoi to the Gironde assize court — complicity in CAH does not require the accomplice's adherence to the ideology of the principal perpetrators."}
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "france-leguay",
+      "case_name": "Jean Leguay (France — Vél d'Hiv roundup, first CAH indictment)",
+      "country_of_prosecution": "France",
+      "country_of_commission": "France (occupied)",
+      "crimes": "Crimes against humanity (investigation)",
+      "jurisdictional_basis": "Territorial",
+      "axes": "first person indicted for CAH in France (1979); died before trial (1989)",
+      "decisions": [
+        {"date": "1982-10-21", "reference": "Cass. crim., 21 oct. 1982, n° 81-93.743", "url": "https://www.courdecassation.fr/decision/6079a7e49ba5988459c4b4e4", "note": "Arrêt in the CAH information opened against 'Jean X...' (chambre d'accusation Paris, 3 July 1981) — matches the Leguay instruction; verify identity before ingestion."}
+      ],
+      "confidence": "probable"
+    },
+    {
+      "suggested_id": "germany-groening",
+      "case_name": "Oskar Gröning (Germany — 'bookkeeper of Auschwitz')",
+      "country_of_prosecution": "Germany",
+      "country_of_commission": "Poland (occupied)",
+      "crimes": "Accessory to murder in 300,000 cases (Auschwitz)",
+      "jurisdictional_basis": "Active personality",
+      "axes": "accessory liability through camp service (post-Demjanjuk doctrine); enforcement vs. old age",
+      "decisions": [
+        {"date": "2016-09-20", "reference": "BGH, 20 Sept 2016, 3 StR 49/16 (Leitsatz: 'Beihilfe zum Mord durch Dienst im Konzentrationslager Auschwitz')", "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KORE301992016&psml=bsjrsprod.psml", "note": "Revision dismissed against LG Lüneburg, 15 July 2015 — the leading decision cementing accessory-to-murder liability for any function sustaining an extermination camp."},
+        {"date": "2017-12-21", "reference": "BVerfG, 21 Dec 2017, 2 BvR 2772/17", "url": "https://www.rechtsprechung-im-internet.de/jportal/?quelle=jlink&docid=KVRE423371701&psml=bsjrsprod.psml", "note": "Constitutional complaint rejected: enforcing the prison sentence against the 96-year-old convict compatible with the right to life and physical integrity. Anonymised — matches the Gröning enforcement litigation; verify."}
+      ],
+      "confidence": "confirmed (BGH); probable (BVerfG)"
+    },
+    {
+      "suggested_id": "germany-hanning",
+      "case_name": "Reinhold Hanning (Germany — Auschwitz guard)",
+      "country_of_prosecution": "Germany",
+      "country_of_commission": "Poland (occupied)",
+      "crimes": "Accessory to murder in 170,000 cases",
+      "jurisdictional_basis": "Active personality",
+      "axes": "camp-service accessory liability; survivor co-plaintiffs",
+      "decisions": [
+        {"date": "2016-06-17", "reference": "LG Detmold, 17 June 2016, 4 Ks 45 Js 3/13-9/15", "url": "https://nrwe.justiz.nrw.de/lgs/detmold/lg_detmold/j2016/4_Ks_45_Js_3_13_9_15_Urteil_20160617.html", "note": "Full judgment text on the official NRW portal — 5 years for guard service at Auschwitz I (Hanning died in 2017 before the revision was decided)."}
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "germany-furchner",
+      "case_name": "Irmgard Furchner (Germany — Stutthof typist)",
+      "country_of_prosecution": "Germany",
+      "country_of_commission": "Poland (occupied)",
+      "crimes": "Accessory to murder in over 10,000 cases (juvenile law — she was 18-19 at the time)",
+      "jurisdictional_basis": "Active personality",
+      "axes": "civilian employee liability; last NS trials",
+      "decisions": [
+        {"date": "2024-08-20", "reference": "BGH, 20 Aug 2024, 5 StR 326/23, ECLI:DE:BGH:2024:200824U5STR326.23.0", "url": "https://testphase.rechtsinformationen.bund.de/suche/KORE704742024", "note": "Revision dismissed against LG Itzehoe, 20 Dec 2022 — first BGH ruling extending camp-service accessory liability to a CIVILIAN employee (the commandant's typist). Probably the last NS-crimes judgment ever."}
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "germany-zafke-nebenklage",
+      "case_name": "Hubert Zafke proceedings — survivors' co-prosecution rulings (Germany)",
+      "country_of_prosecution": "Germany",
+      "country_of_commission": "Poland (occupied)",
+      "crimes": "Accessory to murder (Auschwitz medic — proceedings terminated for unfitness)",
+      "jurisdictional_basis": "Active personality",
+      "axes": "victims' rights (Nebenklage standing of survivors and relatives)",
+      "decisions": [
+        {"date": "2016-02-23", "reference": "OLG Rostock, 23 Feb 2016, 20 Ws 36/16", "url": "https://www.landesrecht-mv.de/perma?d=NJRE001255247", "note": "Co-plaintiff (Nebenkläger) standing of bereaved relatives in NS mass-killing prosecutions — a victims'-rights ruling in the Neubrandenburg Auschwitz-medic proceedings. Companion: 20 Ws 75/16 (25 April 2016)."}
+      ],
+      "confidence": "probable"
+    },
+    {
+      "suggested_id": "italy-priebke",
+      "case_name": "Erich Priebke (Italy — Fosse Ardeatine massacre)",
+      "country_of_prosecution": "Italy",
+      "country_of_commission": "Italy (occupied Rome)",
+      "crimes": "War crimes (participation in the Ardeatine Caves massacre, 335 victims)",
+      "jurisdictional_basis": "Territorial (after extradition from Argentina, 1995)",
+      "axes": "imprescriptibility; amnesty inapplicability; superior orders",
+      "decisions": [
+        {"date": "2000-07-11", "reference": "Corte Costituzionale, sent. 298/2000", "url": "https://www.cortecostituzionale.it/actionSchedaPronuncia.do?param_ecli=ECLI:IT:COST:2000:298", "note": "Constitutional challenge to the 1953 amnesty raised by the Military Appeals Court in the Priebke proceedings — the constitutional layer of the case. The Argentine CSJN extradition ruling (2 Nov 1995, Fallos 318:2148) is NOT in LDH (CSJN open data does not reach 1995)."}
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "italy-sentenza-238-2014",
+      "case_name": "Sentenza 238/2014 (Italy — state immunity vs. Nazi-era victims)",
+      "country_of_prosecution": "Italy (civil)",
+      "country_of_commission": "Italy / Germany (WWII deportation & forced labour)",
+      "crimes": "War crimes and crimes against humanity (civil reparations claims)",
+      "jurisdictional_basis": "Territorial civil jurisdiction (Ferrini doctrine)",
+      "axes": "immunity (core); victims' access to court; national court vs. ICJ",
+      "decisions": [
+        {"date": "2014-10-22", "reference": "Corte Costituzionale, sent. 238/2014", "url": "https://www.cortecostituzionale.it/actionSchedaPronuncia.do?param_ecli=ECLI:IT:COST:2014:238", "note": "The Constitutional Court refuses to give effect to the ICJ's Jurisdictional Immunities judgment insofar as it denies Nazi-era victims access to a judge — the most consequential national ruling on immunity vs. victims' rights."},
+        {"date": "2015-02-11", "reference": "Corte Costituzionale, ord. 30/2015", "url": "https://www.cortecostituzionale.it/actionSchedaPronuncia.do?param_ecli=ECLI:IT:COST:2015:30", "note": "Follow-up order applying the 238/2014 doctrine."}
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "canada-baumgartner",
+      "case_name": "Canada v. Baumgartner (WWII denaturalization)",
+      "country_of_prosecution": "Canada",
+      "country_of_commission": "Germany / occupied territories",
+      "crimes": "Concealment of wartime SS service (citizenship revocation)",
+      "jurisdictional_basis": "Denaturalization (civil)",
+      "axes": "the Canadian post-Finta route: revocation and deportation instead of prosecution",
+      "decisions": [
+        {"date": "2001-08-31", "reference": "Canada (MCI) v. Baumgartner, 2001 FCT 970 (T-2701-97)", "url": "https://decisions.fct-cf.gc.ca/fc-cf/decisions/en/item/44998/index.do", "note": "Citizenship-revocation reference against an alleged SS concentration-camp guard — exemplar of Canada's WWII denaturalization litigation after criminal prosecution collapsed with R v. Finta."}
+      ],
+      "confidence": "probable"
+    },
+    {
+      "suggested_id": "canada-mugesera",
+      "case_name": "Mugesera v. Canada (Rwanda — incitement, removal)",
+      "country_of_prosecution": "Canada",
+      "country_of_commission": "Rwanda",
+      "crimes": "Incitement to genocide and crimes against humanity (immigration law)",
+      "jurisdictional_basis": "Immigration inadmissibility",
+      "axes": "speech as CAH; removal vs. prosecution",
+      "decisions": [
+        {"date": "2001-05-10", "reference": "Mugesera v. Canada (MCI), 2001 FCT 460", "url": "https://decisions.fct-cf.gc.ca/fc-cf/decisions/en/item/40734/index.do", "note": "Federal Court stage of the saga over Mugesera's 1992 speech."},
+        {"date": "2012-01-11", "reference": "Mugesera v. Canada (MCI), 2012 FC 32", "url": "https://decisions.fct-cf.gc.ca/fc-cf/decisions/en/item/60372/index.do", "note": "Final removal-stage ruling before his January 2012 deportation to Rwanda. The SCC's landmark 2005 judgment (2005 SCC 40) is NOT indexed in LDH — link via CanLII/Lexum when ingesting."}
+      ],
+      "confidence": "confirmed"
+    }
+  ],
+  "coverage_notes": [
+    "UK: the National Archives Find Case Law index starts ~2001 — the Pinochet House of Lords rulings (1998-1999) and Sawoniuk (2000) are not indexed; keep the corpus's existing sources.",
+    "ISRAEL: Versa (Cardozo) carries the kapo-trial line (Berenblat) but not the Eichmann appeal (Crim.A. 336/61) or Demjanjuk (Crim.A. 347/88) — the Israeli State Archives / Nizkor texts remain the sources for those.",
+    "CANADA: only Federal Court decisions are indexed — R v. Finta (SCC 1994) and Mugesera (SCC 2005) must be linked via Lexum/CanLII.",
+    "AUSTRALIA: Polyukhovich v. Commonwealth (HCA 1991) not reachable — the indexed AU sources are recent.",
+    "ARGENTINA: CSJN open data does not reach the Priebke extradition (1995); Simón (2005) and Arancibia Clavel (2004) are the earliest key texts confirmed available.",
+    "FRANCE watchlist: Cass. crim. 25 Nov 1986, n° 86-92.714 (prescription cassation, Lyon, civil party 'Lise veuve Y...') sits in the Barbie/Touvier orbit — identify before use; Cass. crim. 12 Feb 2003, n° 02-86.531 may belong to the Aussaresses (Algeria torture apologia) line already in the corpus."
+  ]
+}
