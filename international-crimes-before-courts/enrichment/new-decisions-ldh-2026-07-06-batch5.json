@@ -1,0 +1,74 @@
+{
+  "generated": "2026-07-06",
+  "scope": "Batch 5 — Netherlands (van Anraat), Lithuania (Soviet-genocide line), Bangladesh (ICT-BD appellate layer), plus coverage reconnaissance of Ukraine, Croatia, Uruguay and the DRC.",
+  "new_case_candidates": [
+    {
+      "suggested_id": "netherlands-van-anraat",
+      "case_name": "Frans van Anraat (Netherlands — chemical precursors to Saddam's Iraq)",
+      "country_of_prosecution": "Netherlands",
+      "country_of_commission": "Iraq (Halabja and other Kurdish areas; Iran)",
+      "crimes": "Complicity in war crimes (supply of thiodiglycol for mustard gas); genocide complicity charge acquitted",
+      "jurisdictional_basis": "Active personality (Dutch national)",
+      "corporate_defendant": "No (businessman — the corporate-accessory archetype)",
+      "decisions": [
+        {"date": "2009-06-30", "reference": "Hoge Raad, 30 June 2009, ECLI:NL:HR:2009:BG4822 (on Hof Den Haag, 9 May 2007)", "url": "https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:HR:2009:BG4822", "note": "Final cassation confirming the 17-year sentence (reduced by six months for delay). Identity confirmed by procedural fingerprint (born 1942; Hof Den Haag 9 May 2007, 22/000509-06). First-instance ECLI:NL:RBSGR:2005:AU8685 and appeal ECLI:NL:GHSGR:2007:BA4676 also on rechtspraak.nl."}
+      ],
+      "note": "Major corpus gap: the leading business-accessory case for international crimes, sitting alongside Kouwenhoven and the corpus's corporate cluster (Lafarge, Lundin, Amesys). Related civil litigation involving the Republic of Iraq appears at ECLI:NL:HR:2016:2832 and ECLI:NL:HR:2020:259 — identify before use.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "lithuania-drelingas",
+      "case_name": "Stanislovas Drėlingas (Lithuania — genocide of partisans, Ramanauskas-Vanagas capture)",
+      "country_of_prosecution": "Lithuania",
+      "country_of_commission": "Lithuania (Soviet-occupied)",
+      "crimes": "Genocide (participation, as KGB officer, in the 1956 capture of partisan leader Adolfas Ramanauskas-Vanagas and his wife)",
+      "jurisdictional_basis": "Territorial (post-occupation retrospective genocide statute)",
+      "decisions": [
+        {"date": "2015-07-10", "reference": "Lietuvos apeliacinis teismas, 1A-469-518/2015 (proceso Nr. 1-20-1-00479-2014-9)", "url": "https://liteko.teismai.lt/viesasprendimupaieska/paieska.aspx?detali=2&bnr=1A-469-518/2015", "note": "Appeal dismissed."},
+        {"date": "2016-04-12", "reference": "Lietuvos Aukščiausiasis Teismas (plenary), 2K-P-18-648/2016 (same proceso Nr.)", "url": "https://liteko.teismai.lt/viesasprendimupaieska/paieska.aspx?detali=2&bnr=2K-P-18-648/2016", "note": "Plenary cassation ruling: partisans and their supporters constituted a significant part of the Lithuanian national group — genocide conviction stands. Upheld by the ECtHR in Drėlingas v. Lithuania (no. 28859/16, 12 March 2019)."}
+      ],
+      "note": "The affirmative pole of the Baltic Soviet-genocide axis (national/ethnic group 'in part' via political subgroup). Identity confirmed by matching process numbers across both decisions.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "lithuania-vasiliauskas",
+      "case_name": "Vytautas Vasiliauskas (Lithuania — genocide conviction quashed after Strasbourg)",
+      "country_of_prosecution": "Lithuania",
+      "country_of_commission": "Lithuania (Soviet-occupied)",
+      "crimes": "Genocide (1953 killing of two partisans as MGB operative) — conviction ultimately annulled",
+      "jurisdictional_basis": "Territorial (retrospective genocide statute)",
+      "decisions": [
+        {"date": "2016-10-27", "reference": "Lietuvos Aukščiausiasis Teismas (plenary), 2A-P-8-788/2016", "url": "https://liteko.teismai.lt/viesasprendimupaieska/paieska.aspx?detali=2&bnr=2A-P-8-788/2016", "note": "Regional-court judgment and Court of Appeal ruling annulled and the case discontinued — execution of the ECtHR Grand Chamber judgment Vasiliauskas v. Lithuania (no. 35343/05, 20 Oct 2015, Art. 7 violation)."}
+      ],
+      "note": "The nullum-crimen counterpoint to Drėlingas — together they map the legality limits of retroactive genocide prosecution. The RIS hits in batch 1's Austrian sweep (Bsw35343/05) are the ECtHR side of this same case.",
+      "confidence": "confirmed"
+    },
+    {
+      "suggested_id": "bangladesh-azharul-islam",
+      "case_name": "A.T.M. Azharul Islam (Bangladesh — 1971 international crimes, appellate layer)",
+      "country_of_prosecution": "Bangladesh",
+      "country_of_commission": "Bangladesh (1971 Liberation War)",
+      "crimes": "Genocide; Crimes against humanity (Rangpur — ICT-BD Case No. 05/2013)",
+      "jurisdictional_basis": "Territorial (International Crimes (Tribunals) Act 1973)",
+      "decisions": [
+        {"date": "2019-10-31", "reference": "Supreme Court of Bangladesh, Appellate Division, 14 SCOB [2020] AD 1 (Azharul Islam v. Chief Prosecutor, ICT)", "url": "https://www.supremecourt.gov.bd/resources/bulletin/14_SCOB_AD_1.pdf", "note": "Official Appellate Division text dismissing the appeal against the ICT-BD death sentence."}
+      ],
+      "note": "Entry point into the ICT-BD appellate corpus on the Supreme Court's own site. IMPORTANT UPDATE TO VERIFY: the Appellate Division reportedly acquitted Azharul Islam on review in May 2025 after the 2024 change of government — the case now spans both the accountability and fair-trial/reversal axes. The ICT-BD line (Sayedee, Kamaruzzaman, Nizami, Mollah) should be retrievable from the same sources in a follow-up pass.",
+      "confidence": "confirmed (2019 judgment); verify (2025 review acquittal)"
+    }
+  ],
+  "supporting_doctrine": [
+    {
+      "reference": "Lietuvos Respublikos Konstitucinis Teismas, ruling of 29 Nov 2010 (byla Nr. 09/2008) on the Soviet-occupation damages and genocide-responsibility laws",
+      "url": "https://e-tar.lt/portal/lt/legalAct/TAR.563E1E108E73",
+      "note": "Constitutional framework of the Lithuanian Soviet-genocide prosecutions (the 18 March 2014 ruling narrowing retroactivity is the companion — search e-tar directly)."
+    }
+  ],
+  "coverage_notes": [
+    "UKRAINE: the indexed Supreme Court layer is dominated by administrative cassation with fully anonymised parties; the art. 438 CC war-crimes verdicts (Shishimarin etc.) live on reyestr.court.gov.ua but cannot be reliably identified through search — source them via the OSCE/ULAG trial-monitoring reports and pin reyestr numbers manually.",
+    "CROATIA: the VSRH war-crimes appellate line ('ratni zločin protiv civilnog stanovništva') is richly indexed with official odluke.sudovi.hr links (e.g. I Kž-207/2016-4 of 5 June 2018; Kzz-8/2009-3 of 11 March 2009), but judgments are anonymised — a targeted pass with known case numbers (Glavaš: I Kž-Us 121/2019; Norac/Ademi) is needed to attach names.",
+    "URUGUAY: BJN returns only session-based search URLs (not stable document links) and the landmarks (SCJ 365/2009 Sabalsagaray — Ley de Caducidad unconstitutional; the 2010 Bordaberry conviction; SCJ 20/2013) did not surface — keep external sources for Uruguay.",
+    "DRC: only the ordinary Cour de cassation/CSJ line is indexed (via Juricaf); the military-court international-crimes judgments (Songo Mboyo, Minova, Kavumu, Kamuina Nsapu) are absent — TRIAL International and Avocats Sans Frontières compilations remain the sources.",
+    "SERBIA / BOSNIA / ESTONIA / HUNGARY: not yet swept — candidate veins for a further pass (Belgrade War Crimes Chamber; Court of BiH Section I; Estonian Soviet-deportation cases (Kolk & Kislyiy domestic layer); Hungary's Biszku and Képíró)."
+  ]
+}
