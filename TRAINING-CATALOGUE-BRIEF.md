@@ -1,0 +1,60 @@
+# The Impact Litigation Lab toolset — a plain-language brief for training-module authors
+
+*Prepared 2026-08-07 from the project repository and working sessions. Live-status lines for the public websites should be re-confirmed by the author before publication (they could not be re-checked from the drafting environment).*
+
+## 1. International Crimes before Courts — the database
+
+**What it is.** A structured database of everywhere international crimes have ever been judged, built in two layers. The first layer is a map of the institutions: thirty tribunals, from Nuremberg and Tokyo through the UN tribunals for Yugoslavia and Rwanda, the permanent International Criminal Court, the hybrid courts (Sierra Leone, Cambodia, Lebanon, Kosovo, Senegal…), the UN investigative mechanisms for Syria, Iraq and Myanmar, and courts that exist so far only as proposals. The second layer — the database's real contribution — is a corpus of **245 prosecutions of international crimes before national courts** across more than forty prosecuting countries, each one coded by the legal basis on which the court took the case (universal jurisdiction, territory, the nationality of the perpetrator or victim), the crimes charged, the outcome, whether the defendant was a company, and which NGOs and lawyers were involved. Nested underneath are **222 individual court decisions** — indictments, trial judgments, appeals, supreme-court rulings — each with its date, document number and, wherever one exists, a link to the official text.
+
+**The problem it solves.** Anyone who has tried to answer a question like "how many countries have actually convicted someone under universal jurisdiction?" or "what did courts do with head-of-state immunity?" knows the answer is scattered across dozens of NGO reports, national databases in a dozen languages, and academic footnotes. This database puts the whole landscape in one filterable place. Its users are practitioners choosing where to file, researchers and students mapping trends, and journalists checking claims.
+
+**What it aggregates.** The original corpus was built by hand from practice and from the established reference projects — TRIAL International's annual universal-jurisdiction review, the UJAR reports, the Clooney Foundation's tool, Amnesty's research — each case cross-referenced to those sources. A 2026 enrichment campaign then went back to the **official** sources: the national court databases themselves (the French Cour de cassation, the German federal courts, the Swiss Federal Tribunal, the Dutch and Belgian and Spanish and Argentine supreme courts, the US federal reporters, and some twenty others), retrieving the actual decision texts behind the summaries. Corporate cases are additionally cross-referenced to the Business & Human Rights Resource Centre's lawsuit-profile database.
+
+**Where AI is involved.** The enrichment campaign is the AI story, and it is worth telling precisely. An AI assistant (Claude), connected to a legal-research service that indexes official court databases in over two hundred jurisdictions, did four things: it **searched** those databases for each case in the corpus; it **identified** decisions in the many countries that publish judgments anonymised (Germany, Switzerland, Belgium, the Netherlands, Serbia and others never print the defendant's name — the AI matched decisions to cases by cross-checking dates, courts, docket numbers and the facts described in the text, like matching a fingerprint); it **extracted** the metadata (dates, document numbers, procedural posture) and wrote the case summaries; and it **verified**, flagging every match as either *confirmed* (the identity is certain from the text) or merely *probable*. What remains manual — deliberately: a human signs off on every "probable" match before it enters the dataset, and a human decides what belongs in the corpus at all. In seven research passes the campaign grew the corpus from 198 to 245 cases and from 140 to 222 decisions, attached official texts to some thirty-five existing cases, and caught two factual errors in the original data.
+
+**Status.** The dataset is maintained in a repository as spreadsheets and machine-readable files, versioned so the untouched original export and the enriched version coexist; every enrichment finding is documented in research logs, including the ones *not* accepted. The public-facing site is at prototype stage. *(Confirm current URL and hosting before publication.)*
+
+**Can it be demonstrated live?** Yes, in two ways: the site/spreadsheet itself can be screen-shared and filtered in front of an audience, and — more interestingly for a training course — the enrichment process itself can be re-run live: connect the AI to the legal-research service, pick a case, and let the audience watch it hunt through official databases in real time. The hunt takes minutes per case and is genuinely suspenseful.
+
+**Teaching examples.** This project is rich in them, on both sides:
+
+- *A find manual search would likely miss:* Serbia publishes its war-crimes cassation decisions in a fully indexed official database — but anonymised, so searching any defendant's name returns nothing. The AI found the docket by searching for the legal concepts instead, then proposed defendant identities by matching dates and facts against NGO trial-monitoring reports. A researcher who only searched by name would conclude, wrongly, that nothing is published.
+- *A failure mode worth showing:* meaning-based ("semantic") search is surprisingly bad at proper names. Searches for several well-known defendants returned nothing until the search was switched to exact-keyword mode — a vivid demonstration that AI search is not magic and that method matters.
+- *The honest limits of digitisation:* French trial-level judgments — cour d'assises verdicts, tribunal correctionnel decisions — are published in no official database at all, anywhere. The AI can prove the gap exists but cannot fill it; the only sources remain NGO dossiers and registry copies. An excellent corrective to the assumption that "everything is online."
+- *AI as proofreader:* the campaign caught a wrong date on a German federal ruling and a case outcome that had silently become outdated when the defendant was released in a 2024 prisoner exchange — and also surfaced duplicate entries in the original hand-built corpus. Enrichment doubles as quality control.
+
+## 2. International Criminal Tribunals Skills — the legal-AI toolkit
+
+**What it is.** An open-source collection of thirteen "skills" for Claude, covering sixteen jurisdictions from Nuremberg to Colombia's Special Jurisdiction for Peace, plus a connector (an "MCP server" — in plain terms, a plug that lets an AI assistant query a data source directly). A skill is best explained to a lay audience as a **written methodology the AI is required to follow**: a set of standing instructions that load whenever the AI works on that topic.
+
+**The problem it solves.** The known failure of general-purpose AI in law is the invented citation. These skills enforce a *verification-first* discipline: the AI may not cite a case, decision, filing or warrant unless it has verified it against an authoritative primary source — the ICC's own site, the Legal Tools database — in the course of that very conversation. The user base is lawyers, researchers and students who want AI assistance in international criminal law without the hallucination risk.
+
+**Where AI is involved.** The AI does the reading, searching, drafting and summarising; the skill constrains *how* — which sources count as authoritative, what must be verified, what the citation must look like. The methodology itself is human-written legal expertise; that is the point worth teaching: the value is not the model, it is the discipline imposed on the model.
+
+**Status.** Public, open source, on GitHub (`github.com/jeannesulzer/international-criminal-tribunals-skills`) — the first MCP from Impact Litigation Lab.
+
+**Can it be demonstrated live?** Yes, and the best demonstration is a contrast: ask a bare AI chatbot an ICC case-law question, then ask the same question with the skill loaded, and compare the citations. The failure of the former and the sourced answer of the latter make the argument better than any slide.
+
+## 3. CivilWire
+
+A wire-service-style platform that aggregates **civil society's primary sources in real time** — the statements, reports and press releases of NGOs and victims' organisations, presented the way a news wire presents dispatches. The problem it solves: civil society documentation is the raw material of human-rights litigation and journalism, but it is scattered across hundreds of organisational websites and vanishes quickly. Users are journalists, researchers and practitioners who need the primary source, not a news story about it. AI's role here is in the aggregation pipeline (collection and classification of incoming material); editorial judgment about what the platform is remains human. Live at **civilwire.org**. Demonstrable by screen-share. *(Fill in: number of source organisations tracked and update cadence.)*
+
+## 4. ICC Victims' Rights
+
+A hub making **victims' rights before the International Criminal Court** accessible to the people who hold them. The Rome Statute gave victims unprecedented rights to participate and claim reparations, but the practice is buried in procedural texts that no victim, and few counsel, can navigate unaided. The site organises that material — participation, representation, reparations, the Trust Fund — in plain terms. Users are victims' counsel, intermediary NGOs, and affected communities. Live at **icc-victimsrights.org**. Demonstrable by screen-share.
+
+## 5. Global Justice Archive
+
+A visual archive of **every international tribunal, past and present, since Nuremberg** — the public-facing sibling of the database's first layer. Where the database serves researchers filtering data, the Archive serves teaching: a browsable map of the whole institutional history of international criminal justice. Currently hosted as a prototype at **internationaltribunals.lovable.app**. Demonstrable by screen-share; being a prototype, it is also an honest example of how quickly such a resource can now be built by a lawyer without an engineering team — itself a teaching point about AI-assisted "vibe-built" tools and their limits (hosting, permanence, citability).
+
+## 6. Reparation — International Crimes
+
+A companion resource mapping **reparation mechanisms and case law for victims of international crimes** — who has actually been ordered to repair what, before which body, and through which mechanism. It connects to the author's current academic work on the link between criminal characterisation and the right to reparation. Prototype at **reparation-international-crimes.lovable.app**.
+
+## 7. Victims' Rights & International Justice Journal
+
+An online journal and the host of the **IMPACT podcast** — the editorial layer of the ecosystem, where the tools above meet commentary and interviews. Live at **victimsrightsinternationaljournal.org**.
+
+## How the pieces fit (one paragraph for the module introduction)
+
+The ecosystem has a deliberate architecture: the **database** is the evidence layer (what courts have actually done), the **skills** are the discipline layer (how AI may be used on that evidence without inventing law), **CivilWire** is the real-time layer (what civil society is documenting today), and the **victims' rights hub, reparation resource, archive and journal** are the access layer (making it usable by the people it is for). A training module can walk that stack in order — and at every step there is something to demonstrate live and an instructive failure to show alongside the success.
