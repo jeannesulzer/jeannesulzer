@@ -1,0 +1,154 @@
+From 91c64ccf1e0627c6a6a04db76021eedcd04c106a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 19 Sep 2026 09:14:40 +0000
+Subject: [PATCH 4/5] Enforce dedup in the database and version the cron
+ schedule
+
+Dedup: the scraper pre-read 30 days of source_urls into a Set, with no explicit
+limit, so PostgREST capped it at 1000 rows. Past 1000 articles in the window the
+Set was silently incomplete and duplicates accumulated - nothing prevented them,
+source_url carried only a hash index. Collapse existing duplicates keeping the
+earliest row, add UNIQUE (source_url), and let the scraper upsert.
+
+Schedule: grep found no cron.schedule or http_post anywhere in the migrations.
+The repository activated pg_cron and pg_net but scheduled nothing, so any
+refresh that ran was created by hand in the SQL editor - unreviewable and not
+reproducible. The daily sweep is now defined in code, reading its credentials
+from Vault and degrading to a NOTICE when the secrets are absent rather than
+failing the migration.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_013rc3BqVWShUgEYHwD9tsJJ
+---
+ ...919120000_dedupe_and_unique_source_url.sql | 37 ++++++++++
+ .../20260919120100_schedule_daily_scrape.sql  | 74 +++++++++++++++++++
+ 2 files changed, 111 insertions(+)
+ create mode 100644 supabase/migrations/20260919120000_dedupe_and_unique_source_url.sql
+ create mode 100644 supabase/migrations/20260919120100_schedule_daily_scrape.sql
+
+diff --git a/supabase/migrations/20260919120000_dedupe_and_unique_source_url.sql b/supabase/migrations/20260919120000_dedupe_and_unique_source_url.sql
+new file mode 100644
+index 0000000..31bebe7
+--- /dev/null
++++ b/supabase/migrations/20260919120000_dedupe_and_unique_source_url.sql
+@@ -0,0 +1,37 @@
++-- Enforce one row per source_url, in the database rather than in the scraper.
++--
++-- The scraper used to dedupe by pre-reading the last 30 days of source_urls into
++-- a Set. That read carried no explicit .limit(), so PostgREST capped it at its
++-- 1000-row default: once the 30-day window held more than 1000 articles, the
++-- Set was silently incomplete and duplicates began accumulating. There was only
++-- a hash index on source_url, nothing preventing them.
++--
++-- With this constraint the scraper can upsert with ignoreDuplicates and stop
++-- guessing. NULL source_urls are unaffected (Postgres allows many NULLs under a
++-- UNIQUE constraint), which keeps any hand-entered rows valid.
++
++-- 1. Collapse existing duplicates, keeping the earliest row for each URL so the
++--    oldest archive timestamp — the one closest to when CivilWire first saw the
++--    item — is the one that survives.
++WITH ranked AS (
++  SELECT
++    id,
++    row_number() OVER (
++      PARTITION BY source_url
++      ORDER BY created_at ASC, id ASC
++    ) AS rn
++  FROM public.news_articles
++  WHERE source_url IS NOT NULL
++)
++DELETE FROM public.news_articles a
++USING ranked r
++WHERE a.id = r.id
++  AND r.rn > 1;
++
++-- 2. Now the constraint can be created.
++ALTER TABLE public.news_articles
++  ADD CONSTRAINT news_articles_source_url_key UNIQUE (source_url);
++
++-- 3. The old hash index only served equality lookups that the unique B-tree now
++--    covers. Dropping it saves a write on every insert.
++DROP INDEX IF EXISTS idx_news_articles_source_url;
+diff --git a/supabase/migrations/20260919120100_schedule_daily_scrape.sql b/supabase/migrations/20260919120100_schedule_daily_scrape.sql
+new file mode 100644
+index 0000000..138c5dc
+--- /dev/null
++++ b/supabase/migrations/20260919120100_schedule_daily_scrape.sql
+@@ -0,0 +1,74 @@
++-- Schedule the daily NGO sweep, in version control.
++--
++-- The repository activated pg_cron and pg_net but never scheduled anything:
++-- `grep -r "cron\.\|http_post" supabase/migrations` returned nothing. Whatever
++-- refresh existed was created by hand in the SQL editor, invisible to review and
++-- impossible to reproduce on a new project. This migration makes the schedule
++-- part of the codebase.
++--
++-- PREREQUISITE — create the two secrets first, once, in the SQL editor:
++--
++--   select vault.create_secret('<service-role-key>', 'service_role_key');
++--   select vault.create_secret('<a-long-random-string>', 'cron_secret');
++--
++-- The same random string must be set as the CRON_SECRET environment variable on
++-- the edge functions (Dashboard → Edge Functions → Secrets). _shared/auth.ts
++-- compares the two; an unset CRON_SECRET denies every scheduled call rather
++-- than falling open.
++--
++-- Verify afterwards with:
++--   select jobid, schedule, active from cron.job where jobname = 'civilwire-daily-scrape';
++--   select status, return_message, start_time
++--     from cron.job_run_details
++--     where jobid = (select jobid from cron.job where jobname = 'civilwire-daily-scrape')
++--     order by start_time desc limit 10;
++
++DO $$
++DECLARE
++  v_service_key text;
++  v_cron_secret text;
++  v_url text := 'https://ysmcpnkxugawogfvihsc.supabase.co/functions/v1/scrape-ngo-feeds-cron';
++BEGIN
++  -- Remove any previous incarnation so re-running stays idempotent.
++  PERFORM cron.unschedule('civilwire-daily-scrape')
++  WHERE EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'civilwire-daily-scrape');
++
++  SELECT decrypted_secret INTO v_service_key
++  FROM vault.decrypted_secrets WHERE name = 'service_role_key';
++
++  SELECT decrypted_secret INTO v_cron_secret
++  FROM vault.decrypted_secrets WHERE name = 'cron_secret';
++
++  IF v_service_key IS NULL OR v_cron_secret IS NULL THEN
++    RAISE NOTICE 'CivilWire: vault secrets service_role_key / cron_secret not set — daily scrape NOT scheduled. Create them, then re-run this migration.';
++    RETURN;
++  END IF;
++
++  -- 06:15 UTC daily: after European NGOs publish overnight, before the morning read.
++  PERFORM cron.schedule(
++    'civilwire-daily-scrape',
++    '15 6 * * *',
++    format(
++      $job$
++      select net.http_post(
++        url     := %L,
++        headers := jsonb_build_object(
++          'Content-Type',   'application/json',
++          'Authorization',  'Bearer ' || %L,
++          'x-cron-secret',  %L
++        ),
++        body    := '{}'::jsonb,
++        timeout_milliseconds := 300000
++      );
++      $job$,
++      v_url, v_service_key, v_cron_secret
++    )
++  );
++
++  RAISE NOTICE 'CivilWire: daily scrape scheduled at 06:15 UTC.';
++EXCEPTION
++  WHEN undefined_table OR undefined_function OR insufficient_privilege THEN
++    -- pg_cron / pg_net / supabase_vault not available on this instance.
++    RAISE NOTICE 'CivilWire: scheduling skipped (%). Schedule manually once the extensions are available.', SQLERRM;
++END
++$$;
+-- 
+2.43.0
+

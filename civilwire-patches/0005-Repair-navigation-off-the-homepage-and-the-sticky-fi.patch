@@ -1,0 +1,206 @@
+From 9dbc160504e062031335c78ec0d6f4b3c11baf88 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 19 Sep 2026 09:14:50 +0000
+Subject: [PATCH 5/5] Repair navigation off the homepage and the sticky filter
+ bar
+
+Search: SiteNavbar renders on ten pages but only Index passes onSearch, and the
+anchors it scrolled to exist only there. On the other nine, typing in the search
+box did nothing at all - and neither did Regions, Themes or NGO Directory, which
+used the same missing anchors. Fall back to navigating to the feed; Index
+already reads q/theme/region/country from the URL.
+
+Filter bar: it stuck at top-[88px] under a header measuring 29 + 64 + 40 + 1 =
+134px at z-50, so 46px of a ~50px bar sat behind the navbar - invisible in
+practice, and any replacement constant would break again when the mobile menu
+opens. SiteNavbar now publishes its measured height as --header-h via a
+ResizeObserver and the bar sticks to that.
+
+Also coalesce the realtime refetch: every INSERT triggered a full refetch of the
+100-row feed, so a scrape run fired hundreds in a burst.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_013rc3BqVWShUgEYHwD9tsJJ
+---
+ src/components/FilterBar.tsx  | 11 +++++-
+ src/components/SiteNavbar.tsx | 69 +++++++++++++++++++++++++++++------
+ src/hooks/useNewsArticles.ts  | 18 +++++++--
+ 3 files changed, 82 insertions(+), 16 deletions(-)
+
+diff --git a/src/components/FilterBar.tsx b/src/components/FilterBar.tsx
+index d75b7ea..12b4e90 100644
+--- a/src/components/FilterBar.tsx
++++ b/src/components/FilterBar.tsx
+@@ -106,8 +106,17 @@ const FilterBar = ({
+     ? SUBJECT_COUNTRIES.filter((c) => c.toLowerCase().includes(countryQuery.trim().toLowerCase()))
+     : SUBJECT_COUNTRIES;
+ 
++  // Sticks flush under the navbar. --header-h is published by SiteNavbar from the
++  // header's measured height; the 134px fallback matches its current three rows
++  // should the variable ever be missing. The old top-[88px] left the bar ~46px
++  // behind a z-50 header, i.e. effectively invisible once stuck.
+   return (
+-    <div id="filter-bar" className="bg-card border-b border-border shadow-sm sticky top-[88px] z-40" ref={barRef}>
++    <div
++      id="filter-bar"
++      className="bg-card border-b border-border shadow-sm sticky z-40"
++      style={{ top: "var(--header-h, 134px)" }}
++      ref={barRef}
++    >
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+         <div className="flex items-center gap-2 py-2.5 flex-wrap">
+           {/* Theme */}
+diff --git a/src/components/SiteNavbar.tsx b/src/components/SiteNavbar.tsx
+index 64073ea..e8579e4 100644
+--- a/src/components/SiteNavbar.tsx
++++ b/src/components/SiteNavbar.tsx
+@@ -1,5 +1,5 @@
+ import { useState, useEffect, useRef, useCallback } from "react";
+-import { Link, useNavigate } from "react-router-dom";
++import { Link, useNavigate, useLocation } from "react-router-dom";
+ import { Search, Globe, Menu, X, ChevronDown } from "lucide-react";
+ import { Button } from "@/components/ui/button";
+ import { Input } from "@/components/ui/input";
+@@ -13,18 +13,63 @@ const SiteNavbar = ({ onSearch }: { onSearch?: (q: string) => void }) => {
+   const [langOpen, setLangOpen] = useState(false);
+   const [navQuery, setNavQuery] = useState("");
+   const navigate = useNavigate();
++  const location = useLocation();
+   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+ 
++  // The navbar renders on ten pages but only Index passes `onSearch`, and the
++  // anchors it scrolls to (#news-feed, #filter-bar) exist only there. Everywhere
++  // else, search and the Regions/Themes/Directory links silently did nothing.
++  // Off the feed we navigate to it instead — Index already reads q/theme/region/
++  // country from the URL and syncs its filters back to them.
++  const onFeedPage = location.pathname === "/" || location.pathname === "/search";
++
+   const handleSearchChange = useCallback((value: string) => {
+     setNavQuery(value);
+     if (debounceRef.current) clearTimeout(debounceRef.current);
+     debounceRef.current = setTimeout(() => {
+-      onSearch?.(value);
+-      if (value.length > 0) {
+-        document.getElementById("news-feed")?.scrollIntoView({ behavior: "smooth" });
++      if (onFeedPage && onSearch) {
++        onSearch(value);
++        if (value.length > 0) {
++          document.getElementById("news-feed")?.scrollIntoView({ behavior: "smooth" });
++        }
++        return;
+       }
++      if (!value.trim()) return;
++      // `replace` so a search typed letter by letter leaves one history entry.
++      navigate(`/?q=${encodeURIComponent(value.trim())}`, { replace: true });
+     }, 300);
+-  }, [onSearch]);
++  }, [onSearch, onFeedPage, navigate]);
++
++  // Publish the header's real height as --header-h so anything sticking below it
++  // (FilterBar) can sit flush without hard-coding a pixel value. The header is
++  // three stacked rows and grows further when the mobile menu opens, so any
++  // constant is wrong at some viewport: FilterBar used top-[88px] against a
++  // 134px header and spent its life hidden behind it.
++  const headerRef = useRef<HTMLElement>(null);
++  useEffect(() => {
++    const el = headerRef.current;
++    if (!el) return;
++    const publish = () => {
++      document.documentElement.style.setProperty("--header-h", `${Math.round(el.getBoundingClientRect().height)}px`);
++    };
++    publish();
++    const ro = new ResizeObserver(publish);
++    ro.observe(el);
++    return () => ro.disconnect();
++  }, []);
++
++  /**
++   * Jump to a section of the feed, from any page. On the feed we scroll and let
++   * the panel open; elsewhere we go there first.
++   */
++  const goToFeedSection = useCallback((anchor: "filter-bar" | "news-feed", event?: { name: string; detail?: string }) => {
++    if (onFeedPage) {
++      document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" });
++      if (event) window.dispatchEvent(new CustomEvent(event.name, { detail: event.detail }));
++      return;
++    }
++    navigate("/");
++  }, [onFeedPage, navigate]);
+   const { t, lang, setLang, isRTL } = useLanguage();
+   const [tickerHeadlines, setTickerHeadlines] = useState<string[]>([]);
+ 
+@@ -59,7 +104,7 @@ const SiteNavbar = ({ onSearch }: { onSearch?: (q: string) => void }) => {
+   }, []);
+ 
+   return (
+-    <header className="sticky top-0 z-50 w-full">
++    <header ref={headerRef} className="sticky top-0 z-50 w-full">
+       {/* Wire flash bar — Reuters/AFP style */}
+       <div className="bg-navy-deep border-b border-navy-mid/50 overflow-hidden">
+         <div className="flex items-center h-7">
+@@ -110,9 +155,9 @@ const SiteNavbar = ({ onSearch }: { onSearch?: (q: string) => void }) => {
+             {/* Desktop nav — primary links only */}
+             <div className="hidden md:flex items-center gap-4 lg:gap-5">
+               <NavItem label={t("nav.newsFeed")} href="/" active />
+-              <NavItem label={t("nav.regions")} href="#filter-bar" onClick={() => { document.getElementById("filter-bar")?.scrollIntoView({ behavior: "smooth" }); window.dispatchEvent(new CustomEvent("open-filter-panel", { detail: "regions" })); }} />
+-              <NavItem label={t("nav.themes")} href="#filter-bar" onClick={() => { document.getElementById("filter-bar")?.scrollIntoView({ behavior: "smooth" }); window.dispatchEvent(new CustomEvent("open-filter-panel", { detail: "themes" })); }} />
+-              <NavItem label={t("nav.ngoDirectory")} href="#news-feed" onClick={() => { document.getElementById("news-feed")?.scrollIntoView({ behavior: "smooth" }); window.dispatchEvent(new CustomEvent("open-ngo-tab")); }} />
++              <NavItem label={t("nav.regions")} href="#filter-bar" onClick={() => goToFeedSection("filter-bar", { name: "open-filter-panel", detail: "regions" })} />
++              <NavItem label={t("nav.themes")} href="#filter-bar" onClick={() => goToFeedSection("filter-bar", { name: "open-filter-panel", detail: "themes" })} />
++              <NavItem label={t("nav.ngoDirectory")} href="#news-feed" onClick={() => goToFeedSection("news-feed", { name: "open-ngo-tab" })} />
+               <span className="w-px h-4 bg-cream/20" />
+               <NavItem label={t("nav.about")} href="/about" onClick={() => navigate("/about")} />
+               <NavItem label="Why CivilWire" href="/why" onClick={() => navigate("/why")} />
+@@ -190,9 +235,9 @@ const SiteNavbar = ({ onSearch }: { onSearch?: (q: string) => void }) => {
+           <div className="md:hidden border-t border-navy-mid px-4 py-3 space-y-2 fade-in">
+             {[
+               { label: t("nav.newsFeed"), href: "/", action: undefined },
+-              { label: t("nav.regions"), href: "#filter-bar", action: () => { document.getElementById("filter-bar")?.scrollIntoView({ behavior: "smooth" }); window.dispatchEvent(new CustomEvent("open-filter-panel", { detail: "regions" })); } },
+-              { label: t("nav.themes"), href: "#filter-bar", action: () => { document.getElementById("filter-bar")?.scrollIntoView({ behavior: "smooth" }); window.dispatchEvent(new CustomEvent("open-filter-panel", { detail: "themes" })); } },
+-              { label: t("nav.ngoDirectory"), href: "#news-feed", action: () => { document.getElementById("news-feed")?.scrollIntoView({ behavior: "smooth" }); window.dispatchEvent(new CustomEvent("open-ngo-tab")); } },
++              { label: t("nav.regions"), href: "#filter-bar", action: () => goToFeedSection("filter-bar", { name: "open-filter-panel", detail: "regions" }) },
++              { label: t("nav.themes"), href: "#filter-bar", action: () => goToFeedSection("filter-bar", { name: "open-filter-panel", detail: "themes" }) },
++              { label: t("nav.ngoDirectory"), href: "#news-feed", action: () => goToFeedSection("news-feed", { name: "open-ngo-tab" }) },
+               { label: t("nav.about"), href: "/about", action: undefined },
+               { label: t("nav.customize"), href: "/briefing", action: undefined },
+               { label: t("nav.agenda"), href: "/agenda", action: undefined },
+diff --git a/src/hooks/useNewsArticles.ts b/src/hooks/useNewsArticles.ts
+index 3ae45ce..40c9eae 100644
+--- a/src/hooks/useNewsArticles.ts
++++ b/src/hooks/useNewsArticles.ts
+@@ -80,17 +80,29 @@ export function useNewsArticles(
+     queryFn: () => fetchArticles({ searchQuery, theme, region, subjectCountry }),
+   });
+ 
++  const refetch = result.refetch;
+   useEffect(() => {
++    // A scrape run inserts several rows per organisation, and each INSERT used
++    // to trigger its own refetch of the full 100-row feed — a few hundred
++    // redundant round trips in a burst, which stalls the page precisely while
++    // someone is watching it fill. Coalesce a burst into one refresh.
++    let timer: ReturnType<typeof setTimeout> | undefined;
+     const channel = supabase
+       .channel("news-articles-realtime")
+       .on(
+         "postgres_changes",
+         { event: "INSERT", schema: "public", table: "news_articles" },
+-        () => { result.refetch(); }
++        () => {
++          if (timer) clearTimeout(timer);
++          timer = setTimeout(() => refetch(), 1500);
++        }
+       )
+       .subscribe();
+-    return () => { supabase.removeChannel(channel); };
+-  }, [result.refetch]);
++    return () => {
++      if (timer) clearTimeout(timer);
++      supabase.removeChannel(channel);
++    };
++  }, [refetch]);
+ 
+   return result;
+ }
+-- 
+2.43.0
+

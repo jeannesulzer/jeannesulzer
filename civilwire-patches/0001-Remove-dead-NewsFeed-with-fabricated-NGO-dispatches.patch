@@ -1,0 +1,201 @@
+From 4edea8b04ad8dde6a7a2f693254fe14af5ae7e1c Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 19 Sep 2026 09:14:08 +0000
+Subject: [PATCH 1/5] Remove dead NewsFeed with fabricated NGO dispatches
+
+NewsFeed.tsx was imported nowhere and absent from the built bundle, but it
+carried a MOCK_NEWS fallback of three invented human-rights dispatches
+attributed to Human Rights Watch, CHRI and Reporters Without Borders, rendered
+whenever the live query returned no rows.
+
+Nothing shipped, but invented claims signed by real organisations do not belong
+in the repository of a wire whose premise is source fidelity. WireFeed is the
+live feed and has a proper empty state.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_013rc3BqVWShUgEYHwD9tsJJ
+---
+ src/components/NewsFeed.tsx | 171 ------------------------------------
+ 1 file changed, 171 deletions(-)
+ delete mode 100644 src/components/NewsFeed.tsx
+
+diff --git a/src/components/NewsFeed.tsx b/src/components/NewsFeed.tsx
+deleted file mode 100644
+index 9405bcf..0000000
+--- a/src/components/NewsFeed.tsx
++++ /dev/null
+@@ -1,171 +0,0 @@
+-import { useNewsArticles, NewsArticle } from "@/hooks/useNewsArticles";
+-import NewsCard, { NewsItem } from "./NewsCard";
+-import { RefreshCw, SlidersHorizontal, Loader2 } from "lucide-react";
+-import { Button } from "@/components/ui/button";
+-import { supabase } from "@/integrations/supabase/client";
+-import { useState } from "react";
+-import { useToast } from "@/hooks/use-toast";
+-import { useLanguage } from "@/i18n/LanguageContext";
+-import { buildCorroborationMap } from "@/lib/corroboration";
+-
+-const MOCK_NEWS: NewsItem[] = [
+-  {
+-    id: 1, title: "New Evidence of Systematic Torture in Libyan Detention Centers, Witnesses Testify",
+-    summary: "Investigators gathered testimony from 47 survivors detained in Tripoli and Benghazi facilities.",
+-    ngo: "Human Rights Watch", ngoCountry: "International", theme: "Torture & Ill-Treatment",
+-    region: "North Africa & MENA", country: "Libya", date: "2026-02-20", timeAgo: "2 hours ago",
+-    type: "report", urgent: true,
+-  },
+-  {
+-    id: 2, title: "Iran: 34 Labour Activists Face Death Penalty for Organising Petrochemical Strikes",
+-    summary: "The Center for Human Rights in Iran has documented arrests of labour rights activists.",
+-    ngo: "CHRI", ngoCountry: "Iran / USA", theme: "Arbitrary Detention",
+-    region: "Middle East", country: "Iran", date: "2026-02-20", timeAgo: "5 hours ago",
+-    type: "alert", urgent: true, aiTranslated: true, originalLang: "Farsi",
+-  },
+-  {
+-    id: 3, title: "RSF Index 2026: Press Freedom Deteriorates in 130 Countries",
+-    summary: "Reporters Without Borders documents the sharpest global decline in press freedom since the index began.",
+-    ngo: "RSF", ngoCountry: "France", theme: "Press Freedom",
+-    region: "Global", country: "Global", date: "2026-02-19", timeAgo: "1 day ago",
+-    type: "report",
+-  },
+-];
+-
+-function articleToNewsItem(a: NewsArticle, index: number, t: (key: string) => string): NewsItem {
+-  const now = new Date();
+-  const scraped = new Date(a.scraped_at);
+-  const diffMs = now.getTime() - scraped.getTime();
+-  const diffHours = Math.floor(diffMs / 3600000);
+-  const timeAgo = diffHours < 1 ? t("time.justNow") : diffHours < 24 ? `${diffHours}${t("time.hoursAgo")}` : `${Math.floor(diffHours / 24)}${t("time.daysAgo")}`;
+-
+-  return {
+-    id: index + 1,
+-    uuid: a.id,
+-    title: a.title,
+-    summary: a.summary || "",
+-    ngo: a.ngo,
+-    ngoCountry: a.ngo_country || "",
+-    theme: a.theme || "Human Rights",
+-    region: a.region || "Global",
+-    country: a.country || "Global",
+-    date: a.published_date ? a.published_date.split("T")[0] : a.scraped_at.split("T")[0],
+-    timeAgo,
+-    scrapedAt: a.scraped_at,
+-    type: (a.article_type as NewsItem["type"]) || "report",
+-    urgent: a.urgent || false,
+-    aiTranslated: a.ai_translated || false,
+-    originalLang: a.original_lang || undefined,
+-    url: a.source_url || undefined,
+-    coverImageUrl: a.cover_image_url || undefined,
+-  };
+-}
+-
+-const NewsFeed = ({ searchQuery, theme, region }: { searchQuery?: string; theme?: string; region?: string }) => {
+-  const { data: articles, isLoading, refetch } = useNewsArticles(searchQuery, theme, region);
+-  const [scraping, setScraping] = useState(false);
+-  const { toast } = useToast();
+-  const { t } = useLanguage();
+-
+-  const handleRefresh = async () => {
+-    setScraping(true);
+-    try {
+-      const { data, error } = await supabase.functions.invoke("scrape-ngo-news");
+-      if (error) throw error;
+-      toast({ title: t("feed.scrapingComplete"), description: `${data?.inserted || 0} ${t("feed.newArticlesFound")}` });
+-      refetch();
+-    } catch (e) {
+-      toast({ title: t("feed.scrapingFailed"), description: String(e), variant: "destructive" });
+-    } finally {
+-      setScraping(false);
+-    }
+-  };
+-
+-  const hasLiveData = articles && articles.length > 0;
+-  const items: NewsItem[] = hasLiveData
+-    ? articles.map((a, i) => articleToNewsItem(a, i, t))
+-    : MOCK_NEWS;
+-
+-  const filtered = hasLiveData
+-    ? items
+-    : items.filter((item) => {
+-        if (searchQuery) {
+-          const q = searchQuery.toLowerCase();
+-          if (!item.title.toLowerCase().includes(q) && !item.summary.toLowerCase().includes(q) &&
+-              !item.theme.toLowerCase().includes(q) && !item.country.toLowerCase().includes(q) &&
+-              !item.ngo.toLowerCase().includes(q)) return false;
+-        }
+-        if (theme && theme !== "All" && item.theme !== theme) return false;
+-        if (region && region !== "All Regions" && item.region !== region && item.country !== region) return false;
+-        return true;
+-      });
+-
+-  const corroborationMap = buildCorroborationMap(
+-    filtered
+-      .filter((it) => it.uuid)
+-      .map((it) => ({ id: it.uuid!, title: it.title, ngo: it.ngo, country: it.country, scrapedAt: it.scrapedAt || it.date }))
+-  );
+-  const withCorroboration = filtered.map((it) =>
+-    it.uuid && corroborationMap.get(it.uuid) ? { ...it, corroboration: corroborationMap.get(it.uuid) } : it
+-  );
+-
+-  return (
+-    <div>
+-      <div className="flex items-center justify-between mb-6">
+-        <div>
+-          <h2 className="font-display text-xl font-bold text-ink">
+-            {searchQuery ? `${t("feed.resultsFor")} "${searchQuery}"` : t("feed.latestReports")}
+-          </h2>
+-          <p className="text-xs text-ink-light mt-0.5">
+-            {isLoading ? t("feed.loading") : `${filtered.length} ${t("feed.documentsFound")}`}
+-            {!hasLiveData && !isLoading && ` ${t("feed.sampleData")}`}
+-          </p>
+-        </div>
+-        <div className="flex gap-2">
+-          <Button variant="outline" size="sm" className="text-xs gap-1.5">
+-            <SlidersHorizontal className="h-3.5 w-3.5" />
+-            {t("feed.filter")}
+-          </Button>
+-          <Button
+-            variant="outline"
+-            size="sm"
+-            className="text-xs gap-1.5"
+-            onClick={handleRefresh}
+-            disabled={scraping}
+-          >
+-            {scraping ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+-            {scraping ? t("feed.scraping") : t("feed.refresh")}
+-          </Button>
+-        </div>
+-      </div>
+-
+-      {isLoading ? (
+-        <div className="text-center py-16 text-ink-light">
+-          <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
+-          <p className="text-sm">{t("feed.loading")}</p>
+-        </div>
+-      ) : filtered.length === 0 ? (
+-        <div className="text-center py-16 text-ink-light">
+-          <p className="font-display text-lg mb-2">{t("feed.noResults")}</p>
+-          <p className="text-sm">{t("feed.tryDifferent")}</p>
+-        </div>
+-      ) : (
+-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+-          {withCorroboration.map((item, i) => (
+-            <NewsCard key={item.id} item={item} featured={i === 0} index={i} />
+-          ))}
+-        </div>
+-      )}
+-
+-      {filtered.length > 0 && (
+-        <div className="mt-8 text-center">
+-          <Button variant="outline" className="px-8 border-navy/20 text-navy hover:bg-navy hover:text-cream transition-colors">
+-            {t("feed.loadMore")}
+-          </Button>
+-        </div>
+-      )}
+-    </div>
+-  );
+-};
+-
+-export default NewsFeed;
+-- 
+2.43.0
+

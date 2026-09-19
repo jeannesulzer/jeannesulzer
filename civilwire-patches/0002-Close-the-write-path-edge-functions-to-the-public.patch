@@ -1,0 +1,1065 @@
+From 8d37da32f4440fcb2efd866fe2659c75cfdf1238 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 19 Sep 2026 09:14:20 +0000
+Subject: [PATCH 2/5] Close the write-path edge functions to the public
+
+The anon key is a valid JWT and ships in the browser bundle, so verify_jwt
+alone restricted nothing: any visitor could call these functions, and
+scrape-ngo-feeds-cron and classify-articles had verify_jwt = false outright.
+
+scrape-ngo-feeds was the serious one. It accepted a caller-supplied `ngos`
+array including feedUrl, fetched those URLs, and filed the results under the
+caller's chosen NGO name - letting an unauthenticated third party both reach
+arbitrary URLs from the function and inject a fabricated dispatch signed by a
+real organisation into the public feed.
+
+- _shared/auth.ts: constant-time cron-secret check plus an admin/editor role
+  check against the caller's own JWT. An unset CRON_SECRET denies rather than
+  falls open.
+- _shared/ngo-directory.ts: the 151 organisations now live server-side.
+  Callers may only choose an offset/limit window into that list.
+- Gate scrape-ngo-feeds, scrape-ngo-news, classify-articles, backfill-articles
+  and the cron entry point; set verify_jwt = true everywhere as defence in depth.
+- Hide the feed's Refresh button from non-staff: each press spends Firecrawl
+  and AI-gateway credits.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_013rc3BqVWShUgEYHwD9tsJJ
+---
+ src/components/WireFeed.tsx                   |  27 +-
+ src/pages/WireSettings.tsx                    |  30 +-
+ supabase/config.toml                          |  23 +-
+ supabase/functions/_shared/auth.ts            |  85 ++++++
+ supabase/functions/_shared/ngo-directory.ts   | 186 +++++++++++++
+ supabase/functions/backfill-articles/index.ts |   8 +-
+ supabase/functions/classify-articles/index.ts |   9 +-
+ .../functions/scrape-ngo-feeds-cron/index.ts  | 151 +++++-----
+ supabase/functions/scrape-ngo-feeds/index.ts  | 257 +++++++++++-------
+ 9 files changed, 579 insertions(+), 197 deletions(-)
+ create mode 100644 supabase/functions/_shared/auth.ts
+ create mode 100644 supabase/functions/_shared/ngo-directory.ts
+
+diff --git a/src/components/WireFeed.tsx b/src/components/WireFeed.tsx
+index 9315f1a..5f334f3 100644
+--- a/src/components/WireFeed.tsx
++++ b/src/components/WireFeed.tsx
+@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
+ import { ScrollArea } from "@/components/ui/scroll-area";
+ import { buildCorroborationMap } from "@/lib/corroboration";
+ import CorroborationBadge from "@/components/CorroborationBadge";
++import { useWireAuth } from "@/hooks/useWireAuth";
+ 
+ interface WireEntry {
+   id: string;
+@@ -104,6 +105,7 @@ const WireFeed = ({ searchQuery, theme, region, subjectCountry }: { searchQuery?
+   const [expandedId, setExpandedId] = useState<string | null>(null);
+   const { toast } = useToast();
+   const { t, isRTL } = useLanguage();
++  const { hasAccess } = useWireAuth();
+   const feedRef = useRef<HTMLDivElement>(null);
+ 
+   // Live clock
+@@ -167,16 +169,21 @@ const WireFeed = ({ searchQuery, theme, region, subjectCountry }: { searchQuery?
+                 </span>
+               ) : null}
+             </span>
+-            <Button
+-              variant="ghost"
+-              size="sm"
+-              className="h-7 px-2 text-xs font-mono gap-1"
+-              onClick={handleRefresh}
+-              disabled={scraping}
+-            >
+-              {scraping ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
+-              {scraping ? t("feed.scraping") : t("wire.fetch")}
+-            </Button>
++            {/* Staff only: each fetch spends Firecrawl and AI-gateway credits.
++                The edge function rejects everyone else regardless, but a button
++                that only ever returns 403 does not belong in the public UI. */}
++            {hasAccess && (
++              <Button
++                variant="ghost"
++                size="sm"
++                className="h-7 px-2 text-xs font-mono gap-1"
++                onClick={handleRefresh}
++                disabled={scraping}
++              >
++                {scraping ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
++                {scraping ? t("feed.scraping") : t("wire.fetch")}
++              </Button>
++            )}
+           </div>
+         </div>
+         {searchQuery && (
+diff --git a/src/pages/WireSettings.tsx b/src/pages/WireSettings.tsx
+index 3a6767c..3737036 100644
+--- a/src/pages/WireSettings.tsx
++++ b/src/pages/WireSettings.tsx
+@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
+ import { Input } from "@/components/ui/input";
+ import { Loader2, UserPlus, RefreshCw } from "lucide-react";
+ import { toast } from "sonner";
+-import { FIDH_MEMBERS } from "@/data/fidh-members";
+ 
+ export default function WireSettings() {
+   const navigate = useNavigate();
+@@ -43,32 +42,29 @@ export default function WireSettings() {
+     setChangingPw(false);
+   };
+ 
++  // The organisation list is no longer sent from here: it lives server-side in
++  // supabase/functions/_shared/ngo-directory.ts, because a caller-supplied list
++  // let anyone choose both the URL the function fetched and the NGO name the
++  // result was filed under. This walks that server-side list by offset, letting
++  // the edge function tell us where it stopped.
+   const handleScrapeAll = async () => {
+-    const ngos = FIDH_MEMBERS
+-      .filter((n) => n.website && n.focus && n.focus.length > 0)
+-      .map((n) => ({
+-        name: n.name,
+-        website: n.website!,
+-        country: n.country,
+-        region: n.region,
+-        language: n.language?.[0] || "en",
+-      }));
+-    if (ngos.length === 0) { toast.error("No NGOs with website + focus areas found"); return; }
+     setScraping(true);
+-    setScrapeProgress(`Scraping ${ngos.length} NGOs in batches…`);
++    setScrapeProgress("Starting…");
+     let totalInserted = 0;
+     let totalProcessed = 0;
+-    const batchSize = 25;
++    let offset: number | null = 0;
++    let guard = 0;
+     try {
+-      for (let i = 0; i < ngos.length; i += batchSize) {
+-        const batch = ngos.slice(i, i + batchSize);
+-        setScrapeProgress(`Batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(ngos.length / batchSize)} (${i}/${ngos.length})`);
++      while (offset !== null && guard++ < 20) {
+         const { data, error } = await supabase.functions.invoke("scrape-ngo-feeds", {
+-          body: { ngos: batch, limit: batch.length },
++          body: { offset, limit: 25 },
+         });
+         if (error) throw error;
+         totalInserted += data?.inserted || 0;
+         totalProcessed += data?.processed || 0;
++        const total = data?.total_sources ?? "?";
++        setScrapeProgress(`${totalProcessed}/${total} sources · ${totalInserted} new`);
++        offset = typeof data?.next_offset === "number" ? data.next_offset : null;
+       }
+       toast.success(`Scrape complete: ${totalInserted} new articles from ${totalProcessed} NGOs`);
+     } catch (e) {
+diff --git a/supabase/config.toml b/supabase/config.toml
+index 36a7493..abd5a80 100644
+--- a/supabase/config.toml
++++ b/supabase/config.toml
+@@ -1,7 +1,26 @@
+ project_id = "ysmcpnkxugawogfvihsc"
+ 
++# Every function below now requires a JWT (the default) AND passes through
++# requireCronOrStaff() in _shared/auth.ts.
++#
++# verify_jwt on its own is not an access control for this project: the anon key
++# is a valid JWT and ships in the public browser bundle, so any visitor can
++# satisfy it. It is kept as defence in depth; the shared secret and the
++# admin/editor role check are what actually restrict these functions.
++#
++# scrape-ngo-feeds-cron and classify-articles previously set verify_jwt = false,
++# which left them callable by anyone who knew the project ref.
+ [functions.scrape-ngo-feeds-cron]
+-verify_jwt = false
++verify_jwt = true
++
++[functions.scrape-ngo-feeds]
++verify_jwt = true
++
++[functions.scrape-ngo-news]
++verify_jwt = true
+ 
+ [functions.classify-articles]
+-verify_jwt = false
++verify_jwt = true
++
++[functions.backfill-articles]
++verify_jwt = true
+diff --git a/supabase/functions/_shared/auth.ts b/supabase/functions/_shared/auth.ts
+new file mode 100644
+index 0000000..839235c
+--- /dev/null
++++ b/supabase/functions/_shared/auth.ts
+@@ -0,0 +1,85 @@
++// Authorisation helpers for the write-path edge functions.
++//
++// Every function that writes to news_articles or spends money (Firecrawl,
++// the AI gateway) must be reachable ONLY by:
++//   - the scheduler, which presents the CRON_SECRET shared secret, or
++//   - a signed-in admin/editor, proven by their own JWT.
++//
++// The Supabase anon key is a valid JWT and is published in the browser bundle,
++// so `verify_jwt = true` alone does NOT restrict a function to staff: any
++// visitor can present it. These helpers are what actually close the door.
++
++import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
++
++/** Constant-time string compare — avoids leaking the secret byte by byte. */
++function safeEqual(a: string, b: string): boolean {
++  if (a.length !== b.length) return false;
++  let diff = 0;
++  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
++  return diff === 0;
++}
++
++/** True when the request carries the scheduler's shared secret. */
++export function hasCronSecret(req: Request): boolean {
++  const expected = Deno.env.get("CRON_SECRET");
++  if (!expected) return false; // unset secret must never mean "allow"
++  const got = req.headers.get("x-cron-secret");
++  return typeof got === "string" && safeEqual(got, expected);
++}
++
++/**
++ * True when the Authorization header is a signed-in user holding `admin` or
++ * `editor`. Returns false for the anon key, which carries no user identity.
++ */
++export async function isStaff(req: Request): Promise<boolean> {
++  const authHeader = req.headers.get("Authorization");
++  if (!authHeader?.startsWith("Bearer ")) return false;
++
++  const url = Deno.env.get("SUPABASE_URL");
++  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
++  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
++  if (!url || !anonKey || !serviceKey) return false;
++
++  // Resolve the caller with THEIR token. The anon key yields no user here.
++  const asCaller = createClient(url, anonKey, {
++    global: { headers: { Authorization: authHeader } },
++    auth: { persistSession: false },
++  });
++  const { data: { user }, error } = await asCaller.auth.getUser();
++  if (error || !user) return false;
++
++  // Read the role with the service key: user_roles is not readable by anon.
++  const asService = createClient(url, serviceKey, { auth: { persistSession: false } });
++  const { data: roles } = await asService
++    .from("user_roles")
++    .select("role")
++    .eq("user_id", user.id)
++    .in("role", ["admin", "editor"])
++    .limit(1);
++
++  return !!roles && roles.length > 0;
++}
++
++/**
++ * Gate for a write-path function. Resolves to `null` when the caller is
++ * allowed, or to the 401/403 Response to return when they are not.
++ */
++export async function requireCronOrStaff(
++  req: Request,
++  corsHeaders: Record<string, string>,
++): Promise<Response | null> {
++  if (hasCronSecret(req)) return null;
++  if (await isStaff(req)) return null;
++
++  return new Response(
++    JSON.stringify({ error: "Forbidden: admin/editor session or cron secret required" }),
++    { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
++  );
++}
++
++/** Clamp a caller-supplied integer into a safe range. */
++export function clampInt(value: unknown, min: number, max: number, fallback: number): number {
++  const n = typeof value === "number" ? Math.floor(value) : NaN;
++  if (!Number.isFinite(n)) return fallback;
++  return Math.min(max, Math.max(min, n));
++}
+diff --git a/supabase/functions/_shared/ngo-directory.ts b/supabase/functions/_shared/ngo-directory.ts
+new file mode 100644
+index 0000000..dc0aba6
+--- /dev/null
++++ b/supabase/functions/_shared/ngo-directory.ts
+@@ -0,0 +1,186 @@
++// Server-side NGO directory — the ONLY source of feed URLs for the scraper.
++//
++// SECURITY: this list must never come from a request body. An attacker who can
++// supply { name, website, feedUrl } controls both which URL the edge function
++// fetches (SSRF) and the NGO name a scraped item is attributed to, which would
++// let anyone inject a fabricated dispatch signed by a real organisation.
++// Callers may only choose an offset/limit window into this list.
++//
++// `priority: true` marks the information-integrity and digital-rights sources.
++// They are scraped FIRST so that a run cut short by the edge-function time limit
++// still refreshes them (previously they sat at the end of the list and were the
++// only sources never collected).
++//
++// Generated from src/data/fidh-members.ts plus the former hard-coded cron list.
++// Keep in sync when adding an organisation to the public directory.
++
++export interface NgoSource {
++  name: string;
++  website: string;
++  country: string;
++  region: string;
++  language: string;
++  /** Scraped before non-priority sources. */
++  priority?: boolean;
++  /** Known-good feed URL; skips path discovery entirely. */
++  feedUrl?: string;
++}
++
++export const NGO_DIRECTORY: NgoSource[] = [
++  { name: "Access Now", website: "https://www.accessnow.org", country: "USA", region: "Global", language: "en", priority: true },
++  { name: "Article 19", website: "https://www.article19.org", country: "United Kingdom", region: "Global", language: "en", priority: true },
++  { name: "Bellingcat", website: "https://www.bellingcat.com", country: "Netherlands", region: "Global", language: "en", priority: true },
++  { name: "Committee to Protect Journalists", website: "https://cpj.org", country: "USA", region: "Global", language: "en", priority: true },
++  { name: "Debunk.org", website: "https://www.debunk.org", country: "Lithuania", region: "Europe", language: "en", priority: true },
++  { name: "Detector Media", website: "https://detector.media", country: "Ukraine", region: "Eastern Europe & CIS", language: "en", priority: true },
++  { name: "DFRLab", website: "https://dfrlab.org", country: "USA", region: "Global", language: "en", priority: true },
++  { name: "Electronic Frontier Foundation", website: "https://www.eff.org", country: "USA", region: "Global", language: "en", priority: true },
++  { name: "EU DisinfoLab", website: "https://www.disinfo.eu", country: "Belgium", region: "Europe", language: "en", priority: true },
++  { name: "European Digital Rights", website: "https://edri.org", country: "Belgium", region: "Europe", language: "en", priority: true },
++  { name: "Global Disinformation Index", website: "https://www.disinformationindex.org", country: "United Kingdom", region: "Global", language: "en", priority: true },
++  { name: "Institute for Strategic Dialogue", website: "https://www.isdglobal.org", country: "United Kingdom", region: "Global", language: "en", priority: true },
++  { name: "Internews", website: "https://internews.org", country: "USA", region: "Global", language: "en", priority: true },
++  { name: "La Quadrature du Net", website: "https://www.laquadrature.net", country: "France", region: "Europe", language: "fr", priority: true },
++  { name: "Panoptykon Foundation", website: "https://panoptykon.org", country: "Poland", region: "Europe", language: "en", priority: true },
++  { name: "Privacy International", website: "https://privacyinternational.org", country: "United Kingdom", region: "Global", language: "en", priority: true },
++  { name: "Reporters Without Borders", website: "https://rsf.org", country: "France", region: "Global", language: "en", priority: true },
++  { name: "Statewatch", website: "https://www.statewatch.org", country: "United Kingdom", region: "Europe", language: "en", priority: true },
++  { name: "AI Now Institute", website: "https://ainowinstitute.org", country: "United States", region: "Global", language: "en" },
++  { name: "Al-Haq", website: "https://www.alhaq.org", country: "Palestine", region: "Middle East", language: "en" },
++  { name: "AlgorithmWatch", website: "https://algorithmwatch.org", country: "Germany", region: "Europe", language: "en" },
++  { name: "Alternatif Bilisim", website: "https://www.alternatifbilisim.org", country: "Turkey", region: "Europe", language: "tr" },
++  { name: "AMDH", website: "https://www.amdh.org.ma", country: "Morocco", region: "MENA", language: "fr" },
++  { name: "Amnesty International", website: "https://www.amnesty.org", country: "United Kingdom", region: "Global", language: "en" },
++  { name: "ApTI", website: "https://www.apti.ro", country: "Romania", region: "Europe", language: "ro" },
++  { name: "Aquilenet", website: "https://aquilenet.fr", country: "France", region: "Europe", language: "fr" },
++  { name: "Asian Forum for Human Rights and Development", website: "https://www.forum-asia.org", country: "Thailand", region: "Asia-Pacific", language: "en" },
++  { name: "Asociación por los Derechos Civiles", website: "https://adc.org.ar", country: "Spain", region: "Europe", language: "es" },
++  { name: "Assistance Association for Political Prisoners", website: "https://aappb.org", country: "Myanmar", region: "Asia-Pacific", language: "en" },
++  { name: "Associação D3 - Defesa dos Direitos Digitais", website: "https://www.direitosdigitais.pt", country: "Portugal", region: "Europe", language: "pt" },
++  { name: "B'Tselem", website: "https://www.btselem.org", country: "Israel", region: "Middle East", language: "en" },
++  { name: "Belarusian Helsinki Committee", website: "https://belhelcom.org/en", country: "Belarus", region: "Eastern Europe & CIS", language: "en" },
++  { name: "Bits of Freedom", website: "https://www.bitsoffreedom.nl", country: "Netherlands", region: "Europe", language: "en" },
++  { name: "Business & Human Rights Resource Centre", website: "https://www.business-humanrights.org", country: "United Kingdom", region: "Global", language: "en" },
++  { name: "Cairo Institute for Human Rights Studies", website: "https://cihrs.org/?lang=en", country: "Egypt", region: "North Africa & MENA", language: "en" },
++  { name: "Center for Democracy and Technology", website: "https://cdt.org", country: "United States", region: "Global", language: "en" },
++  { name: "Center for Justice and Accountability", website: "https://cja.org", country: "United States", region: "Global", language: "en" },
++  { name: "Center on Resilience & Digital Justice", website: "https://www.raceanddigitaljustice.org", country: "United States", region: "Global", language: "en" },
++  { name: "Centro de Derechos Humanos Miguel Agustín Pro Juárez", website: "https://centroprodh.org.mx", country: "Mexico", region: "Latin America", language: "es" },
++  { name: "Centro de Estudios Legales y Sociales", website: "https://www.cels.org.ar", country: "Argentina", region: "Latin America", language: "es" },
++  { name: "Centrum Cyfrowe", website: "https://centrumcyfrowe.pl", country: "Poland", region: "Europe", language: "pl" },
++  { name: "Chaos Computer Club", website: "https://www.ccc.de", country: "Germany", region: "Europe", language: "de" },
++  { name: "China Human Rights Defenders", website: "https://www.nchrd.org", country: "China", region: "Asia-Pacific", language: "en" },
++  { name: "Citizen D / Državljan D", website: "https://www.drzavljand.si", country: "Slovenia", region: "Europe", language: "sl" },
++  { name: "Citizen Lab", website: "https://citizenlab.ca", country: "Canada", region: "Global", language: "en" },
++  { name: "CIVICUS", website: "https://www.civicus.org", country: "South Africa", region: "Global", language: "en" },
++  { name: "Civil Liberties Union for Europe", website: "https://www.liberties.eu", country: "Germany", region: "Europe", language: "en" },
++  { name: "ClientEarth", website: "https://www.clientearth.org", country: "United Kingdom", region: "Global", language: "en" },
++  { name: "CNDH", website: "https://www.cndh.ma", country: "Morocco", region: "MENA", language: "fr" },
++  { name: "Coalition for the International Criminal Court", website: "https://www.coalitionfortheicc.org", country: "Netherlands", region: "Global", language: "en" },
++  { name: "Code for All Romania", website: "https://codeforromania.ro", country: "Romania", region: "Europe", language: "ro" },
++  { name: "Comisión Colombiana de Juristas", website: "https://www.coljuristas.org", country: "Colombia", region: "Latin America", language: "es" },
++  { name: "Communia", website: "https://communia-association.org", country: "Belgium", region: "Europe", language: "en" },
++  { name: "Conectas Direitos Humanos", website: "https://www.conectas.org/en", country: "Brazil", region: "Latin America", language: "pt" },
++  { name: "Corporate Accountability Lab", website: "https://corpaccountabilitylab.org", country: "United States", region: "Global", language: "en" },
++  { name: "Council on Foreign Relations — LEAD AI", website: "https://www.cfr.org/keywords/artificial-intelligence-ai", country: "United States", region: "Global", language: "en" },
++  { name: "Data & Society", website: "https://datasociety.net", country: "United States", region: "Global", language: "en" },
++  { name: "David and Lucile Packard Foundation", website: "https://www.packard.org", country: "United States", region: "Global", language: "en" },
++  { name: "Defend Democracy", website: "https://www.defenddemocracy.eu", country: "Belgium", region: "Europe", language: "en" },
++  { name: "Digital Public Library of America", website: "https://dp.la", country: "United States", region: "Global", language: "en" },
++  { name: "Digitalcourage", website: "https://digitalcourage.de", country: "Germany", region: "Europe", language: "de" },
++  { name: "Digitale Gesellschaft (Germany)", website: "https://digitalegesellschaft.de", country: "Germany", region: "Europe", language: "de" },
++  { name: "Digitale Gesellschaft (Switzerland)", website: "https://www.digitale-gesellschaft.ch", country: "Switzerland", region: "Europe", language: "de" },
++  { name: "Distributed AI Research Institute", website: "https://www.dair-institute.org", country: "United States", region: "Global", language: "en" },
++  { name: "Doris Duke Foundation", website: "https://www.dorisduke.org", country: "United States", region: "Global", language: "en" },
++  { name: "ECCHR", website: "https://www.ecchr.eu", country: "Germany", region: "Europe", language: "en" },
++  { name: "Electronic Frontier Finland", website: "https://effi.org", country: "Finland", region: "Europe", language: "fi" },
++  { name: "Electronic Frontier Norway", website: "https://efn.no", country: "Norway", region: "Europe", language: "no" },
++  { name: "epicenter.works", website: "https://epicenter.works", country: "Austria", region: "Europe", language: "de" },
++  { name: "EuroMed Rights", website: "https://euromedrights.org", country: "Denmark", region: "Europe", language: "en" },
++  { name: "European Center for Not-for-Profit Law", website: "https://ecnl.org", country: "Netherlands", region: "Europe", language: "en" },
++  { name: "FIDH", website: "https://www.fidh.org", country: "France", region: "Global", language: "en" },
++  { name: "Fitug", website: "https://www.fitug.de", country: "Germany", region: "Europe", language: "de" },
++  { name: "Ford Foundation", website: "https://www.fordfoundation.org", country: "United States", region: "Global", language: "en" },
++  { name: "Forensic Architecture", website: "https://forensic-architecture.org", country: "United Kingdom", region: "Global", language: "en" },
++  { name: "Free Software Foundation Europe", website: "https://fsfe.org", country: "Germany", region: "Europe", language: "en" },
++  { name: "Freedom House", website: "https://freedomhouse.org", country: "USA", region: "Global", language: "en" },
++  { name: "Front Line Defenders", website: "https://www.frontlinedefenders.org", country: "Ireland", region: "Global", language: "en" },
++  { name: "Fundación Karisma", website: "https://web.karisma.org.co", country: "Colombia", region: "Latin America", language: "es" },
++  { name: "Global Witness", website: "https://www.globalwitness.org", country: "United Kingdom", region: "Global", language: "en" },
++  { name: "Globe International Center", website: "https://globeinter.org.mn", country: "Mongolia", region: "Asia-Pacific", language: "en" },
++  { name: "Gulf Centre for Human Rights", website: "https://www.gc4hr.org", country: "Lebanon", region: "Middle East", language: "en" },
++  { name: "Helsinki Foundation for Human Rights", website: "https://hfhr.pl/en", country: "Poland", region: "Europe", language: "pl" },
++  { name: "Hermes Center for Transparency and Digital Human Rights", website: "https://www.hermescenter.org", country: "Italy", region: "Europe", language: "it" },
++  { name: "Homo Digitalis", website: "https://www.homodigitalis.gr", country: "Greece", region: "Europe", language: "el" },
++  { name: "Hong Kong Watch", website: "https://www.hongkongwatch.org", country: "United Kingdom", region: "Asia-Pacific", language: "en" },
++  { name: "Human Rights Commission of Pakistan", website: "https://hrcp-web.org", country: "Pakistan", region: "Asia-Pacific", language: "en" },
++  { name: "Human Rights Watch", website: "https://www.hrw.org", country: "USA", region: "Global", language: "en" },
++  { name: "IFEX", website: "https://ifex.org", country: "Canada", region: "Global", language: "en" },
++  { name: "ILGA-Europe", website: "https://www.ilga-europe.org", country: "Belgium", region: "Europe", language: "en" },
++  { name: "Inclusion Europe", website: "https://www.inclusion-europe.eu", country: "Belgium", region: "Europe", language: "en" },
++  { name: "International Commission of Jurists", website: "https://www.icj.org", country: "Switzerland", region: "Global", language: "en" },
++  { name: "International Crisis Group", website: "https://www.crisisgroup.org", country: "Belgium", region: "Global", language: "en" },
++  { name: "IT-Pol Denmark", website: "https://itpol.dk", country: "Denmark", region: "Europe", language: "da" },
++  { name: "IuRe (Iuridicum Remedium)", website: "https://iure.org", country: "Czech Republic", region: "Europe", language: "cs" },
++  { name: "Kameraty.org", website: "https://kameraty.org", country: "Poland", region: "Europe", language: "pl" },
++  { name: "Kapor Foundation", website: "https://kaporfoundation.org", country: "United States", region: "Global", language: "en" },
++  { name: "Kenya Human Rights Commission", website: "https://www.khrc.or.ke", country: "Kenya", region: "Sub-Saharan Africa", language: "en" },
++  { name: "Kharkiv Human Rights Protection Group", website: "https://khpg.org/en", country: "Ukraine", region: "Eastern Europe & CIS", language: "uk" },
++  { name: "Kinfolk Tech", website: "https://www.kinfolktech.org", country: "United States", region: "Global", language: "en" },
++  { name: "Lawyers for Human Rights", website: "https://www.lhr.org.za", country: "South Africa", region: "Sub-Saharan Africa", language: "en" },
++  { name: "Legal and Human Rights Centre", website: "https://www.humanrights.or.tz", country: "Tanzania", region: "Sub-Saharan Africa", language: "en" },
++  { name: "Liga voor Mensenrechten", website: "https://mensenrechten.be", country: "Belgium", region: "Europe", language: "nl" },
++  { name: "Ligue des Droits Humains (Belgium)", website: "https://www.liguedh.be", country: "Belgium", region: "Europe", language: "fr" },
++  { name: "Lumina Foundation", website: "https://www.luminafoundation.org", country: "United States", region: "Global", language: "en" },
++  { name: "MacArthur Foundation", website: "https://www.macfound.org", country: "United States", region: "Global", language: "en" },
++  { name: "Manushya Foundation", website: "https://www.manushyafoundation.org", country: "Thailand", region: "Asia-Pacific", language: "en" },
++  { name: "Mellon Foundation", website: "https://www.mellon.org", country: "United States", region: "Global", language: "en" },
++  { name: "Memorial Human Rights Centre", website: "https://memohrc.org/en", country: "Russia", region: "Eastern Europe & CIS", language: "ru" },
++  { name: "Metamorphosis Foundation", website: "https://metamorphosis.org.mk", country: "North Macedonia", region: "Europe", language: "mk" },
++  { name: "Minority Rights Group International", website: "https://minorityrights.org", country: "United Kingdom", region: "Global", language: "en" },
++  { name: "Mnemonic", website: "https://mnemonic.org", country: "Germany", region: "Europe", language: "en" },
++  { name: "Mozilla Foundation", website: "https://www.mozillafoundation.org", country: "United States", region: "Global", language: "en" },
++  { name: "Mwatana for Human Rights", website: "https://mwatana.org/en", country: "Yemen", region: "Middle East", language: "en" },
++  { name: "Naomi", website: "https://naomi.cat", country: "Spain", region: "Europe", language: "es" },
++  { name: "Nederlands Juristen Comité voor de Mensenrechten", website: "https://njcm.nl", country: "Netherlands", region: "Europe", language: "nl" },
++  { name: "Net Users' Rights Protection Association", website: "https://nurpa.be", country: "Belgium", region: "Europe", language: "fr" },
++  { name: "Nodo50", website: "https://info.nodo50.org", country: "Spain", region: "Europe", language: "es" },
++  { name: "OHCHR", website: "https://www.ohchr.org", country: "Switzerland", region: "Global", language: "en" },
++  { name: "OMDH", website: "https://www.omdh.ma", country: "Morocco", region: "MENA", language: "fr" },
++  { name: "Omidyar Network", website: "https://omidyar.com", country: "United States", region: "Global", language: "en" },
++  { name: "Open Future", website: "http://www.openfuture.eu", country: "Poland", region: "Europe", language: "en" },
++  { name: "Open Rights Group", website: "https://www.openrightsgroup.org", country: "United Kingdom", region: "Europe", language: "en" },
++  { name: "Open Society Justice Initiative", website: "https://www.justiceinitiative.org", country: "United States", region: "Global", language: "en" },
++  { name: "Osservatorio Nessuno", website: "https://osservatorionessuno.org", country: "Italy", region: "Europe", language: "it" },
++  { name: "Outright International", website: "https://outrightinternational.org", country: "USA", region: "Global", language: "en" },
++  { name: "OVD-Info", website: "https://en.ovdinfo.org", country: "Russia", region: "Eastern Europe & CIS", language: "ru" },
++  { name: "Pangea", website: "https://pangea.org", country: "Spain", region: "Europe", language: "es" },
++  { name: "Partnership on AI", website: "https://partnershiponai.org", country: "United States", region: "Global", language: "en" },
++  { name: "PEN International", website: "https://pen-international.org", country: "United Kingdom", region: "Global", language: "en" },
++  { name: "Politiscope", website: "https://politiscope.eu", country: "Croatia", region: "Europe", language: "hr" },
++  { name: "Privacy Network", website: "https://privacy-network.it", country: "Italy", region: "Europe", language: "it" },
++  { name: "PROSA", website: "https://www.prosa.dk", country: "Denmark", region: "Europe", language: "da" },
++  { name: "Provea", website: "https://provea.org", country: "Venezuela", region: "Latin America", language: "es" },
++  { name: "Pulitzer Center", website: "https://pulitzercenter.org", country: "United States", region: "Global", language: "en" },
++  { name: "Quintessenz", website: "http://www.quintessenz.org", country: "Austria", region: "Europe", language: "de" },
++  { name: "Reporter ohne Grenzen Deutschland", website: "https://www.reporter-ohne-grenzen.de", country: "Germany", region: "Europe", language: "de" },
++  { name: "SHARE Foundation", website: "https://www.sharefoundation.info", country: "Serbia", region: "Eastern Europe & CIS", language: "sr" },
++  { name: "Siegel Family Endowment", website: "https://www.siegelendowment.org", country: "United States", region: "Global", language: "en" },
++  { name: "Student Defense", website: "https://defendstudents.org", country: "United States", region: "Global", language: "en" },
++  { name: "SUPERRR Lab", website: "https://superrr.net", country: "Germany", region: "Europe", language: "en" },
++  { name: "Syrian Network for Human Rights", website: "https://snhr.org/", country: "Syria", region: "Middle East", language: "en" },
++  { name: "TechEquity", website: "https://techequity.us", country: "United States", region: "Global", language: "en" },
++  { name: "TRIAL International", website: "https://trialinternational.org", country: "Switzerland", region: "Global", language: "en" },
++  { name: "Viasna Human Rights Centre", website: "https://spring96.org/en", country: "Belarus", region: "Eastern Europe & CIS", language: "en" },
++  { name: "VIBE!AT", website: "https://www.vibe.at", country: "Austria", region: "Europe", language: "de" },
++  { name: "Vrijschrift", website: "https://www.vrijschrift.org", country: "Netherlands", region: "Europe", language: "nl" },
++  { name: "Wikimedia Deutschland", website: "https://www.wikimedia.de", country: "Germany", region: "Europe", language: "de" },
++  { name: "World Organisation Against Torture", website: "https://www.omct.org", country: "Switzerland", region: "Global", language: "en" },
++  { name: "Zašto ne", website: "https://zastone.ba", country: "Bosnia and Herzegovina", region: "Eastern Europe & CIS", language: "bs" },
++  { name: "Zimbabwe Human Rights NGO Forum", website: "https://www.hrforumzim.org", country: "Zimbabwe", region: "Sub-Saharan Africa", language: "en" },
++];
++
++/** Sources ordered for scraping: priority first, then the rest. */
++export function orderedSources(): NgoSource[] {
++  return [...NGO_DIRECTORY].sort((a, b) => Number(!!b.priority) - Number(!!a.priority));
++}
+diff --git a/supabase/functions/backfill-articles/index.ts b/supabase/functions/backfill-articles/index.ts
+index b6304d8..bee431e 100644
+--- a/supabase/functions/backfill-articles/index.ts
++++ b/supabase/functions/backfill-articles/index.ts
+@@ -1,6 +1,8 @@
++import { requireCronOrStaff } from "../_shared/auth.ts";
++
+ const corsHeaders = {
+   'Access-Control-Allow-Origin': '*',
+-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
++  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret',
+ };
+ 
+ const VALID_THEMES = [
+@@ -85,6 +87,10 @@ Deno.serve(async (req) => {
+     return new Response(null, { headers: corsHeaders });
+   }
+ 
++  // Rewrites stored articles and spends AI-gateway credits per row.
++  const denied = await requireCronOrStaff(req, corsHeaders);
++  if (denied) return denied;
++
+   try {
+     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+diff --git a/supabase/functions/classify-articles/index.ts b/supabase/functions/classify-articles/index.ts
+index 764ad9d..dc169a7 100644
+--- a/supabase/functions/classify-articles/index.ts
++++ b/supabase/functions/classify-articles/index.ts
+@@ -5,15 +5,22 @@
+ 
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+ import { COUNTRY_ENTRIES, THEME_KEYWORDS, classifyText } from "../_shared/classify.ts";
++import { requireCronOrStaff } from "../_shared/auth.ts";
+ 
+ const corsHeaders = {
+   "Access-Control-Allow-Origin": "*",
+-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
++  "Access-Control-Allow-Headers":
++    "authorization, x-client-info, apikey, content-type, x-cron-secret",
+ };
+ 
+ Deno.serve(async (req) => {
+   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+ 
++  // Used to run unauthenticated: anyone could force a full re-classification of
++  // the table, repeatedly, at the project's expense.
++  const denied = await requireCronOrStaff(req, corsHeaders);
++  if (denied) return denied;
++
+   const supabase = createClient(
+     Deno.env.get("SUPABASE_URL")!,
+     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+diff --git a/supabase/functions/scrape-ngo-feeds-cron/index.ts b/supabase/functions/scrape-ngo-feeds-cron/index.ts
+index 6479eb6..bd784d7 100644
+--- a/supabase/functions/scrape-ngo-feeds-cron/index.ts
++++ b/supabase/functions/scrape-ngo-feeds-cron/index.ts
+@@ -1,78 +1,101 @@
+-// Cron entry point: invoked by pg_cron daily. Loads the NGO list (passed in body or empty)
+-// and forwards to scrape-ngo-feeds in batches. Since edge functions can't import src/,
+-// the NGO list is sent in by the caller (cron passes a precomputed batch slug, or the
+-// frontend manual button passes the full filtered list).
++// Scheduled entry point: walks the whole NGO directory in resumable chunks.
+ //
+-// For cron, we keep it simple: cron POSTs an empty body, and this function reads a curated
+-// shortlist embedded here (top NGOs with reliable feeds). The frontend "Refresh" button
+-// passes the full filtered NGO list (websites + focus areas).
+-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
++// The organisation list used to be hard-coded here, which meant the scheduled
++// run and the manual run scraped different sets — and because scrape-ngo-feeds
++// processed them one at a time, the tail of that list (every disinformation and
++// information-integrity specialist) was never reached before the platform
++// timeout. The list now lives in _shared/ngo-directory.ts, priority sources
++// first, and this function just drives it to completion.
++import { requireCronOrStaff } from "../_shared/auth.ts";
++import { NGO_DIRECTORY } from "../_shared/ngo-directory.ts";
+ 
+ const corsHeaders = {
+   "Access-Control-Allow-Origin": "*",
+   "Access-Control-Allow-Headers":
+-    "authorization, x-client-info, apikey, content-type",
++    "authorization, x-client-info, apikey, content-type, x-cron-secret",
+ };
+ 
+-// Curated shortlist for the daily cron — high-output, reliable feeds.
+-// The full directory sweep is triggered manually from the admin UI.
+-const CRON_NGOS = [
+-  { name: "Human Rights Watch", website: "https://www.hrw.org", country: "USA", region: "Global", language: "en" },
+-  { name: "Amnesty International", website: "https://www.amnesty.org", country: "United Kingdom", region: "Global", language: "en" },
+-  { name: "FIDH", website: "https://www.fidh.org", country: "France", region: "Global", language: "en" },
+-  { name: "Reporters Without Borders", website: "https://rsf.org", country: "France", region: "Global", language: "en" },
+-  { name: "Article 19", website: "https://www.article19.org", country: "United Kingdom", region: "Global", language: "en" },
+-  { name: "Committee to Protect Journalists", website: "https://cpj.org", country: "USA", region: "Global", language: "en" },
+-  { name: "Privacy International", website: "https://privacyinternational.org", country: "United Kingdom", region: "Global", language: "en" },
+-  { name: "Electronic Frontier Foundation", website: "https://www.eff.org", country: "USA", region: "Global", language: "en" },
+-  { name: "European Digital Rights", website: "https://edri.org", country: "Belgium", region: "Europe", language: "en" },
+-  { name: "Global Witness", website: "https://www.globalwitness.org", country: "United Kingdom", region: "Global", language: "en" },
+-  { name: "ECCHR", website: "https://www.ecchr.eu", country: "Germany", region: "Europe", language: "en" },
+-  { name: "TRIAL International", website: "https://trialinternational.org", country: "Switzerland", region: "Global", language: "en" },
+-  { name: "Open Rights Group", website: "https://www.openrightsgroup.org", country: "United Kingdom", region: "Europe", language: "en" },
+-  { name: "La Quadrature du Net", website: "https://www.laquadrature.net", country: "France", region: "Europe", language: "fr" },
+-  { name: "Panoptykon Foundation", website: "https://panoptykon.org", country: "Poland", region: "Europe", language: "en" },
+-  { name: "Access Now", website: "https://www.accessnow.org", country: "USA", region: "Global", language: "en" },
+-  { name: "Statewatch", website: "https://www.statewatch.org", country: "United Kingdom", region: "Europe", language: "en" },
+-  { name: "Bits of Freedom", website: "https://www.bitsoffreedom.nl", country: "Netherlands", region: "Europe", language: "en" },
+-  { name: "Digitalcourage", website: "https://digitalcourage.de", country: "Germany", region: "Europe", language: "de" },
+-  { name: "Chaos Computer Club", website: "https://www.ccc.de", country: "Germany", region: "Europe", language: "de" },
+-  // Additional global monitors cited in country briefings (Freedom House, Outright, OHCHR).
+-  { name: "Freedom House", website: "https://freedomhouse.org", country: "USA", region: "Global", language: "en" },
+-  { name: "Outright International", website: "https://outrightinternational.org", country: "USA", region: "Global", language: "en" },
+-  { name: "OHCHR", website: "https://www.ohchr.org", country: "Switzerland", region: "Global", language: "en" },
+-  // Moroccan civil society — local sources so Morocco coverage isn't only mediated by international NGOs.
+-  { name: "AMDH", website: "https://www.amdh.org.ma", country: "Morocco", region: "MENA", language: "fr" },
+-  { name: "OMDH", website: "https://www.omdh.ma", country: "Morocco", region: "MENA", language: "fr" },
+-  { name: "CNDH", website: "https://www.cndh.ma", country: "Morocco", region: "MENA", language: "fr" },
+-  // Disinformation / information-integrity specialists.
+-  { name: "Debunk.org", website: "https://www.debunk.org", country: "Lithuania", region: "Europe", language: "en" },
+-  { name: "EU DisinfoLab", website: "https://www.disinfo.eu", country: "Belgium", region: "Europe", language: "en" },
+-  { name: "Institute for Strategic Dialogue", website: "https://www.isdglobal.org", country: "United Kingdom", region: "Global", language: "en" },
+-  { name: "Bellingcat", website: "https://www.bellingcat.com", country: "Netherlands", region: "Global", language: "en" },
+-  { name: "DFRLab", website: "https://dfrlab.org", country: "USA", region: "Global", language: "en" },
+-  { name: "Internews", website: "https://internews.org", country: "USA", region: "Global", language: "en" },
+-  { name: "Global Disinformation Index", website: "https://www.disinformationindex.org", country: "United Kingdom", region: "Global", language: "en" },
+-  { name: "Detector Media", website: "https://detector.media", country: "Ukraine", region: "Eastern Europe & CIS", language: "en" },
+-];
++/** Sources handed to scrape-ngo-feeds per call. */
++const CHUNK = 40;
++/** Safety net so a stuck chunk can never loop forever. */
++const MAX_CHUNKS = 12;
+ 
+ Deno.serve(async (req) => {
+   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+ 
+-  // Forward to scrape-ngo-feeds
++  const denied = await requireCronOrStaff(req, corsHeaders);
++  if (denied) return denied;
++
+   const url = `${Deno.env.get("SUPABASE_URL")}/functions/v1/scrape-ngo-feeds`;
+-  const r = await fetch(url, {
+-    method: "POST",
+-    headers: {
+-      Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+-      "Content-Type": "application/json",
+-    },
+-    body: JSON.stringify({ ngos: CRON_NGOS, limit: CRON_NGOS.length }),
+-  });
+-  const data = await r.json();
++  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
++  const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
++
++  let offset: number | null = 0;
++  let totalInserted = 0;
++  let totalProcessed = 0;
++  let totalClassified = 0;
++  const chunkReports: Array<Record<string, unknown>> = [];
++  const errors: string[] = [];
++
++  for (let n = 0; n < MAX_CHUNKS && offset !== null; n++) {
++    try {
++      const r = await fetch(url, {
++        method: "POST",
++        headers: {
++          Authorization: `Bearer ${serviceKey}`,
++          "x-cron-secret": cronSecret,
++          "Content-Type": "application/json",
++        },
++        body: JSON.stringify({ offset, limit: CHUNK }),
++      });
++
++      // A non-JSON body here means the platform cut the call short (504 HTML).
++      // Record it and stop rather than throwing on JSON.parse.
++      const text = await r.text();
++      let data: Record<string, unknown>;
++      try {
++        data = JSON.parse(text);
++      } catch {
++        errors.push(`chunk at offset ${offset}: HTTP ${r.status}, non-JSON response`);
++        break;
++      }
++      if (!r.ok) {
++        errors.push(`chunk at offset ${offset}: HTTP ${r.status} ${data?.error ?? ""}`);
++        break;
++      }
++
++      totalInserted += Number(data.inserted ?? 0);
++      totalProcessed += Number(data.processed ?? 0);
++      totalClassified += Number(data.classified ?? 0);
++      chunkReports.push({
++        offset,
++        processed: data.processed,
++        inserted: data.inserted,
++        rss_hits: data.rss_hits,
++        firecrawl_hits: data.firecrawl_hits,
++      });
++      if (Array.isArray(data.errors)) errors.push(...(data.errors as string[]));
++
++      const next = data.next_offset;
++      offset = typeof next === "number" ? next : null;
++    } catch (e) {
++      errors.push(`chunk at offset ${offset}: ${(e as Error).message}`);
++      break;
++    }
++  }
+ 
+-  return new Response(JSON.stringify({ trigger: "cron", ...data }), {
+-    status: 200,
+-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+-  });
++  return new Response(
++    JSON.stringify({
++      trigger: "cron",
++      total_sources: NGO_DIRECTORY.length,
++      processed: totalProcessed,
++      inserted: totalInserted,
++      classified: totalClassified,
++      completed: offset === null,
++      resume_from: offset,
++      chunks: chunkReports,
++      errors: errors.slice(0, 30),
++    }),
++    { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
++  );
+ });
+diff --git a/supabase/functions/scrape-ngo-feeds/index.ts b/supabase/functions/scrape-ngo-feeds/index.ts
+index 01902c3..7959892 100644
+--- a/supabase/functions/scrape-ngo-feeds/index.ts
++++ b/supabase/functions/scrape-ngo-feeds/index.ts
+@@ -1,39 +1,59 @@
+-// RSS-first scraper for NGO directory. Falls back to Firecrawl /scrape on homepage when no feed.
+-// Stores fresh items in news_articles. Dedupes by source_url.
++// RSS-first scraper for the NGO directory. Falls back to Firecrawl /scrape on the
++// homepage when no feed is found. Stores fresh items in news_articles.
++//
++// Callers: the scheduler (x-cron-secret) or a signed-in admin/editor. The list of
++// organisations comes from _shared/ngo-directory.ts and is NEVER taken from the
++// request body — see the security note there. Callers may only pick an
++// offset/limit window into that list.
++//
++// Work is done in concurrent batches under a wall-clock budget. When the budget
++// runs out the function returns `next_offset` so the caller can resume, instead
++// of dying at the platform timeout with nothing to show for it.
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
++import { orderedSources, type NgoSource } from "../_shared/ngo-directory.ts";
++import { clampInt, requireCronOrStaff } from "../_shared/auth.ts";
+ 
+ const corsHeaders = {
+   "Access-Control-Allow-Origin": "*",
+   "Access-Control-Allow-Headers":
+-    "authorization, x-client-info, apikey, content-type",
++    "authorization, x-client-info, apikey, content-type, x-cron-secret",
+ };
+ 
+-interface NgoInput {
+-  name: string;
+-  website: string;
+-  country?: string;
+-  region?: string;
+-  language?: string;
+-  feedUrl?: string;
+-}
++// Feed discovery is the expensive part: every miss costs a full request timeout.
++// Four paths cover the overwhelming majority of CMSs these organisations run.
++const COMMON_FEED_PATHS = ["/feed", "/rss.xml", "/feed.xml", "/atom.xml"];
++const FEED_TIMEOUT_MS = 6000;
++const BATCH_SIZE = 6;
++/** Stop starting new work after this; leaves room to write results and reply. */
++const TIME_BUDGET_MS = 110_000;
+ 
+-const COMMON_FEED_PATHS = [
+-  "/feed", "/feed/", "/rss", "/rss.xml", "/feed.xml",
+-  "/atom.xml", "/feed/rss", "/news/feed", "/blog/feed",
+-  "/en/feed", "/en/rss",
+-];
++// Some publishers reject non-browser agents; use a realistic UA so their feeds resolve.
++const FEED_UA =
++  "Mozilla/5.0 (compatible; CivilWireBot/1.0; +https://civilwire.org) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36";
++
++interface FeedItem { title: string; link: string; pubDate?: string; description?: string }
+ 
+ // crude RSS/Atom parser — extracts <item>/<entry> blocks
+-function parseFeed(xml: string): Array<{ title: string; link: string; pubDate?: string; description?: string }> {
+-  const items: Array<{ title: string; link: string; pubDate?: string; description?: string }> = [];
++function parseFeed(xml: string): FeedItem[] {
++  const items: FeedItem[] = [];
+   const blocks = xml.split(/<item[\s>]|<entry[\s>]/i).slice(1);
+   for (const raw of blocks) {
+     const block = raw.split(/<\/item>|<\/entry>/i)[0];
+     const title = (block.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || "")
+       .replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]+>/g, "").trim();
+-    let link = block.match(/<link[^>]*href=["']([^"']+)["']/i)?.[1]
+-      || block.match(/<link[^>]*>([\s\S]*?)<\/link>/i)?.[1]
+-      || "";
++    // Atom entries carry several <link>s; the article is rel="alternate"
++    // (or the one with no rel at all), never rel="edit"/"replies"/"enclosure".
++    let link = "";
++    const linkTags = block.match(/<link[^>]*>/gi) || [];
++    for (const tag of linkTags) {
++      const rel = tag.match(/\brel=["']([^"']+)["']/i)?.[1]?.toLowerCase();
++      if (rel && rel !== "alternate") continue;
++      const href = tag.match(/\bhref=["']([^"']+)["']/i)?.[1];
++      if (href) { link = href; break; }
++    }
++    if (!link) {
++      link = block.match(/<link[^>]*>([\s\S]*?)<\/link>/i)?.[1] || "";
++    }
+     link = link.replace(/<!\[CDATA\[|\]\]>/g, "").trim();
+     const pubDate = (block.match(/<pubDate[^>]*>([\s\S]*?)<\/pubDate>/i)?.[1]
+       || block.match(/<published[^>]*>([\s\S]*?)<\/published>/i)?.[1]
+@@ -47,14 +67,10 @@ function parseFeed(xml: string): Array<{ title: string; link: string; pubDate?:
+   return items;
+ }
+ 
+-// Some publishers reject non-browser agents; use a realistic UA so their feeds resolve.
+-const FEED_UA =
+-  "Mozilla/5.0 (compatible; CivilWireBot/1.0; +https://civilwire.org) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36";
+-
+ async function tryRss(
+   website: string,
+   explicitFeedUrl?: string,
+-): Promise<{ items: Array<{ title: string; link: string; pubDate?: string; description?: string }>; feedUrl?: string }> {
++): Promise<{ items: FeedItem[]; feedUrl?: string }> {
+   const base = website.replace(/\/$/, "");
+   const candidates = explicitFeedUrl
+     ? [explicitFeedUrl, ...COMMON_FEED_PATHS.map((p) => base + p)]
+@@ -62,13 +78,17 @@ async function tryRss(
+   for (const url of candidates) {
+     try {
+       const ctrl = new AbortController();
+-      const timer = setTimeout(() => ctrl.abort(), 10000);
+-      const r = await fetch(url, {
+-        signal: ctrl.signal,
+-        redirect: "follow",
+-        headers: { "User-Agent": FEED_UA, Accept: "application/rss+xml, application/xml, text/xml, */*" },
+-      });
+-      clearTimeout(timer);
++      const timer = setTimeout(() => ctrl.abort(), FEED_TIMEOUT_MS);
++      let r: Response;
++      try {
++        r = await fetch(url, {
++          signal: ctrl.signal,
++          redirect: "follow",
++          headers: { "User-Agent": FEED_UA, Accept: "application/rss+xml, application/xml, text/xml, */*" },
++        });
++      } finally {
++        clearTimeout(timer);
++      }
+       if (!r.ok) continue;
+       const ct = r.headers.get("content-type") || "";
+       const text = await r.text();
+@@ -80,111 +100,104 @@ async function tryRss(
+   return { items: [] };
+ }
+ 
+-async function firecrawlScrape(url: string, apiKey: string): Promise<Array<{ title: string; link: string; description?: string }>> {
++async function firecrawlScrape(url: string, apiKey: string): Promise<FeedItem[]> {
+   const r = await fetch("https://api.firecrawl.dev/v2/scrape", {
+     method: "POST",
+     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+-    body: JSON.stringify({
+-      url,
+-      formats: ["links", "markdown"],
+-      onlyMainContent: true,
+-    }),
++    body: JSON.stringify({ url, formats: ["links", "markdown"], onlyMainContent: true }),
+   });
+   if (!r.ok) return [];
+   const data = await r.json();
+   const links: string[] = data?.data?.links || data?.links || [];
+   const markdown: string = data?.data?.markdown || data?.markdown || "";
+-  // pick links that look like articles (contain year or /news/ or /press/)
+   const candidates = links
+     .filter((l) => typeof l === "string" && /^https?:\/\//.test(l))
+     .filter((l) => /\/(news|press|article|story|blog|publication|report|statement|2024|2025|2026)\//i.test(l))
+     .slice(0, 8);
+-  // try to extract titles from markdown headings near each link (best-effort)
+-  return candidates.map((link) => {
+-    const slug = link.split("/").filter(Boolean).pop() || "";
+-    const guess = slug.replace(/[-_]+/g, " ").replace(/\.\w+$/, "").trim();
+-    const titleMatch = markdown.match(new RegExp(`\\[([^\\]]{8,200})\\]\\(${link.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\)`));
+-    const title = titleMatch?.[1]?.trim() || guess.charAt(0).toUpperCase() + guess.slice(1);
+-    return { title, link };
+-  });
++
++  // Only keep links whose real headline appears in the page markdown. We used to
++  // fall back to prettifying the URL slug, which invented a headline the
++  // organisation never wrote — unacceptable on a wire whose whole claim is
++  // fidelity to the primary source.
++  const items: FeedItem[] = [];
++  for (const link of candidates) {
++    const escaped = link.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
++    const title = markdown.match(new RegExp(`\\[([^\\]]{8,200})\\]\\(${escaped}\\)`))?.[1]?.trim();
++    if (title) items.push({ title, link });
++  }
++  return items;
++}
++
++interface ScrapeResult {
++  name: string;
++  website: string;
++  source: "rss" | "firecrawl" | "none" | "error";
++  items_found: number;
++  items_inserted: number;
++  feed_url?: string;
++  error?: string;
+ }
+ 
+ Deno.serve(async (req) => {
+   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+ 
++  const denied = await requireCronOrStaff(req, corsHeaders);
++  if (denied) return denied;
++
++  const started = Date.now();
+   const supabase = createClient(
+     Deno.env.get("SUPABASE_URL")!,
+     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+   );
+   const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
+ 
+-  let body: { ngos?: NgoInput[]; limit?: number } = {};
+-  try { body = await req.json(); } catch { /* GET / cron */ }
++  let body: { limit?: number; offset?: number } = {};
++  try { body = await req.json(); } catch { /* GET / cron sends no body */ }
+ 
+-  const ngos: NgoInput[] = body.ngos || [];
+-  const limit = body.limit ?? 50;
+-
+-  if (ngos.length === 0) {
+-    return new Response(JSON.stringify({ error: "No NGOs provided" }), {
+-      status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+-    });
+-  }
+-
+-  // dedupe existing source_urls from last 30 days
+-  const since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+-  const { data: existing } = await supabase
+-    .from("news_articles")
+-    .select("source_url")
+-    .gte("scraped_at", since);
+-  const seen = new Set((existing || []).map((r) => r.source_url).filter(Boolean));
++  const all = orderedSources();
++  const offset = clampInt(body.offset, 0, Math.max(0, all.length - 1), 0);
++  const limit = clampInt(body.limit, 1, all.length, all.length);
++  const slice = all.slice(offset, offset + limit);
+ 
+   let inserted = 0;
+   let rssHits = 0;
+   let firecrawlHits = 0;
+   const errors: string[] = [];
+-  const results: Array<{
+-    name: string;
+-    website: string;
+-    source: "rss" | "firecrawl" | "none" | "error";
+-    items_found: number;
+-    items_inserted: number;
+-    feed_url?: string;
+-    error?: string;
+-  }> = [];
+-
+-  const slice = ngos.slice(0, limit);
+-  for (const ngo of slice) {
+-    if (!ngo.website) {
+-      results.push({ name: ngo.name, website: "", source: "error", items_found: 0, items_inserted: 0, error: "missing website" });
+-      continue;
+-    }
++  const results: ScrapeResult[] = [];
++  let processed = 0;
++  let budgetExhausted = false;
++
++  async function handleOne(ngo: NgoSource): Promise<ScrapeResult> {
+     try {
+       const rss = await tryRss(ngo.website, ngo.feedUrl);
+-      let items: Array<{ title: string; link: string; pubDate?: string; description?: string }> = rss.items;
+-      let source: "rss" | "firecrawl" | "none" = "none";
+-      let feedUrl: string | undefined = rss.feedUrl;
++      let items = rss.items;
++      let source: ScrapeResult["source"] = "none";
++      const feedUrl = rss.feedUrl;
+       if (items.length > 0) { rssHits++; source = "rss"; }
+ 
+       if (items.length === 0 && firecrawlKey) {
+-        const fc = await firecrawlScrape(ngo.website, firecrawlKey);
+-        items = fc.map((x) => ({ title: x.title, link: x.link }));
++        items = await firecrawlScrape(ngo.website, firecrawlKey);
+         if (items.length > 0) { firecrawlHits++; source = "firecrawl"; }
+       }
+ 
+       const rows = items
+-        .filter((it) => it.link && !seen.has(it.link))
++        .filter((it) => it.link)
+         .slice(0, 5)
+         .map((it) => {
+-          seen.add(it.link);
+           const pub = it.pubDate ? new Date(it.pubDate) : null;
+           return {
+             title: it.title.slice(0, 500),
+             ngo: ngo.name,
+             ngo_country: ngo.country,
++            // `country` describes the PUBLISHER. The country an article is about
++            // lives in subject_countries, filled by classify-articles below.
+             country: ngo.country,
+             region: ngo.region,
+             source_url: it.link,
+             summary: (it.description || "").slice(0, 1000) || null,
++            // Never substitute "now" for a missing publication date: a wire that
++            // invents timestamps cannot be cited. Absent date stays null and the
++            // UI says so.
+             published_date: pub && !isNaN(pub.getTime()) ? pub.toISOString() : null,
+             original_lang: ngo.language || "en",
+             ai_translated: false,
+@@ -192,31 +205,71 @@ Deno.serve(async (req) => {
+           };
+         });
+ 
+-      let insertedHere = 0;
+-      if (rows.length > 0) {
+-        const { error } = await supabase.from("news_articles").insert(rows);
+-        if (error) {
+-          errors.push(`${ngo.name}: ${error.message}`);
+-          results.push({ name: ngo.name, website: ngo.website, source: "error", items_found: items.length, items_inserted: 0, feed_url: feedUrl, error: error.message });
+-          continue;
+-        }
+-        inserted += rows.length;
+-        insertedHere = rows.length;
++      if (rows.length === 0) {
++        return { name: ngo.name, website: ngo.website, source, items_found: items.length, items_inserted: 0, feed_url: feedUrl };
+       }
+-      results.push({ name: ngo.name, website: ngo.website, source, items_found: items.length, items_inserted: insertedHere, feed_url: feedUrl });
++
++      // Dedup is enforced by the UNIQUE constraint on source_url rather than by
++      // a pre-read of recent rows: that read was capped at PostgREST's 1000-row
++      // default, so duplicates slipped through once the window grew past it.
++      const { data: written, error } = await supabase
++        .from("news_articles")
++        .upsert(rows, { onConflict: "source_url", ignoreDuplicates: true })
++        .select("id");
++      if (error) {
++        errors.push(`${ngo.name}: ${error.message}`);
++        return { name: ngo.name, website: ngo.website, source: "error", items_found: items.length, items_inserted: 0, feed_url: feedUrl, error: error.message };
++      }
++
++      const n = written?.length ?? 0;
++      inserted += n;
++      return { name: ngo.name, website: ngo.website, source, items_found: items.length, items_inserted: n, feed_url: feedUrl };
+     } catch (e) {
+       const msg = (e as Error).message;
+       errors.push(`${ngo.name}: ${msg}`);
+-      results.push({ name: ngo.name, website: ngo.website, source: "error", items_found: 0, items_inserted: 0, error: msg });
++      return { name: ngo.name, website: ngo.website, source: "error", items_found: 0, items_inserted: 0, error: msg };
++    }
++  }
++
++  for (let i = 0; i < slice.length; i += BATCH_SIZE) {
++    if (Date.now() - started > TIME_BUDGET_MS) { budgetExhausted = true; break; }
++    const batch = slice.slice(i, i + BATCH_SIZE);
++    results.push(...await Promise.all(batch.map(handleOne)));
++    processed += batch.length;
++  }
++
++  // Newly inserted rows have no subject_countries, which is what the country
++  // navigation filters on — they would be invisible until someone ran this by
++  // hand. Chain it here so the feed is browsable the moment it lands.
++  let classified: number | null = null;
++  if (inserted > 0) {
++    try {
++      const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/classify-articles`, {
++        method: "POST",
++        headers: {
++          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
++          "x-cron-secret": Deno.env.get("CRON_SECRET") ?? "",
++          "Content-Type": "application/json",
++        },
++        body: JSON.stringify({ limit: Math.min(2000, inserted * 4) }),
++      });
++      if (r.ok) classified = (await r.json())?.updated ?? null;
++    } catch (e) {
++      errors.push(`classify-articles: ${(e as Error).message}`);
+     }
+   }
+ 
++  const nextOffset = offset + processed;
+   return new Response(
+     JSON.stringify({
+       inserted,
+-      processed: slice.length,
++      processed,
++      classified,
+       rss_hits: rssHits,
+       firecrawl_hits: firecrawlHits,
++      budget_exhausted: budgetExhausted,
++      next_offset: nextOffset < all.length ? nextOffset : null,
++      total_sources: all.length,
+       errors: errors.slice(0, 20),
+       results,
+     }),
+-- 
+2.43.0
+

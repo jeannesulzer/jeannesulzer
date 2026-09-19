@@ -1,0 +1,190 @@
+From e8a810e86f941079000fd26e16b44328294f319a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 19 Sep 2026 09:14:30 +0000
+Subject: [PATCH 3/5] Stop inventing publication dates
+
+scrape-ngo-news set published_date to new Date() - the moment of scraping - so
+every article it ingested claimed to have been published the instant CivilWire
+found it. An NGO report from 2023 appeared dated today, and /cite rendered
+formal academic citations carrying that invented date.
+
+Read the page's own metadata instead (publishedTime, article:published_time,
+datePublished and the usual variants), rejecting values before 1995 or more
+than a day in the future. When the page states no date, published_date stays
+null: an unknown date must read as unknown, never as today.
+
+Extracted to _shared/published-date.ts, free of Deno globals, with nine tests
+covering the regression directly.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_013rc3BqVWShUgEYHwD9tsJJ
+---
+ src/test/published-date.test.ts              | 56 ++++++++++++++++++++
+ supabase/functions/_shared/published-date.ts | 50 +++++++++++++++++
+ supabase/functions/scrape-ngo-news/index.ts  | 17 +++++-
+ 3 files changed, 121 insertions(+), 2 deletions(-)
+ create mode 100644 src/test/published-date.test.ts
+ create mode 100644 supabase/functions/_shared/published-date.ts
+
+diff --git a/src/test/published-date.test.ts b/src/test/published-date.test.ts
+new file mode 100644
+index 0000000..9c94d29
+--- /dev/null
++++ b/src/test/published-date.test.ts
+@@ -0,0 +1,56 @@
++import { describe, it, expect } from "vitest";
++import { extractPublishedDate } from "../../supabase/functions/_shared/published-date";
++
++// published_date feeds the citations rendered by /cite. The contract these
++// tests defend: report the page's own date, or report nothing. Never invent one.
++describe("extractPublishedDate", () => {
++  const NOW = Date.parse("2026-09-19T12:00:00Z");
++
++  it("returns null when there is no metadata", () => {
++    expect(extractPublishedDate(undefined, NOW)).toBeNull();
++    expect(extractPublishedDate(null, NOW)).toBeNull();
++    expect(extractPublishedDate({}, NOW)).toBeNull();
++  });
++
++  it("never substitutes the current date for a missing one", () => {
++    // The regression this whole change exists for.
++    expect(extractPublishedDate({ title: "A report" }, NOW)).toBeNull();
++  });
++
++  it("reads the publication date from the page metadata", () => {
++    expect(extractPublishedDate({ publishedTime: "2024-03-11T09:30:00Z" }, NOW))
++      .toBe("2024-03-11T09:30:00.000Z");
++  });
++
++  it("accepts the Open Graph and schema.org spellings", () => {
++    expect(extractPublishedDate({ "article:published_time": "2023-11-02" }, NOW))
++      .toBe("2023-11-02T00:00:00.000Z");
++    expect(extractPublishedDate({ datePublished: "2022-01-15T00:00:00+01:00" }, NOW))
++      .toBe("2022-01-14T23:00:00.000Z");
++  });
++
++  it("prefers the more trustworthy key when several are present", () => {
++    const meta = { date: "2019-01-01", publishedTime: "2024-06-06T10:00:00Z" };
++    expect(extractPublishedDate(meta, NOW)).toBe("2024-06-06T10:00:00.000Z");
++  });
++
++  it("skips unparseable values and falls through to the next key", () => {
++    const meta = { publishedTime: "not a date", datePublished: "2025-02-02T08:00:00Z" };
++    expect(extractPublishedDate(meta, NOW)).toBe("2025-02-02T08:00:00.000Z");
++  });
++
++  it("rejects dates before the web and dates in the future", () => {
++    expect(extractPublishedDate({ publishedTime: "1970-01-01T00:00:00Z" }, NOW)).toBeNull();
++    expect(extractPublishedDate({ publishedTime: "2031-01-01T00:00:00Z" }, NOW)).toBeNull();
++  });
++
++  it("tolerates a page published minutes ago against a skewed clock", () => {
++    expect(extractPublishedDate({ publishedTime: "2026-09-19T12:05:00Z" }, NOW))
++      .toBe("2026-09-19T12:05:00.000Z");
++  });
++
++  it("ignores non-string values", () => {
++    expect(extractPublishedDate({ publishedTime: 1700000000 }, NOW)).toBeNull();
++    expect(extractPublishedDate({ publishedTime: "   " }, NOW)).toBeNull();
++  });
++});
+diff --git a/supabase/functions/_shared/published-date.ts b/supabase/functions/_shared/published-date.ts
+new file mode 100644
+index 0000000..41fb924
+--- /dev/null
++++ b/supabase/functions/_shared/published-date.ts
+@@ -0,0 +1,50 @@
++// Publication-date extraction, kept free of Deno globals and imports so the
++// browser test suite can exercise it directly (src/test/published-date.test.ts).
++//
++// This is integrity-critical: /cite renders formal citations from published_date,
++// so a wrong value here becomes a wrong date in someone's footnote. The rule is
++// that an unknown date stays null — never today's date, never the scrape time.
++
++/** Metadata keys publishers actually use, in order of trustworthiness. */
++export const PUBLISHED_DATE_KEYS = [
++  "publishedTime",
++  "article:published_time",
++  "og:article:published_time",
++  "datePublished",
++  "dateCreated",
++  "date",
++] as const;
++
++/** Nothing on the web predates this; anything earlier is a parsing artefact. */
++const EARLIEST_PLAUSIBLE_YEAR = 1995;
++/** Clock skew allowance for "published just now" pages. */
++const FUTURE_TOLERANCE_MS = 24 * 3600 * 1000;
++
++/**
++ * The article's own publication date as an ISO string, or null when the page
++ * does not state one we can trust.
++ *
++ * @param metadata scraper-supplied page metadata (Firecrawl `result.metadata`)
++ * @param now injectable clock, for tests
++ */
++export function extractPublishedDate(
++  metadata: Record<string, unknown> | undefined | null,
++  now: number = Date.now(),
++): string | null {
++  if (!metadata) return null;
++
++  for (const key of PUBLISHED_DATE_KEYS) {
++    const raw = metadata[key];
++    if (typeof raw !== "string") continue;
++    const trimmed = raw.trim();
++    if (!trimmed) continue;
++
++    const parsed = new Date(trimmed);
++    if (isNaN(parsed.getTime())) continue;
++    if (parsed.getUTCFullYear() < EARLIEST_PLAUSIBLE_YEAR) continue;
++    if (parsed.getTime() > now + FUTURE_TOLERANCE_MS) continue;
++
++    return parsed.toISOString();
++  }
++  return null;
++}
+diff --git a/supabase/functions/scrape-ngo-news/index.ts b/supabase/functions/scrape-ngo-news/index.ts
+index a40727f..0c4275a 100644
+--- a/supabase/functions/scrape-ngo-news/index.ts
++++ b/supabase/functions/scrape-ngo-news/index.ts
+@@ -1,6 +1,13 @@
++import { requireCronOrStaff } from "../_shared/auth.ts";
++// published_date used to be `new Date()` — the moment of scraping — so every
++// dispatch claimed to have been published the instant CivilWire found it, and
++// /cite emitted academic citations carrying that invented date. A wire that
++// fabricates timestamps cannot be cited: an unknown date must stay unknown.
++import { extractPublishedDate } from "../_shared/published-date.ts";
++
+ const corsHeaders = {
+   'Access-Control-Allow-Origin': '*',
+-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
++  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+ };
+ 
+ // NGO sources to scrape — each with a Firecrawl search query
+@@ -248,6 +255,12 @@ Deno.serve(async (req) => {
+     return new Response(null, { headers: corsHeaders });
+   }
+ 
++  // This function spends real money on every call (Firecrawl search + an AI
++  // gateway request per article). It was reachable by any visitor holding the
++  // published anon key, from the public feed's Refresh button.
++  const denied = await requireCronOrStaff(req, corsHeaders);
++  if (denied) return denied;
++
+   try {
+     const firecrawlKey = Deno.env.get('FIRECRAWL_API_KEY');
+     if (!firecrawlKey) {
+@@ -346,7 +359,7 @@ Deno.serve(async (req) => {
+             region: classification.region,
+             country: classification.country,
+             source_url: result.url,
+-            published_date: new Date().toISOString(),
++            published_date: extractPublishedDate(result.metadata),
+             article_type: articleType,
+             urgent: isUrgent(finalTitle, finalSummary),
+             cover_image_url: coverImageUrl,
+-- 
+2.43.0
+
