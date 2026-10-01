@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { fetchProductByHandle, isForcedSoldOut, type ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
+import { TSHIRT_PRODUCT_HANDLE } from "@/lib/tshirtVariants";
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
@@ -16,12 +17,21 @@ const ProductDetail = () => {
   const isCartLoading = useCartStore(state => state.isLoading);
 
   useEffect(() => {
-    if (!handle) return;
+    if (!handle || handle === TSHIRT_PRODUCT_HANDLE) return;
     setLoading(true);
+    setSelectedImage(0);
     fetchProductByHandle(handle)
-      .then(setProduct)
+      .then((p) => {
+        setProduct(p);
+        // Pré-sélectionne la première déclinaison disponible
+        const firstAvailable = p?.variants.edges.findIndex(v => v.node.availableForSale) ?? -1;
+        setSelectedVariantIdx(Math.max(firstAvailable, 0));
+      })
       .finally(() => setLoading(false));
   }, [handle]);
+
+  // Le t-shirt personnalisable se compose dans le simulateur
+  if (handle === TSHIRT_PRODUCT_HANDLE) return <Navigate to="/simulateur" replace />;
 
   if (loading) {
     return (
@@ -45,11 +55,19 @@ const ProductDetail = () => {
   const images = product.images.edges;
   const variants = product.variants.edges;
   const selectedVariant = variants[selectedVariantIdx]?.node;
-  const hasMultipleVariants = variants.length > 1 && !(variants.length === 1 && variants[0].node.title === "Default Title");
+  const hasMultipleVariants = variants.length > 1;
+
+  /** Variante correspondant à la sélection actuelle, avec une option remplacée */
+  const findVariantIdx = (optionName: string, value: string) => {
+    const wanted = (selectedVariant?.selectedOptions ?? []).map(o => o.name === optionName ? { ...o, value } : o);
+    const exact = variants.findIndex(v => wanted.every(w => v.node.selectedOptions.some(o => o.name === w.name && o.value === w.value)));
+    if (exact >= 0) return exact;
+    return variants.findIndex(v => v.node.selectedOptions.some(o => o.name === optionName && o.value === value));
+  };
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
-    await addItem({
+    const ok = await addItem({
       product: { node: product } as ShopifyProduct,
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
@@ -57,14 +75,15 @@ const ProductDetail = () => {
       quantity: 1,
       selectedOptions: selectedVariant.selectedOptions || [],
     });
-    toast.success("Ajouté au panier", { description: product.title });
+    if (ok) toast.success("Ajouté au panier", { description: product.title });
+    else toast.error("L'ajout au panier a échoué", { description: "Réessayez dans un instant." });
   };
 
   return (
     <div className="min-h-screen bg-background pt-24 pb-20 px-8">
       <div className="max-w-[1400px] mx-auto">
-        <Link to="/#collections" className="inline-flex items-center gap-2 font-body text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors mb-12">
-          <ArrowLeft size={14} strokeWidth={1.5} /> Collections
+        <Link to="/eshop" className="inline-flex items-center gap-2 font-body text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors mb-12">
+          <ArrowLeft size={14} strokeWidth={1.5} /> E-shop
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
@@ -116,15 +135,14 @@ const ProductDetail = () => {
                 <label className="font-body text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground block mb-3">{option.name}</label>
                 <div className="flex flex-wrap gap-2">
                   {option.values.map((value) => {
-                    const variantIdx = variants.findIndex(v =>
-                      v.node.selectedOptions.some(o => o.name === option.name && o.value === value)
-                    );
+                    const variantIdx = findVariantIdx(option.name, value);
                     const isSelected = selectedVariant?.selectedOptions.some(o => o.name === option.name && o.value === value);
+                    const isAvailable = variantIdx >= 0 && variants[variantIdx].node.availableForSale;
                     return (
                       <button
                         key={value}
                         onClick={() => variantIdx >= 0 && setSelectedVariantIdx(variantIdx)}
-                        className={`px-5 py-2.5 font-body text-[11px] uppercase tracking-wider border transition-all ${isSelected ? 'border-foreground bg-foreground text-background' : 'border-border text-muted-foreground hover:border-foreground hover:text-foreground'}`}
+                        className={`px-5 py-2.5 font-body text-[11px] uppercase tracking-wider border transition-all ${isSelected ? 'border-foreground bg-foreground text-background' : 'border-border text-muted-foreground hover:border-foreground hover:text-foreground'} ${isAvailable ? '' : 'line-through opacity-50'}`}
                       >
                         {value}
                       </button>
@@ -137,7 +155,7 @@ const ProductDetail = () => {
             <button
               onClick={handleAddToCart}
               disabled={isCartLoading || !selectedVariant?.availableForSale || isForcedSoldOut({ node: product } as ShopifyProduct)}
-              className="w-full bg-foreground text-background font-body text-[11px] font-semibold uppercase tracking-[0.2em] py-4.5 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+              className="w-full bg-foreground text-background font-body text-[11px] font-semibold uppercase tracking-[0.2em] py-4 hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
             >
               {isCartLoading ? (
                 <Loader2 size={14} className="animate-spin" />

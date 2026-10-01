@@ -20,13 +20,16 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const firstVariant = node.variants.edges[0]?.node;
   const soldOut = showOutOfStock(product);
   const cannotBuy = soldOut || !firstVariant?.availableForSale;
+  // Plusieurs tailles/couleurs : le choix se fait sur la fiche produit
+  const needsChoice = node.variants.edges.length > 1;
 
   const handleAddToCart = async (e: React.MouseEvent) => {
+    if (needsChoice) return; // laisse le lien ouvrir la fiche produit
     e.preventDefault();
     e.stopPropagation();
     if (!firstVariant || cannotBuy) return;
 
-    await addItem({
+    const ok = await addItem({
       product,
       variantId: firstVariant.id,
       variantTitle: firstVariant.title,
@@ -35,7 +38,8 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       selectedOptions: firstVariant.selectedOptions || [],
     });
 
-    toast.success("Ajouté au panier", { description: node.title });
+    if (ok) toast.success("Ajouté au panier", { description: node.title });
+    else toast.error("L'ajout au panier a échoué", { description: "Réessayez dans un instant." });
   };
 
   return (
@@ -71,10 +75,10 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           )}
           <button
             onClick={handleAddToCart}
-            disabled={isLoading || cannotBuy}
+            disabled={!needsChoice && (isLoading || cannotBuy)}
             className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-sm text-foreground font-body text-[11px] font-medium uppercase tracking-[0.1em] py-3 rounded-full opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {isLoading ? <Loader2 size={12} className="animate-spin" /> : soldOut ? "Out of stock" : cannotBuy ? "Indisponible" : "Ajouter au panier"}
+            {soldOut ? "Out of stock" : needsChoice ? "Choisir" : isLoading ? <Loader2 size={12} className="animate-spin" /> : cannotBuy ? "Indisponible" : "Ajouter au panier"}
           </button>
         </div>
         <h3 className="font-body text-sm font-medium text-foreground leading-snug mb-0.5">

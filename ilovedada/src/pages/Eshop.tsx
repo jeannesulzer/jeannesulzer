@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Link, useSearchParams } from "react-router-dom";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { fetchProducts, type ShopifyProduct, type ProductCategory, CATEGORIES, categorizeProduct, isNewProduct } from "@/lib/shopify";
+import { fetchProducts, type ShopifyProduct, type ProductCategory, CATEGORIES, categorizeProduct, isNewProduct, isTshirtGenerator } from "@/lib/shopify";
+import { TSHIRT_PRICE_EUR } from "@/lib/tshirtVariants";
+import partyingImg from "@/assets/partying.jpg";
 import ProductCard from "@/components/ProductCard";
 import Footer from "@/components/Footer";
 
@@ -14,7 +16,11 @@ const Eshop = () => {
   const setActiveCategory = (c: ProductCategory) => setParams(c === "all" ? {} : { cat: c });
 
   useEffect(() => {
-    fetchProducts(100).then(setProducts).catch(console.error).finally(() => setLoadingProducts(false));
+    fetchProducts(100)
+      // Le t-shirt personnalisable se commande uniquement via le simulateur
+      .then(all => setProducts(all.filter(p => !isTshirtGenerator(p))))
+      .catch(console.error)
+      .finally(() => setLoadingProducts(false));
   }, []);
 
   const filteredProducts = useMemo(() => {
@@ -26,6 +32,37 @@ const Eshop = () => {
 
   return (
     <div className="min-h-screen bg-background pt-20">
+      {/* Atelier t-shirt */}
+      {(activeCategory === 'all' || activeCategory === 'vestes') && (
+        <section className="px-6 md:px-8 pt-8">
+          <Link
+            to="/simulateur"
+            className="group max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center gap-6 md:gap-10 bg-primary text-primary-foreground rounded-2xl p-6 md:p-10 overflow-hidden"
+          >
+            <img
+              src={partyingImg}
+              alt=""
+              className="w-24 h-24 md:w-32 md:h-32 object-contain rounded-xl bg-background p-1.5 -rotate-6 transition-transform duration-500 group-hover:rotate-0 flex-shrink-0"
+            />
+            <div className="flex-1 text-center sm:text-left">
+              <span className="font-body text-[10px] font-bold uppercase tracking-[0.3em] opacity-80">
+                L'Atelier Dada
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl leading-tight mt-1">
+                Compose ton t-shirt
+              </h2>
+              <p className="font-body text-sm opacity-80 mt-2 max-w-md">
+                PARTYING IS A HUMAN RIGHT : 7 couleurs de coton bio, 6 encres, imprimé à la demande.
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-2 bg-background text-foreground font-body text-[11px] font-semibold uppercase tracking-[0.2em] px-6 py-3.5 rounded-full whitespace-nowrap">
+              {TSHIRT_PRICE_EUR} € · Créer le mien
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </span>
+          </Link>
+        </section>
+      )}
+
       {/* Nouveautés */}
       {activeCategory === 'all' && newProducts.length > 0 && (
         <section id="nouveautes" className="py-16 px-6 md:px-8 scroll-mt-20 bg-card">

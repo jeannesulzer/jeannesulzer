@@ -21,7 +21,11 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const shopCategories = CATEGORIES.filter(c => c.key !== 'all');
+  const shopLinks = [
+    { to: "/eshop", label: "Tout voir" },
+    ...CATEGORIES.filter(c => c.key !== 'all').map(c => ({ to: `/eshop?cat=${c.key}`, label: c.label })),
+    { to: "/simulateur", label: "Atelier t-shirt ✦" },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background/95 backdrop-blur-md">
@@ -36,17 +40,15 @@ const Navbar = () => {
             </button>
             {shopOpen && (
               <div className="absolute top-full left-0 mt-3 min-w-[200px] rounded-lg shadow-lg border py-2 bg-background border-border">
-                {shopCategories.map(cat => (
-                  <a
-                    key={cat.key}
-                    href={`/eshop?cat=${cat.key}`}
-                    onClick={() => {
-                      setShopOpen(false);
-                    }}
+                {shopLinks.map(link => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    onClick={() => setShopOpen(false)}
                     className="block px-4 py-2 font-body text-[12px] transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
                   >
-                    {cat.label}
-                  </a>
+                    {link.label}
+                  </Link>
                 ))}
               </div>
             )}
@@ -82,17 +84,15 @@ const Navbar = () => {
           </button>
           {mobileShopOpen && (
             <div className="pl-4 space-y-1 pb-2">
-              {shopCategories.map(cat => (
-                <a
-                  key={cat.key}
-                  href={`/eshop?cat=${cat.key}`}
-                  onClick={() => {
-                    setIsOpen(false);
-                  }}
+              {shopLinks.map(link => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setIsOpen(false)}
                   className="block py-2 font-body text-[13px] text-muted-foreground"
                 >
-                  {cat.label}
-                </a>
+                  {link.label}
+                </Link>
               ))}
             </div>
           )}

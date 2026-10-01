@@ -7,6 +7,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { fetchProductByHandle, type ShopifyProduct } from "@/lib/shopify";
 import {
   TSHIRT_PRODUCT_HANDLE,
+  TSHIRT_PRICE_EUR,
   GARMENT_OPTION_LABEL,
   getTshirtVariantId,
 } from "@/lib/tshirtVariants";
@@ -51,8 +52,6 @@ const MOTIFS: { id: Motif; label: string; subtitle: string; description: string 
 
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"] as const;
 type Size = (typeof SIZES)[number];
-
-const PRICE_EUR = 45;
 
 /* --------- Pastille de couleur cliquable --------- */
 
@@ -181,6 +180,7 @@ const Simulateur = () => {
   }, [garment, ink]);
 
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
+  const [loadError, setLoadError] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
   const getCheckoutUrl = useCartStore((s) => s.getCheckoutUrl);
@@ -190,36 +190,73 @@ const Simulateur = () => {
     let active = true;
     fetchProductByHandle(TSHIRT_PRODUCT_HANDLE)
       .then((node) => {
-        if (active && node) setProduct({ node } as unknown as ShopifyProduct);
+        if (!active) return;
+        if (node) setProduct({ node } as unknown as ShopifyProduct);
+        else setLoadError(true);
       })
-      .catch((e) => console.error("Chargement produit simulateur:", e));
+      .catch((e) => {
+        console.error("Chargement produit simulateur:", e);
+        if (active) setLoadError(true);
+      });
     return () => {
       active = false;
     };
   }, []);
 
+  /** Variante Shopify (couleur × taille) : prix et stock réels */
+  const findVariant = (garmentId: string, s: Size) => {
+    const id = getTshirtVariantId(garmentId, s);
+    return product?.node.variants.edges.find((v) => v.node.id === id)?.node;
+  };
+  const isSizeAvailable = (s: Size) => !product || (findVariant(garment.id, s)?.availableForSale ?? false);
+  const variant = findVariant(garment.id, size);
+  const price = variant?.price ?? { amount: String(TSHIRT_PRICE_EUR), currencyCode: "EUR" };
+  const priceLabel = `${parseFloat(price.amount).toFixed(2).replace(".", ",")} ${price.currencyCode === "EUR" ? "€" : price.currencyCode}`;
+  const canBuy = !!product && !!variant?.availableForSale;
+
+  // Si la taille choisie est épuisée dans cette couleur, on passe à la première dispo
+  useEffect(() => {
+    if (!product || isSizeAvailable(size)) return;
+    const fallback = SIZES.find(isSizeAvailable);
+    if (fallback) setSize(fallback);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product, garment]);
+
   const handleAdd = async () => {
-    const variantId = getTshirtVariantId(garment.id, size);
-    if (!variantId || !product) {
+    if (!product || !variant || !variant.availableForSale) {
       toast.error("Produit indisponible", {
-        description: "Impossible de charger cette déclinaison pour le moment.",
+        description: "Cette couleur n'est pas disponible dans cette taille pour le moment.",
       });
       return;
     }
 
-    await addItem({
+    const motifLabel = MOTIFS.find((m) => m.id === motif)?.label ?? "";
+    const ok = await addItem({
       product,
-      variantId,
+      variantId: variant.id,
       variantTitle: `${GARMENT_OPTION_LABEL[garment.id]} / ${size}`,
-      price: { amount: String(PRICE_EUR), currencyCode: "EUR" },
+      price: variant.price,
       quantity: 1,
       selectedOptions: [
         { name: "Couleur", value: GARMENT_OPTION_LABEL[garment.id] },
         { name: "Taille", value: size },
         { name: "Encre", value: effectiveInk.name },
-        { name: "Motif", value: MOTIFS.find((m) => m.id === motif)?.label ?? "" },
+        { name: "Motif", value: motifLabel },
+      ],
+      // Transmis à Shopify : apparaît sur la commande pour l'impression
+      attributes: [
+        { key: "Encre", value: effectiveInk.name },
+        { key: "Motif", value: motifLabel },
       ],
     });
+
+    if (!ok) {
+      toast.error("Oups, l'ajout au panier a échoué", {
+        description: "Réessaie dans un instant.",
+        position: "top-center",
+      });
+      return;
+    }
 
     setAdded(true);
     toast.success("Ajouté au panier", {
@@ -385,21 +422,26 @@ const Simulateur = () => {
                   04. Taille — <span className="text-foreground/70 normal-case tracking-normal">{size}</span>
                 </label>
                 <div className="flex gap-2">
-                  {SIZES.map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => setSize(s)}
-                      aria-pressed={size === s}
-                      className={`flex-1 h-12 text-sm transition-colors ${
-                        size === s
-                          ? "border-2 border-primary font-bold"
-                          : "border border-foreground/10 font-medium hover:border-foreground"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
+                  {SIZES.map((s) => {
+                    const available = isSizeAvailable(s);
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSize(s)}
+                        disabled={!available}
+                        aria-pressed={size === s}
+                        title={available ? undefined : "Épuisé dans cette couleur"}
+                        className={`flex-1 h-12 text-sm transition-colors disabled:opacity-30 disabled:line-through disabled:pointer-events-none ${
+                          size === s
+                            ? "border-2 border-primary font-bold"
+                            : "border border-foreground/10 font-medium hover:border-foreground"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
                 </div>
               </section>
             </div>
@@ -418,18 +460,24 @@ const Simulateur = () => {
                     {MOTIFS.find((m) => m.id === motif)?.label}
                   </p>
                 </div>
-                <span className="font-display text-3xl text-foreground">{PRICE_EUR},00 €</span>
+                <span className="font-display text-3xl text-foreground">{priceLabel}</span>
               </div>
 
               <button
                 type="button"
                 onClick={handleAdd}
-                disabled={isLoading || !product}
+                disabled={isLoading || !canBuy}
                 className="group relative w-full overflow-hidden bg-primary text-primary-foreground py-5 px-8 font-bold uppercase tracking-[0.2em] text-sm transition-colors disabled:opacity-60 disabled:pointer-events-none"
               >
                 <span className="relative z-10 flex items-center justify-center gap-3">
                   {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-                  {product ? "Ajouter au panier" : "Chargement…"}
+                  {loadError
+                    ? "Indisponible pour le moment"
+                    : !product
+                      ? "Chargement…"
+                      : canBuy
+                        ? "Ajouter au panier"
+                        : "Épuisé"}
                 </span>
                 <span
                   aria-hidden

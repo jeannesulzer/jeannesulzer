@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
-import { useCartStore } from "@/stores/cartStore";
-import { Badge } from "@/components/ui/badge";
+import { useCartStore, getLineKey } from "@/stores/cartStore";
+import logoUrl from "@/assets/logo-ilovedada.png";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 export const CartDrawer = () => {
@@ -48,11 +48,16 @@ export const CartDrawer = () => {
             <>
               <div className="flex-1 overflow-y-auto min-h-0">
                 <div className="space-y-6">
-                  {items.map((item) => (
-                    <div key={item.variantId} className="flex gap-4">
+                  {items.map((item) => {
+                    const lineKey = getLineKey(item);
+                    const image = item.product.node.images?.edges?.[0]?.node;
+                    return (
+                    <div key={lineKey} className="flex gap-4">
                       <div className="w-20 h-24 overflow-hidden flex-shrink-0 bg-muted">
-                        {item.product.node.images?.edges?.[0]?.node && (
-                          <img src={item.product.node.images.edges[0].node.url} alt={item.product.node.title} className="w-full h-full object-cover" />
+                        {image ? (
+                          <img src={image.url} alt={item.product.node.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <img src={logoUrl} alt="" className="w-full h-full object-contain p-3" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -62,20 +67,21 @@ export const CartDrawer = () => {
                         )}
                         <p className="font-body text-sm font-semibold text-foreground mt-2">{parseFloat(item.price.amount).toFixed(0)} {item.price.currencyCode}</p>
                         <div className="flex items-center gap-3 mt-3">
-                          <button onClick={() => updateQuantity(item.variantId, item.quantity - 1)} className="w-6 h-6 border border-border flex items-center justify-center hover:border-foreground transition-colors">
+                          <button onClick={() => updateQuantity(lineKey, item.quantity - 1)} className="w-6 h-6 border border-border flex items-center justify-center hover:border-foreground transition-colors">
                             <Minus size={10} />
                           </button>
                           <span className="font-body text-xs w-4 text-center">{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.variantId, item.quantity + 1)} className="w-6 h-6 border border-border flex items-center justify-center hover:border-foreground transition-colors">
+                          <button onClick={() => updateQuantity(lineKey, item.quantity + 1)} className="w-6 h-6 border border-border flex items-center justify-center hover:border-foreground transition-colors">
                             <Plus size={10} />
                           </button>
-                          <button onClick={() => removeItem(item.variantId)} className="ml-auto text-muted-foreground hover:text-foreground transition-colors">
+                          <button onClick={() => removeItem(lineKey)} className="ml-auto text-muted-foreground hover:text-foreground transition-colors">
                             <Trash2 size={12} />
                           </button>
                         </div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
               <div className="flex-shrink-0 pt-6 border-t border-border space-y-5">
