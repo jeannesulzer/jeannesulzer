@@ -14,16 +14,19 @@ que j'ai décidé à ta place et comment le défaire, c'est le point 6.
 Le site en ligne n'a aucun des six derniers correctifs. Copie ce message dans
 Lovable :
 
-> Récupère main à nouveau (dernier commit `f951f76`), redéploie l'edge function
-> `scrape-ngo-feeds`, et republie le site.
+> Récupère main à nouveau (dernier commit `82abf5b`), redéploie les edge
+> functions `scrape-ngo-feeds` et `translate-articles`, et republie le site.
+>
+> Ne modifie aucun code : tout est déjà sur main. Juste pull, deploy, publish.
 
 Ce que ça apporte : les codes `&nbsp;` disparaissent des résumés, le lien
 LinkedIn fonctionne, la page périmée en cache se recharge toute seule sur Chrome,
 un lecteur anglophone reçoit la traduction des dépêches en arabe, persan et
 cyrillique, l'EFCSN apparaît sur la page méthodologie, le panneau Focus porte ses
-trois chiffres, et la barre de recherche du fil répond à une question posée en
-toutes lettres. Tant que ce n'est pas republié, les retours de tes collègues
-restent vrais sur le site en ligne.
+trois chiffres, la barre de recherche du fil répond à une question posée en
+toutes lettres, et les dépêches en ukrainien et en arabe sont traduites sur
+toute la page et plus seulement sur les quarante premières. Tant que ce n'est
+pas republié, les retours de tes collègues restent vrais sur le site en ligne.
 
 Une fois republié, la question à essayer devant la salle, exactement comme ça :
 
