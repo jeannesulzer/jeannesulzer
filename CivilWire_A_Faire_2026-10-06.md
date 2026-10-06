@@ -1,26 +1,28 @@
 # À faire, dans l'ordre. 6 octobre, avant Vilnius
 
-Six choses. Cinq demandent deux minutes chacune. Rien sur GitHub : la PR 27 est
-fusionnée, main est à `573dcd5`, il n'y a plus rien à cliquer de ton côté.
+Cinq choses à faire, deux minutes chacune, et un point d'information à la fin.
+Rien sur GitHub : les PR 27 et 28 sont
+fusionnées, main est à `e211aa6`, il n'y a plus rien à cliquer de ton côté.
 
-Pendant que tu es en rendez-vous, je fais l'ajout de l'EFCSN et la version B du
-panneau Focus. Je te montrerai avant de pousser.
+Pendant ton rendez-vous j'ai fait l'EFCSN et le panneau Focus en version B. Ce
+que j'ai décidé à ta place et comment le défaire, c'est le point 6.
 
 ---
 
 ## 1. Lovable. Deux minutes, et c'est le seul point bloquant
 
-Le site en ligne n'a pas les quatre derniers correctifs. Copie ce message dans
+Le site en ligne n'a aucun des six derniers correctifs. Copie ce message dans
 Lovable :
 
-> Récupère main à nouveau (dernier commit `573dcd5`), redéploie l'edge function
+> Récupère main à nouveau (dernier commit `e211aa6`), redéploie l'edge function
 > `scrape-ngo-feeds`, et republie le site.
 
 Ce que ça apporte : les codes `&nbsp;` disparaissent des résumés, le lien
 LinkedIn fonctionne, la page périmée en cache se recharge toute seule sur Chrome,
-et un lecteur anglophone reçoit la traduction des dépêches en arabe, persan et
-cyrillique. Tant que ce n'est pas republié, les retours de tes collègues restent
-vrais sur le site en ligne.
+un lecteur anglophone reçoit la traduction des dépêches en arabe, persan et
+cyrillique, l'EFCSN apparaît sur la page méthodologie, et le panneau Focus porte
+ses trois chiffres. Tant que ce n'est pas republié, les retours de tes collègues
+restent vrais sur le site en ligne.
 
 ---
 
@@ -127,19 +129,35 @@ résultat ».
 
 ---
 
-## 6. Une seule question pour moi
+## 6. Ce que j'ai décidé à ta place
 
-Le panneau Focus. Les trois maquettes :
+Maquettes de référence :
 **https://claude.ai/artifact/DtyxPfYFz72faQNCYFUM3G**
 
-- **Couleur du bandeau** : teal foncé, vert forêt, navy, ou sans bandeau du tout.
-  Mon avis : pas le vert d'EU DisinfoLab, il suggère une affiliation que personne
-  n'a validée, et devant cette salle ça se remarque.
-- **Version B ou pas** : le panneau devient une destination, avec trois chiffres
-  que le fil ne donne pas (dépêches ce mois-ci, organisations, pays). Mon avis :
-  oui, sinon il ne fait que répéter le filtre thème.
+**Le panneau Focus est passé en version B.** Il porte le sujet dans son propre
+en-tête et trois chiffres que le fil ne donne pas : dépêches ce mois-ci,
+organisations qui en ont parlé, pays concernés. Les chiffres sont comptés sur
+tout le thème, pas sur les cent dernières lignes, et s'affichent seulement s'ils
+sont calculés : un panneau qui annonce « 0 organisations » parce qu'une requête a
+échoué dit le contraire de la vérité.
 
-Réponds-moi « teal + B » ou ce que tu veux, et je le code.
+**Bandeau en teal foncé**, ta couleur d'accent. Pas le vert d'EU DisinfoLab : il
+suggère une affiliation que personne n'a validée, et devant cette salle ça se
+remarque. Si tu veux changer, c'est une ligne, `HEADER_BAND` dans
+`DisinformationFocus.tsx` : `bg-navy-deep` pour le navy du one-pager,
+`bg-card border-b-2 border-teal` pour aucun bandeau. Dis-moi le mot, je le fais.
+
+**L'EFCSN est ajouté comme réseau**, avec son code de standards, ses deux
+évaluateurs externes, et la condition écrite noir sur blanc : seuls ses membres
+vérifiés qui sont à but non lucratif et non gouvernementaux sont repris. C'est
+ton arbitrage, pas le leur, donc la page le dit comme tel.
+
+**Ses membres, eux, ne sont pas encore dans l'index**, et c'est volontaire : le
+proxy de cet environnement bloque `efcsn.com` et `members.efcsn.com`. Une liste
+de membres vérifiés ne se reconstitue pas de mémoire, et le statut juridique de
+chacun encore moins. Si tu autorises ces deux domaines dans les réglages réseau
+de l'environnement cloud, je lis la liste et je la remplis en quelques minutes.
+Sinon, la question à Stephan au point 4 règle la même chose autrement.
 
 ---
 
