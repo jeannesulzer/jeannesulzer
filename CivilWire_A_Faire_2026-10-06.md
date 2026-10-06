@@ -14,15 +14,30 @@ que j'ai décidé à ta place et comment le défaire, c'est le point 6.
 Le site en ligne n'a aucun des six derniers correctifs. Copie ce message dans
 Lovable :
 
-> Récupère main à nouveau (dernier commit `e211aa6`), redéploie l'edge function
+> Récupère main à nouveau (dernier commit `f951f76`), redéploie l'edge function
 > `scrape-ngo-feeds`, et republie le site.
 
 Ce que ça apporte : les codes `&nbsp;` disparaissent des résumés, le lien
 LinkedIn fonctionne, la page périmée en cache se recharge toute seule sur Chrome,
 un lecteur anglophone reçoit la traduction des dépêches en arabe, persan et
-cyrillique, l'EFCSN apparaît sur la page méthodologie, et le panneau Focus porte
-ses trois chiffres. Tant que ce n'est pas republié, les retours de tes collègues
+cyrillique, l'EFCSN apparaît sur la page méthodologie, le panneau Focus porte ses
+trois chiffres, et la barre de recherche du fil répond à une question posée en
+toutes lettres. Tant que ce n'est pas republié, les retours de tes collègues
 restent vrais sur le site en ligne.
+
+Une fois republié, la question à essayer devant la salle, exactement comme ça :
+
+> Je fais une recherche sur les crimes commis au Soudan contre les personnes
+> homosexuelles. Qu'est-ce qu'il y a comme rapport d'ONG ?
+
+Elle affiche sous la barre ce qu'elle a compris, `Soudan` et `LGBTQ+ rights`,
+chaque étiquette retirable, puis le nombre de dépêches, le nombre
+d'organisations et la période. Rien n'est résumé : ce sont les titres des
+organisations, chacun renvoyant à leur document. Si le résultat est vide, la
+page dit que c'est un constat sur l'index et pas sur la documentation, et
+combien de dépêches elle a sur le Soudan malgré tout. Essaie-la une fois avant
+de la montrer : un index en bêta peut très bien n'avoir aucune dépêche sur ce
+croisement précis, et il vaut mieux le savoir avant qu'après.
 
 ---
 
