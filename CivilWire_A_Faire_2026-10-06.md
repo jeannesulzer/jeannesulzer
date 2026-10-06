@@ -1,0 +1,155 @@
+# À faire, dans l'ordre. 6 octobre, avant Vilnius
+
+Six choses. Cinq demandent deux minutes chacune. Rien sur GitHub : la PR 27 est
+fusionnée, main est à `573dcd5`, il n'y a plus rien à cliquer de ton côté.
+
+Pendant que tu es en rendez-vous, je fais l'ajout de l'EFCSN et la version B du
+panneau Focus. Je te montrerai avant de pousser.
+
+---
+
+## 1. Lovable. Deux minutes, et c'est le seul point bloquant
+
+Le site en ligne n'a pas les quatre derniers correctifs. Copie ce message dans
+Lovable :
+
+> Récupère main à nouveau (dernier commit `573dcd5`), redéploie l'edge function
+> `scrape-ngo-feeds`, et republie le site.
+
+Ce que ça apporte : les codes `&nbsp;` disparaissent des résumés, le lien
+LinkedIn fonctionne, la page périmée en cache se recharge toute seule sur Chrome,
+et un lecteur anglophone reçoit la traduction des dépêches en arabe, persan et
+cyrillique. Tant que ce n'est pas republié, les retours de tes collègues restent
+vrais sur le site en ligne.
+
+---
+
+## 2. Les trois lettres. Elles sont prêtes, il manque trois gestes par lettre
+
+Dans Gmail, dossier Brouillons, sujet « CivilWire, un fil de dépêches pour les
+publications de la société civile ». Trois brouillons : Philippe (HRW), Agnès
+(Amnesty), Alexis (FIDH). Version texte simple, sans bandeau, comme tu voulais.
+
+Pour chacune, avant d'envoyer :
+
+1. **Mets l'adresse.** Le champ est vide exprès, pour qu'aucune ne puisse
+   partir par accident.
+2. **Retape le lien.** Gmail a transformé `civilwire.org` en
+   `google.com/url?q=...`, un lien de pistage. Supprime-le et retape
+   `civilwire.org` à la main. C'est le genre de détail que ces trois-là
+   remarquent.
+3. **Joins le one-pager** : `CivilWire_One-Pager_2026-09-27.pdf`.
+
+Le quatrième brouillon, « Un café à Vilnius ? », est pour les journalistes
+français sur place. Même chose : adresses, et retape le lien.
+
+---
+
+## 3. Le post LinkedIn. À publier depuis Vilnius
+
+Le lien va **dans le premier commentaire**, pas dans le post : LinkedIn diffuse
+moins les posts qui sortent de la plateforme.
+
+Avant de publier, deux précautions. Ouvre `civilwire.org/?country=sudan` et garde
+ce conflit seulement si plusieurs organisations remontent. Et dis-le à Diana
+Wallis ou à Stephan avant, deux phrases suffisent : tu cites leur Hub comme
+complément, pas comme partenariat. Tu es leur invitée, un oui en personne vaut
+mieux qu'un post qui les surprend.
+
+**Le post :**
+
+> EU DisinfoLab's Conflict and Crisis Hub gathers what is known about
+> disinformation in a conflict.
+>
+> CivilWire holds the other half: what civil society published from inside it.
+> The reports, statements and alerts, newest first, each entry linked to the
+> organisation's own document.
+>
+> Side by side for Sudan: their hub, and the same conflict in CivilWire.
+>
+> One tells you what is being said. The other tells you what was documented, by
+> whom, and where to read it in full.
+>
+> It is in beta. 377 organisations, 125 countries, six languages.
+
+**Premier commentaire :**
+
+> civilwire.org/?country=sudan
+> disinfo.eu/conflict-and-crisis-hub
+
+N'utilise pas leur vert. Tu cites une ressource publique, tu n'annonces pas une
+collaboration.
+
+---
+
+## 4. Stephan Mündges, EFCSN. Son agenda demande « What would you like to chat about? »
+
+Si le champ est large :
+
+> CivilWire (civilwire.org), an index of what civil society publishes: 377
+> organisations, one chronological feed, every entry linked to the publisher's
+> own document. Admission is delegated to networks that publish their own
+> criteria, and the EFCSN is the only body in the information integrity field
+> that works that way.
+>
+> I would like to ask whether you would see any objection to a third-party index
+> using your verified member list as an admission source. Happy to show you the
+> thing in five minutes.
+
+Si c'est une seule ligne :
+
+> I run CivilWire (civilwire.org), an index of civil society publications where
+> admission is delegated to networks that publish their own criteria. I would
+> like to ask whether the EFCSN would object to a third-party index using your
+> verified member list the same way.
+
+---
+
+## 5. La LDH. Une requête, trente secondes
+
+La France ne remonte que quatre entrées, et tu as raison, la Ligue des droits de
+l'Homme publie plus que ça. Je ne peux pas atteindre Supabase depuis ici. Dans
+Supabase, SQL Editor, colle :
+
+```sql
+select ngo, website, rss_url, last_error
+  from wire_sources
+ where ngo ilike '%ligue des droits%'
+    or website ilike '%ldh-france%';
+```
+
+Envoie-moi ce que ça rend. Zéro ligne veut dire qu'elle n'est pas collectée du
+tout. Une ligne avec un `last_error` veut dire que son flux casse. Les deux se
+réparent, mais pas de la même façon.
+
+Si tu préfères, demande-le à Lovable : « exécute cette requête et donne-moi le
+résultat ».
+
+---
+
+## 6. Une seule question pour moi
+
+Le panneau Focus. Les trois maquettes :
+**https://claude.ai/artifact/DtyxPfYFz72faQNCYFUM3G**
+
+- **Couleur du bandeau** : teal foncé, vert forêt, navy, ou sans bandeau du tout.
+  Mon avis : pas le vert d'EU DisinfoLab, il suggère une affiliation que personne
+  n'a validée, et devant cette salle ça se remarque.
+- **Version B ou pas** : le panneau devient une destination, avec trois chiffres
+  que le fil ne donne pas (dépêches ce mois-ci, organisations, pays). Mon avis :
+  oui, sinon il ne fait que répéter le filtre thème.
+
+Réponds-moi « teal + B » ou ce que tu veux, et je le code.
+
+---
+
+## Ce qui reste ouvert, pour que tu le saches
+
+- Je n'ai pas vérifié que `archive-dispatches` **réussit**, seulement qu'elle est
+  déployée. Les lettres disent que chaque dépêche est archivée chez Internet
+  Archive. À vérifier au retour, pas avant de partir.
+- Le drapeau « ne pas être traduite » par organisation, promis dans le one-pager,
+  n'est pas encore construit.
+- La branche distante a été réécrite deux fois dans ce projet. Rien n'a été
+  perdu, mais c'est pour ça que la règle tient : j'écris, Lovable déploie. Ne lui
+  demande pas de pousser du code.
